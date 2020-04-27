@@ -1,4 +1,4 @@
-# Dynatrace Fire Team
+# Dynatrace Python3 API Framework
 
 Testing the Dev Branch
 
@@ -13,4 +13,3 @@ Python >= 3.4 (Built and tested with Python 3.8)
 2. Run python change_variables.py and type in the name of the file (without ".py").
     It will copy over the new file as user_variables.py
 3. Create "sandbox_script.py" for trying out script or create your scripts in ./scripts
-# dt-python3-framework
