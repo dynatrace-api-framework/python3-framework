@@ -1,0 +1,16 @@
+*.pyc
+
+jsons/*
+txt/*
+variable_sets/*
+scripts/*
+templates/*
+
+.vscode/
+
+user_variables.py
+sandbox_script.py
+
+!variable_sets/template.py
+!scripts/template.py
+!scripts/change_pythonpath.py
