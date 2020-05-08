@@ -109,7 +109,6 @@ def generate_schedule(recurrence_type, start_time, duration, range_start, range_
     else:
       raise Exception ("Invalid Monthly Day! Allowed values are 1-31")
 
-  print(schedule)
   return schedule
 
 def create_window (cluster, tenant, json):
