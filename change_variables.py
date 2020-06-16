@@ -7,7 +7,7 @@ def replace_env():
   print("Enter Set to Import: ", end='')
   new_env = input()
 
-  if "win" in sys.platform:
+  if "windows" in sys.platform:
     os.system("copy variable_sets\\" + str(new_env) + ".py user_variables.py")
   else:
     os.system("cp variable_sets/" + str(new_env) + ".py user_variables.py")
