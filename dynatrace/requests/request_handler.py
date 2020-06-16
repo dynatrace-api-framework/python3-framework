@@ -73,11 +73,11 @@ def cluster_get(cluster, endpoint, params=None):
 
   with no_ssl_verification():
     params['Api-Token'] = cluster['cluster_token']
-    verify = (True if "verify_ssl" not in cluster else cluster ["verify_ssl"])
+    
     response = requests.get(
         "https://" + cluster['url'] + "/api/v1.0/onpremise/" + endpoint,
         params=params,
-        verify=verify
+        verify=(True if "verify_ssl" not in cluster else cluster ["verify_ssl"])
     )
     check_response(response)
     return response
