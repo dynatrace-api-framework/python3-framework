@@ -18,7 +18,6 @@ def no_ssl_verification():
     opened_adapters.add(self.get_adapter(url))
 
     settings = OLD_MERGE_ENVIRONMENT_SETTINGS(self, url, proxies, stream, verify, cert)
-    settings['verify'] = False
 
     return settings
 
@@ -74,11 +73,11 @@ def cluster_get(cluster, endpoint, params=None):
 
   with no_ssl_verification():
     params['Api-Token'] = cluster['cluster_token']
-
+    verify = (True if "verify_ssl" not in cluster else cluster ["verify_ssl"])
     response = requests.get(
         "https://" + cluster['url'] + "/api/v1.0/onpremise/" + endpoint,
         params=params,
-        verify=False
+        verify=verify
     )
     check_response(response)
     return response
@@ -100,7 +99,7 @@ def cluster_post(cluster, endpoint, params=None, json=None):
         "https://" + cluster['url'] + "/api/v1.0/onpremise/" + endpoint,
         params=params,
         json=json,
-        verify=False
+        verify=(True if "verify_ssl" not in cluster else cluster ["verify_ssl"])
     )
     check_response(response)
     return response
@@ -121,7 +120,7 @@ def cluster_put(cluster, endpoint, params=None, json=None):
         "https://" + cluster['url'] + "/api/v1.0/onpremise/" + endpoint,
         params=params,
         json=json,
-        verify=False
+        verify=(True if "verify_ssl" not in cluster else cluster ["verify_ssl"])
     )
     check_response(response)
     return response
@@ -141,7 +140,7 @@ def cluster_delete(cluster, endpoint, params=None, json=None):
         "https://" + cluster['url'] + "/api/v1.0/onpremise/" + endpoint,
         params=params,
         json=json,
-        verify=False
+        verify=(True if "verify_ssl" not in cluster else cluster ["verify_ssl"])
     )
     check_response(response)
     return response
@@ -158,7 +157,7 @@ def env_get(cluster, tenant, endpoint, params=None):
     response = requests.get(
         generate_tenant_url(cluster, tenant) + "/api/v1/" + endpoint,
         params=params,
-        verify=False
+        verify=(True if "verify_ssl" not in cluster else cluster ["verify_ssl"])
     )
     check_response(response)
     return response
@@ -176,7 +175,7 @@ def env_post(cluster, tenant, endpoint, params=None, json=None):
     response = requests.post(
         generate_tenant_url(cluster, tenant) + "/api/v1/" + endpoint,
         params=params,
-        verify=False,
+        verify=(True if "verify_ssl" not in cluster else cluster ["verify_ssl"]),
         json=json
     )
     check_response(response)
@@ -195,7 +194,7 @@ def env_put(cluster, tenant, endpoint, params=None, json=None):
     response = requests.put(
         generate_tenant_url(cluster, tenant) + "/api/v1/" + endpoint,
         params=params,
-        verify=False,
+        verify=(True if "verify_ssl" not in cluster else cluster ["verify_ssl"]),
         json=json
     )
     check_response(response)
@@ -213,7 +212,7 @@ def env_delete(cluster, tenant, endpoint, params=None):
     response = requests.delete(
         generate_tenant_url(cluster, tenant) + "/api/v1/" + endpoint,
         params=params,
-        verify=False
+        verify=(True if "verify_ssl" not in cluster else cluster ["verify_ssl"])
     )
     check_response(response)
     return response
@@ -232,7 +231,7 @@ def config_get(cluster, tenant, endpoint, params=None, json=None):
     response = requests.get(
         generate_tenant_url(cluster, tenant) + "/api/config/v1/" + endpoint,
         params=params,
-        verify=False,
+        verify=(True if "verify_ssl" not in cluster else cluster ["verify_ssl"]),
         json=json
     )
     check_response(response)
@@ -251,7 +250,7 @@ def config_post(cluster, tenant, endpoint, params=None, json=None):
     response = requests.post(
         generate_tenant_url(cluster, tenant) + "/api/config/v1/" + endpoint,
         params=params,
-        verify=False,
+        verify=(True if "verify_ssl" not in cluster else cluster ["verify_ssl"]),
         json=json
     )
     check_response(response)
@@ -270,7 +269,7 @@ def config_put(cluster, tenant, endpoint, params=None, json=None):
     response = requests.put(
         generate_tenant_url(cluster, tenant) + "/api/config/v1/" + endpoint,
         params=params,
-        verify=False,
+        verify=(True if "verify_ssl" not in cluster else cluster ["verify_ssl"]),
         json=json
     )
     check_response(response)
@@ -289,7 +288,7 @@ def config_delete(cluster, tenant, endpoint, params=None, json=None):
     response = requests.delete(
         generate_tenant_url(cluster, tenant) + "/api/config/v1/" + endpoint,
         params=params,
-        verify=False,
+        verify=(True if "verify_ssl" not in cluster else cluster ["verify_ssl"]),
         json=json
     )
     check_response(response)
