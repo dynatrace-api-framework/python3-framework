@@ -4,6 +4,11 @@ import contextlib
 import requests
 from urllib3.exceptions import InsecureRequestWarning
 
+HTTPS_STR = "https://"
+CLUSTER_V1_PATH = "/api/v1.0/onpremise/"
+ENV_API_V1 = "/api/v1/"
+CONFIG_API_V1 = "/api/config/v1/"
+
 OLD_MERGE_ENVIRONMENT_SETTINGS = requests.Session.merge_environment_settings
 
 @contextlib.contextmanager
@@ -56,7 +61,7 @@ def sanitize_endpoint (endpoint):
 
 def generate_tenant_url(cluster, tenant):
   """Generate URL based on SaaS or Managed"""
-  url = "https://"
+  url = HTTPS_STR
   if cluster["is_managed"]:
     url = url + cluster['url'] + "/e/" + cluster['tenant'][tenant]
   else:
@@ -76,7 +81,7 @@ def cluster_get(cluster, endpoint, params=None):
     params['Api-Token'] = cluster['cluster_token']
 
     response = requests.get(
-        "https://" + cluster['url'] + "/api/v1.0/onpremise/" + endpoint,
+        HTTPS_STR + cluster['url'] + CLUSTER_V1_PATH + endpoint,
         params=params,
         verify=False
     )
@@ -97,7 +102,7 @@ def cluster_post(cluster, endpoint, params=None, json=None):
     params['Api-Token'] = cluster['cluster_token']
 
     response =  requests.post(
-        "https://" + cluster['url'] + "/api/v1.0/onpremise/" + endpoint,
+        HTTPS_STR + cluster['url'] + CLUSTER_V1_PATH + endpoint,
         params=params,
         json=json,
         verify=False
@@ -118,7 +123,7 @@ def cluster_put(cluster, endpoint, params=None, json=None):
     params['Api-Token'] = cluster['cluster_token']
 
     response =  requests.put(
-        "https://" + cluster['url'] + "/api/v1.0/onpremise/" + endpoint,
+        HTTPS_STR + cluster['url'] + CLUSTER_V1_PATH + endpoint,
         params=params,
         json=json,
         verify=False
@@ -138,7 +143,7 @@ def cluster_delete(cluster, endpoint, params=None, json=None):
   with no_ssl_verification():
     params['Api-Token'] = cluster['cluster_token']
     response =  requests.delete(
-        "https://" + cluster['url'] + "/api/v1.0/onpremise/" + endpoint,
+        HTTPS_STR + cluster['url'] + CLUSTER_V1_PATH + endpoint,
         params=params,
         json=json,
         verify=False
@@ -156,7 +161,7 @@ def env_get(cluster, tenant, endpoint, params=None):
   with no_ssl_verification():
     params['Api-Token'] = cluster['api_token'][tenant]
     response = requests.get(
-        generate_tenant_url(cluster, tenant) + "/api/v1/" + endpoint,
+        generate_tenant_url(cluster, tenant) + ENV_API_V1 + endpoint,
         params=params,
         verify=False
     )
@@ -174,7 +179,7 @@ def env_post(cluster, tenant, endpoint, params=None, json=None):
     params['Api-Token'] = cluster['api_token'][tenant]
 
     response = requests.post(
-        generate_tenant_url(cluster, tenant) + "/api/v1/" + endpoint,
+        generate_tenant_url(cluster, tenant) + ENV_API_V1 + endpoint,
         params=params,
         verify=False,
         json=json
@@ -193,7 +198,7 @@ def env_put(cluster, tenant, endpoint, params=None, json=None):
     params['Api-Token'] = cluster['api_token'][tenant]
 
     response = requests.put(
-        generate_tenant_url(cluster, tenant) + "/api/v1/" + endpoint,
+        generate_tenant_url(cluster, tenant) + ENV_API_V1 + endpoint,
         params=params,
         verify=False,
         json=json
@@ -211,7 +216,7 @@ def env_delete(cluster, tenant, endpoint, params=None):
   with no_ssl_verification():
     params['Api-Token'] = cluster['api_token'][tenant]
     response = requests.delete(
-        generate_tenant_url(cluster, tenant) + "/api/v1/" + endpoint,
+        generate_tenant_url(cluster, tenant) + ENV_API_V1 + endpoint,
         params=params,
         verify=False
     )
@@ -230,7 +235,7 @@ def config_get(cluster, tenant, endpoint, params=None, json=None):
     params['Api-Token'] = cluster['api_token'][tenant]
 
     response = requests.get(
-        generate_tenant_url(cluster, tenant) + "/api/config/v1/" + endpoint,
+        generate_tenant_url(cluster, tenant) + CONFIG_API_V1 + endpoint,
         params=params,
         verify=False,
         json=json
@@ -249,7 +254,7 @@ def config_post(cluster, tenant, endpoint, params=None, json=None):
     params['Api-Token'] = cluster['api_token'][tenant]
 
     response = requests.post(
-        generate_tenant_url(cluster, tenant) + "/api/config/v1/" + endpoint,
+        generate_tenant_url(cluster, tenant) + CONFIG_API_V1 + endpoint,
         params=params,
         verify=False,
         json=json
@@ -268,7 +273,7 @@ def config_put(cluster, tenant, endpoint, params=None, json=None):
     params['Api-Token'] = cluster['api_token'][tenant]
 
     response = requests.put(
-        generate_tenant_url(cluster, tenant) + "/api/config/v1/" + endpoint,
+        generate_tenant_url(cluster, tenant) + CONFIG_API_V1 + endpoint,
         params=params,
         verify=False,
         json=json
@@ -287,7 +292,7 @@ def config_delete(cluster, tenant, endpoint, params=None, json=None):
     params['Api-Token'] = cluster['api_token'][tenant]
 
     response = requests.delete(
-        generate_tenant_url(cluster, tenant) + "/api/config/v1/" + endpoint,
+        generate_tenant_url(cluster, tenant) + CONFIG_API_V1 + endpoint,
         params=params,
         verify=False,
         json=json

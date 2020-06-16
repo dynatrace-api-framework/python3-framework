@@ -4,6 +4,9 @@ import re
 import dynatrace.requests.request_handler as rh
 import user_variables as uv
 
+
+MZ_ENDPOINT = "/maintenanceWindows/"
+
 class InvalidDateFormatException(ValueError):
   def __init__(self, required_format):
     self.required_format = required_format
@@ -114,28 +117,28 @@ def generate_schedule(recurrence_type, start_time, duration, range_start, range_
 
 def create_window (cluster, tenant, json):
   """Create Maintenance Window"""
-  response = rh.config_post(cluster, tenant, '/maintenanceWindows', json=json)
+  response = rh.config_post(cluster, tenant, MZ_ENDPOINT, json=json)
   return response.status_code
 
 def update_window (cluster, tenant, window_id, json):
   """Update Maintenance Window"""
-  response = rh.config_put(cluster, tenant, '/maintenanceWindows/' + window_id, json=json)
+  response = rh.config_put(cluster, tenant, MZ_ENDPOINT + window_id, json=json)
   return response.status_code
 
 def delete_window (cluster, tenant, window_id):
   """Delete Maintenance Window"""
-  response = rh.config_delete(cluster, tenant, '/maintenanceWindows/' + window_id)
+  response = rh.config_delete(cluster, tenant, MZ_ENDPOINT + window_id)
   return response.status_code
   
 def get_windows (cluster, tenant):
   """Return List of Maintenance Windows in Effect"""
-  response = rh.config_get(cluster, tenant, '/maintenanceWindows')
+  response = rh.config_get(cluster, tenant, MZ_ENDPOINT)
   return response.json()
 
 
 def get_window (cluster, tenant, window_id):
   """Return Maintenance Window Details"""
-  response = rh.config_get(cluster, tenant, '/maintenanceWindows/' + window_id)
+  response = rh.config_get(cluster, tenant, MZ_ENDPOINT + window_id)
   return response.json()
 
 def parse_tag(tag_string):

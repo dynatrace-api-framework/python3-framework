@@ -1,6 +1,8 @@
 """SSO Operations for Dynatrace"""
 import dynatrace.requests.request_handler as rh
 
+ENDPOINT = "sso/ssoProvider"
+
 def disable_sso (cluster):
   """Disable SSO Sign-in"""
   disable_payload = {
@@ -10,7 +12,7 @@ def disable_sso (cluster):
       "ssoGroupsEnabled": False,
       "ssoLoginDisabled": True
   }
-  response = rh.cluster_post(cluster, "sso/ssoProvider", json=disable_payload)
+  response = rh.cluster_post(cluster, ENDPOINT, json=disable_payload)
   return response.status_code
 
 def enable_sso(cluster, disable_local=False, groups_enabled=False, is_openid=False):
@@ -30,9 +32,9 @@ def enable_sso(cluster, disable_local=False, groups_enabled=False, is_openid=Fal
   if is_openid:
     enable_payload['ssoProvider'] = "OIDC"
 
-  response = rh.cluster_post(cluster, "sso/ssoProvider", json=enable_payload)
+  response = rh.cluster_post(cluster, ENDPOINT, json=enable_payload)
   return response.status_code
 
 def get_sso_status (cluster):
-  response = rh.cluster_get(cluster, "sso/ssoProvider")
+  response = rh.cluster_get(cluster, ENDPOINT)
   return response.json()
