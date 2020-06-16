@@ -11,6 +11,7 @@ FULL_SET = {
             "tenant2": "API TOKEN GOES HERE",
         },
         "is_managed": True,
+        "verify_ssl": True,
         "cluster_token": "Required for Cluster Operations in Managed"
     }
 }
