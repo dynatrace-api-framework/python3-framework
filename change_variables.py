@@ -1,15 +1,25 @@
 """Replace active variables with another set"""
-import sys
+from platform import system
+import argparse
 import os
 
-def replace_env():
+def replace_set(set_file):
   """Replace Variable File"""
-  print("Enter Set to Import: ", end='')
-  new_env = input()
-
-  if "windows" in sys.platform:
-    os.system("copy variable_sets\\" + str(new_env) + ".py user_variables.py")
+  # Options are Darwin, Linux, Java and Windows. Java not supported
+  if "Windows" in system():
+    os.system("copy variable_sets\\" + str(set_file) + ".py user_variables.py")
   else:
-    os.system("cp variable_sets/" + str(new_env) + ".py user_variables.py")
+    os.system("cp variable_sets/" + str(set_file) + ".py user_variables.py")
 
-replace_env()
+def get_variable_set_file(variable_set_arg):
+  """Checks if the set file was provided via arg else prompt"""
+  if variable_set_arg:
+    return variable_set_arg
+  return input("Enter Set to Import: ")
+
+if __name__ == '__main__':
+  parser = argparse.ArgumentParser()
+  parser.add_argument('--set-file', '-s')
+  args = parser.parse_args()
+  set_file = get_variable_set_file(args.set_file)
+  replace_set(set_file)
