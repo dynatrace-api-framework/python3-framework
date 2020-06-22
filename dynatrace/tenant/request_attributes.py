@@ -3,10 +3,12 @@
 import json
 from dynatrace.requests import request_handler as rh
 
+ENDPOINT = "/service/requestAttributes/"
+
 def pull_to_files(cluster, tenant, ignore_disabled=True):
   """Pull files from an environment to local"""
   # API Calls needed: Pull RA, take the ID and pull the details of each RA
-  all_ra_call = rh.config_get(cluster, tenant, "/service/requestAttributes")
+  all_ra_call = rh.config_get(cluster, tenant, ENDPOINT)
   all_ra_json = all_ra_call.json()
   all_ra_json = all_ra_json['values']
   #print (json.dumps(all_ra_json, indent=2))
@@ -15,7 +17,7 @@ def pull_to_files(cluster, tenant, ignore_disabled=True):
     single_ra_call = rh.config_get(
         cluster,
         tenant,
-        "/service/requestAttributes/" + str(request_attribute['id'])
+        ENDPOINT + str(request_attribute['id'])
     )
     if single_ra_call.status_code == 200:
       single_ra_json = single_ra_call.json()
@@ -34,7 +36,7 @@ def push_from_files(file_list, cluster, tenant):
   """Push Request Attributes in JSONs to a tenant"""
   
   # Checks for Existing RAs to update them put request rather than a post that would fail
-  existing_ra_get = rh.config_get(cluster, tenant, "/service/requestAttributes")
+  existing_ra_get = rh.config_get(cluster, tenant, ENDPOINT)
   existing_ra_json = existing_ra_get.json()
   existing_ra_json = existing_ra_json['values']
   existing_ra_list = {}
@@ -48,14 +50,14 @@ def push_from_files(file_list, cluster, tenant):
         single_ra_post = rh.config_put(
             cluster,
             tenant,
-            "/service/requestAttributes/" + existing_ra_list[file],
+            ENDPOINT + existing_ra_list[file],
             json=ra_json
         )
       else:
         single_ra_post = rh.config_post(
             cluster,
             tenant,
-            "/service/requestAttributes",
+            ENDPOINT,
             json=ra_json
         )
       if single_ra_post.status_code >= 400:
