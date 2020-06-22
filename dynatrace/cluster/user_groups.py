@@ -63,7 +63,6 @@ def delete_app_groups (cluster, app_name):
           cluster,
           "groups/" + group_id
       )
-  return
 
 def delete_app_groups_setwide(app_name):
   """Create Dynatrace User Groups for Applications"""

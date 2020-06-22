@@ -2,19 +2,21 @@
 # Applications needs a seperate definition since the url is not the same (not /infrastructre/)
 from dynatrace.requests import request_handler as rh
 
+ENDPOINT = "entity/applications/"
+
 def get_applications_tenantwide(cluster, tenant):
   """Get Information for all applications in a tenant"""
-  response = rh.env_get(cluster, tenant, "entity/applications")
+  response = rh.env_get(cluster, tenant, ENDPOINT)
   return response.json()
 
 def get_application(cluster, tenant, entity):
   """Get Information on one application for in a tenant"""
-  response = rh.env_get(cluster, tenant, "entity/applications/" + entity)
+  response = rh.env_get(cluster, tenant, ENDPOINT + entity)
   return response.json()
 
 def set_application_properties(cluster, tenant, entity, prop_json):
   """Update properties of application entity"""
-  response = rh.env_post(cluster, tenant, "entity/applications/" + entity, json=prop_json)
+  response = rh.env_post(cluster, tenant, ENDPOINT + entity, json=prop_json)
   return response.json()
 
 def get_application_count_tenantwide(cluster, tenant):
@@ -24,7 +26,7 @@ def get_application_count_tenantwide(cluster, tenant):
       "includeDetails" : "false"
   }
 
-  response = rh.env_get(cluster, tenant, "entity/applications", params=params)
+  response = rh.env_get(cluster, tenant, ENDPOINT, params=params)
   env_app_count = len(response.json())
   return env_app_count
 
@@ -55,5 +57,5 @@ def add_application_tags (cluster, tenant, entity, tag_list):
 
 def get_application_baseline(cluster, tenant, entity):
   """Get baselines on one application for in a tenant"""
-  response = rh.env_get(cluster, tenant, "entity/applications/" + entity + "/baseline")
+  response = rh.env_get(cluster, tenant, ENDPOINT + entity + "/baseline")
   return response.json()
