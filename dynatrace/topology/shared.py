@@ -6,6 +6,8 @@ from dynatrace.requests import request_handler as rh
 # 2. Get specific entity - application, host process, process group, service
 # 3. Update properties of entity - application, custom, host, process group, service
 
+ENDPOINT = "entity/infrastructure/"
+
 def check_valid_layer(layer, layer_list):
   """Check if the operation is valid for the layer"""
   if layer is None or layer_list is None:
@@ -21,7 +23,7 @@ def get_env_layer_entities(cluster, tenant, layer, params=None):
   response = rh.env_get(
       cluster,
       tenant,
-      "entity/infrastructure/" + layer,
+      ENDPOINT + layer,
       params=params
   )
   return response.json()
@@ -33,7 +35,7 @@ def get_env_layer_entity(cluster, tenant, layer, entity, params=None):
   response = rh.env_get(
       cluster,
       tenant,
-      "entity/infrastructure/" + layer + "/" + entity,
+      ENDPOINT + layer + "/" + entity,
       params=params
   )
   return response.json()
@@ -45,7 +47,7 @@ def set_env_layer_properties(cluster, tenant, layer, entity, prop_json):
   response = rh.env_post(
       cluster,
       tenant,
-      "entity/infrastructure/" + layer + "/" + entity,
+      ENDPOINT + layer + "/" + entity,
       json=prop_json
   )
   return response.status_code
@@ -62,7 +64,7 @@ def get_env_layer_count(cluster, tenant, layer, params=None):
     params['includeDetails'] : "false"
 
   check_valid_layer(layer, layer_list)
-  response = rh.env_get(cluster, tenant, "entity/infrastructure/" + layer, params=params)
+  response = rh.env_get(cluster, tenant, ENDPOINT + layer, params=params)
   env_layer_count = len(response.json())
   return env_layer_count
 
