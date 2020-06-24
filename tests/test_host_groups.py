@@ -1,4 +1,4 @@
-# import change_pythonpath
+"""Testing dynatrace.tenant.host_groups"""
 import unittest
 import json
 import user_variables

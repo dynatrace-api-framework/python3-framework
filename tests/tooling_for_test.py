@@ -4,7 +4,7 @@ import json
 from dynatrace.requests.request_handler import generate_tenant_url, no_ssl_verification
 
 
-def create_mockserver_expectation(cluster, tenant, url_path, request_type, parameters, response_payload_file=None, response_code=200, mock_id=None):
+def create_mockserver_expectation(cluster, tenant, url_path, request_type, parameters, response_payload_file=None, mock_id=None):
   expectation = {
       "httpRequest": {
           "queryStringParameters": {
@@ -12,7 +12,7 @@ def create_mockserver_expectation(cluster, tenant, url_path, request_type, param
           },
       },
       "httpResponse": {
-          "statusCode": 302
+          "statusCode": 200
       },
       "times": {
           "remainingTimes": 1,
@@ -31,8 +31,7 @@ def create_mockserver_expectation(cluster, tenant, url_path, request_type, param
         "type": "JSON",
         "json": response_payload,
     }
-  if response_code and isinstance(response_code, int):
-    expectation["httpResponse"]["statusCode"] = response_code
+
   if mock_id:
     expectation["id"] = mock_id
 
