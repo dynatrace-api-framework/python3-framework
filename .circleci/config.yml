@@ -16,7 +16,7 @@ jobs:
             sudo chown -R circleci:circleci /usr/local/lib/python3.8/site-packages
       - run:
           command: |
-            cp .circleci/user_variables.py framework/user_variables.py
+            cp .circleci/mockserver.py user_variables.py
             pip install pipenv
             pipenv install --dev
       - run:
