@@ -1,0 +1,34 @@
+[{
+    "entityId": "HOST-238441A17F95B305",
+    "displayName": "testserver",
+    "discoveredName": "testserver",
+    "firstSeenTimestamp": 1592513300463,
+    "lastSeenTimestamp": 1592980597441,
+    "tags": [],
+    "fromRelationships": {},
+    "toRelationships": {
+        "isProcessOf": [],
+        "runsOn": []
+    },
+    "osType": "LINUX",
+    "osArchitecture": "X86",
+    "osVersion": "Debian GNU/Linux 10 (buster) (kernel 4.19.0-9-amd64)",
+    "bitness": "64bit",
+    "cpuCores": 12,
+    "logicalCpuCores": 24,
+    "monitoringMode": "FULL_STACK",
+    "networkZoneId": "default",
+    "agentVersion": {
+        "major": 1,
+        "minor": 195,
+        "revision": 54,
+        "timestamp": "20200529-113801",
+        "sourceRevision": ""
+    },
+    "consumedHostUnits": 8.0,
+    "userLevel": "SUPERUSER",
+    "hostGroup": {
+        "meId": "HOST_GROUP-ABCDEFGH12345678",
+        "name": "HOST_GROUP_1"
+    }
+}]
