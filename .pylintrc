@@ -1,0 +1,1 @@
+init-hook='from sys.path import append; from os import getcwd; append(getcwd())'
