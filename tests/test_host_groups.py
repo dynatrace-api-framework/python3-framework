@@ -16,7 +16,7 @@ class TestHostGroupFunctions(unittest.TestCase):
         "includeDetails": [ "true" ],
         "Api-Token": [CLUSTER["api_token"][TENANT]],
     }
-    mockserver_expectation_file = "tests/mockserver_expectations/mock_hostgroup_tenantwide.json"
+    mockserver_expectation_file = "tests/mockserver_expectations/mock_hostgroup_1.json"
     tooling_for_test.create_mockserver_expectation(
         CLUSTER, TENANT, URL_PATH, "GET", parameters, mockserver_expectation_file)
     command_tested = host_groups.get_host_groups_tenantwide(CLUSTER, TENANT)
@@ -25,6 +25,13 @@ class TestHostGroupFunctions(unittest.TestCase):
       'HOST_GROUP-ABCDEFGH12345678': 'HOST_GROUP_1'
     }
     self.assertEqual(command_tested, expected_result)
+
+  def test_get_host_groups_clusterwide(self):
+    parameters = {
+      "relativeTime": ["day"],
+      "includeDetails": [ "true" ],
+      "Api-Token": [CLUSTER["api_token"][TENANT]],
+    }
 
 
 if __name__ == '__main__':
