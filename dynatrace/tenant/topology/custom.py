@@ -1,4 +1,4 @@
-import dynatrace.topology.shared as topology_shared
+import dynatrace.tenant.topology.shared as topology_shared
 
 
 def set_custom_properties(cluster, tenant, entity, prop_json):

@@ -1,5 +1,5 @@
 """Host operations from the Dynatrace API"""
-import dynatrace.topology.shared as topology_shared
+import dynatrace.tenant.topology.shared as topology_shared
 from dynatrace.requests import request_handler as rh
 
 
