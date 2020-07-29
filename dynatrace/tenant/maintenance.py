@@ -3,22 +3,10 @@ import datetime
 import re
 import dynatrace.requests.request_handler as rh
 import user_variables as uv
+from dynatrace.exceptions import InvalidDateFormatException
 
 
 MZ_ENDPOINT = rh.TenantAPIs.MAINTENANCE_WINDOWS
-
-
-class InvalidDateFormatException(ValueError):
-    def __init__(self, required_format):
-        self.required_format = required_format
-        print("Incorrect Date for following entry: %s", required_format)
-
-
-class InvalidScopeException(ValueError):
-    def __init__(self, required_format):
-        self.required_format = required_format
-        print("Invalid scope used. Tag required for management zone, matching rule: %s", required_format)
-
 
 def validate_datetime(datetime_text, required_format):
     try:
@@ -73,7 +61,7 @@ def generate_schedule(recurrence_type, start_time, duration, range_start, range_
 
     # Check Recurrence
     if recurrence_type not in types_available:
-        raise Exception(
+        raise ValueError(
             "Invalid Recurrence Type! Allowed values are: ONCE, DAILY, WEEKLY, MONTHLY")
 
     # Check ranges
@@ -110,7 +98,7 @@ def generate_schedule(recurrence_type, start_time, duration, range_start, range_
         if day in days_of_week:
             schedule['recurrence']['dayOfWeek'] = day
         else:
-            raise Exception("Invalid Weekly Day! Allowed values are "
+            raise ValueError("Invalid Weekly Day! Allowed values are "
                             + "SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY")
 
     # Check Monthly Day
@@ -118,7 +106,7 @@ def generate_schedule(recurrence_type, start_time, duration, range_start, range_
         if (1 <= int(day) <= 31):
             schedule['recurrence']['dayOfMonth'] = day
         else:
-            raise Exception("Invalid Monthly Day! Allowed values are 1-31")
+            raise ValueError("Invalid Monthly Day! Allowed values are 1-31")
 
     return schedule
 
