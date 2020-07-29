@@ -41,7 +41,7 @@ def add_host_tags(cluster, tenant, entity, tag_list):
 def delete_host_tag(cluster, tenant, entity, tag):
     """Remove single tag from host"""
     if tag is None:
-        raise Exception("Tag cannot be None!")
+        raise ValueError("Tag cannot be None!")
     return rh.make_api_call(cluster=cluster,
                             tenant=tenant,
                             method=rh.HTTP.DELETE,
