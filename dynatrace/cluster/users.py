@@ -1,5 +1,6 @@
 """User Operations in Cluster Mangement"""
 import dynatrace.requests.request_handler as rh
+from dynatrace.exceptions import ManagedClusterOnlyException
 
 # TODO add check for is_managed
 
@@ -7,7 +8,7 @@ import dynatrace.requests.request_handler as rh
 def check_is_managed(cluster, ignore_saas):
     """Checks if the cluster is Managed"""
     if not cluster['is_managed'] and not ignore_saas:
-        raise Exception('Cannot run operation on SaaS instances!')
+        raise ManagedClusterOnlyException()
     return cluster['is_managed']
 
 
