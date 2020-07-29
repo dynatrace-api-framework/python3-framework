@@ -19,9 +19,9 @@ ENDPOINT_SUFFIX = {
 def check_valid_layer(layer, layer_list):
     """Check if the operation is valid for the layer"""
     if layer is None or layer_list is None:
-        raise Exception('Provide layer and layer_list!')
+        raise TypeError('Provide layer and layer_list!')
     if layer not in layer_list:
-        raise Exception(
+        raise ValueError(
             layer + " layer does not exist or is invalid for this use!")
 
 
@@ -114,7 +114,7 @@ def add_env_layer_tags(cluster, tenant, layer, entity, tag_list):
                   'custom', 'process-groups', 'services']
     check_valid_layer(layer, layer_list)
     if not tag_list:
-        raise Exception("tag_list cannot be None type")
+        raise TypeError("tag_list cannot be None type")
     tag_json = {
         'tags': tag_list
     }
