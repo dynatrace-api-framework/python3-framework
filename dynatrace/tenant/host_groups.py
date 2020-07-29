@@ -1,5 +1,5 @@
 """Host Group Information for Tenant"""
-from dynatrace.topology import hosts as topology_hosts
+from dynatrace.tenant.topology import hosts as topology_hosts
 
 # TODO redo export function (break out to export function?)
 # def export_host_groups_setwide(full_set):
