@@ -1,7 +1,7 @@
 """Make API Request to available Dynatrace API"""
 import requests
 import time
-from dynatrace.exceptions import InvalidAPIResponseException
+from dynatrace.exceptions import InvalidAPIResponseException, ManagedClusterOnlyException
 from enum import Enum, auto
 
 requests.packages.urllib3.disable_warnings()
@@ -94,13 +94,14 @@ def make_api_call(cluster, endpoint, tenant=None, params=None, json=None, method
     @return - response from request\n
     '''
     # Set the right URL for the operation
-    url = f"{generate_tenant_url(cluster, tenant)}{endpoint}" if tenant else cluster['url']
+    url = f"{generate_tenant_url(cluster, tenant)}{endpoint}" if tenant else f"{HTTPS_STR}{cluster['url']}"
 
     if not params:
         params = {}
 
     # Get correct token for the operation
     if 'onpremise' in str(endpoint) or 'cluster' in str(endpoint):
+        check_managed (cluster)
         params['Api-Token'] = cluster['cluster_token']
     else:
         params['Api-Token'] = cluster['api_token'][tenant]
@@ -157,10 +158,10 @@ def check_response(response):
     return True
 
 
-def check_managed(managed_bool):
+def check_managed(cluster):
     """Checks if the Cluster Operation is valid (Managed) for the current cluster"""
-    if not managed_bool:
-        raise Exception("Cluster Operations not supported for SaaS!")
+    if not cluster['is_managed']:
+        raise ManagedClusterOnlyException()
 
 
 def generate_tenant_url(cluster, tenant):

@@ -16,3 +16,7 @@ class InvalidScopeException(ValueError):
     def __init__(self, required_format):
         self.required_format = required_format
         print("Invalid scope used. Tag required for management zone, matching rule: %s", required_format, file=stderr)
+
+class ManagedClusterOnlyException(TypeError):
+    def __init__(self):
+        print ("This operation is only supported on Dynatrace Managed!", file=stderr)
