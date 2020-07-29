@@ -1,10 +1,11 @@
 """Mockserver Expectation Setup"""
 import requests
 import json
-from dynatrace.requests.request_handler import generate_tenant_url, no_ssl_verification
+from dynatrace.requests.request_handler import generate_tenant_url
 
 
 def create_mockserver_expectation(cluster, tenant, url_path, request_type, parameters, response_payload_file=None, mock_id=None):
+  requests.packages.urllib3.disable_warnings()
   expectation = {
       "httpRequest": {
           "queryStringParameters": {
@@ -37,12 +38,15 @@ def create_mockserver_expectation(cluster, tenant, url_path, request_type, param
 
   expectation_url = generate_tenant_url(
       cluster, tenant) + "/mockserver/expectation"
-  with no_ssl_verification():
-    test_req = requests.request(
-        "PUT", expectation_url, json=expectation, verify=False)
-    if test_req.status_code > 300:
-      print(expectation, test_req.status_code, test_req.text, end="\n")
-      raise ValueError(test_req.status_code)
+  test_req = requests.request(
+      "PUT",
+      expectation_url,
+      json=expectation,
+      verify=False
+  )
+  if test_req.status_code > 300:
+    print(expectation, test_req.status_code, test_req.text, end="\n")
+    raise ValueError(test_req.status_code)
 
 
 def expected_payload(json_file):
