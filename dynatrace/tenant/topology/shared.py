@@ -6,17 +6,23 @@ from dynatrace.requests import request_handler as rh
 # 2. Get specific entity - application, host process, process group, service
 # 3. Update properties of entity - application, custom, host, process group, service
 
-ENDPOINT = "entity/infrastructure/"
+ENDPOINT_SUFFIX = {
+        'applications': 'applications',
+        'custom': "infrastructure/custom",
+        'hosts': "infrastructure/hosts",
+        'processes': "infrastructure/processes",
+        'process-groups': "infrastructure/process-groups",
+        'services': "infrastructure/services"
+}
 
 
 def check_valid_layer(layer, layer_list):
     """Check if the operation is valid for the layer"""
     if layer is None or layer_list is None:
-        raise Exception('Provide layer and layer_list!')
+        raise TypeError('Provide layer and layer_list!')
     if layer not in layer_list:
-        raise Exception(
+        raise ValueError(
             layer + " layer does not exist or is invalid for this use!")
-    return
 
 
 def get_env_layer_entities(cluster, tenant, layer, params=None):
@@ -27,7 +33,7 @@ def get_env_layer_entities(cluster, tenant, layer, params=None):
     response = rh.make_api_call(
         cluster=cluster,
         tenant=tenant,
-        endpoint=f"{rh.Endpoints.V1_TOPOLOGY}/{layer}",
+        endpoint=f"{rh.TenantAPIs.V1_TOPOLOGY}/{ENDPOINT_SUFFIX[layer]}",
         params=params
     )
     return response.json()
@@ -41,7 +47,7 @@ def get_env_layer_entity(cluster, tenant, layer, entity, params=None):
     response = rh.make_api_call(
         cluster=cluster,
         tenant=tenant,
-        endpoint=f"{rh.Endpoints.V1_TOPOLOGY}/{layer}/{entity}",
+        endpoint=f"{rh.TenantAPIs.V1_TOPOLOGY}/{ENDPOINT_SUFFIX[layer]}/{entity}",
         params=params
     )
     return response.json()
@@ -56,7 +62,7 @@ def set_env_layer_properties(cluster, tenant, layer, entity, prop_json):
         cluster=cluster,
         tenant=tenant,
         method=rh.HTTP.POST,
-        endpoint=f"{rh.Endpoints.V1_TOPOLOGY}/{layer}/{entity}",
+        endpoint=f"{rh.TenantAPIs.V1_TOPOLOGY}/{ENDPOINT_SUFFIX[layer]}/{entity}",
         json=prop_json
     )
     return response.status_code
@@ -76,7 +82,7 @@ def get_env_layer_count(cluster, tenant, layer, params=None):
     check_valid_layer(layer, layer_list)
     response = rh.make_api_call(cluster=cluster,
                                 tenant=tenant,
-                                endpoint=f"{rh.Endpoints.V1_TOPOLOGY}/{layer}",
+                                endpoint=f"{rh.TenantAPIs.V1_TOPOLOGY}/{ENDPOINT_SUFFIX[layer]}",
                                 params=params)
     env_layer_count = len(response.json())
     return env_layer_count
@@ -108,7 +114,7 @@ def add_env_layer_tags(cluster, tenant, layer, entity, tag_list):
                   'custom', 'process-groups', 'services']
     check_valid_layer(layer, layer_list)
     if not tag_list:
-        raise Exception("tag_list cannot be None type")
+        raise TypeError("tag_list cannot be None type")
     tag_json = {
         'tags': tag_list
     }

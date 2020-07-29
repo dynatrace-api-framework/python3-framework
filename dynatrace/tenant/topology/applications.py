@@ -67,7 +67,7 @@ def get_application_count_setwide(full_set):
 def add_application_tags(cluster, tenant, entity, tag_list):
     """Add tags to application"""
     if tag_list is None:
-        raise Exception("tag_list cannot be None type")
+        raise TypeError("tag_list cannot be None type")
     tag_json = {
         'tags': tag_list
     }

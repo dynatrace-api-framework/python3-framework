@@ -1,5 +1,5 @@
 """Process operations from the Dynatrace API"""
-import dynatrace.topology.shared as topology_shared
+import dynatrace.tenant.topology.shared as topology_shared
 
 
 def get_processes_tenantwide(cluster, tenant, params=None):

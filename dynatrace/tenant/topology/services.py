@@ -1,5 +1,5 @@
 """Service operations from the Dynatrace API"""
-import dynatrace.topology.shared as topology_shared
+import dynatrace.tenant.topology.shared as topology_shared
 
 
 def get_services_tenantwide(cluster, tenant):

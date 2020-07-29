@@ -1,5 +1,5 @@
 """Host operations from the Dynatrace API"""
-import dynatrace.topology.shared as topology_shared
+import dynatrace.tenant.topology.shared as topology_shared
 from dynatrace.requests import request_handler as rh
 
 
@@ -41,7 +41,7 @@ def add_host_tags(cluster, tenant, entity, tag_list):
 def delete_host_tag(cluster, tenant, entity, tag):
     """Remove single tag from host"""
     if tag is None:
-        raise Exception("Tag cannot be None!")
+        raise TypeError("Tag cannot be None!")
     return rh.make_api_call(cluster=cluster,
                             tenant=tenant,
                             method=rh.HTTP.DELETE,
@@ -58,11 +58,11 @@ def get_host_units_tenantwide(cluster, tenant, params=None):
 
 def get_oneagents_tenantwide(cluster, tenant, params=None):
     oneagents = []
-    nextPageKey = 1
+    next_page_key = 1
 
-    while nextPageKey:
-        if nextPageKey != 1:
-            params['nextPageKey'] = nextPageKey
+    while next_page_key:
+        if next_page_key != 1:
+            params['nextPageKey'] = next_page_key
 
         response = rh.make_api_call(cluster=cluster,
                                     endpoint=rh.TenantAPIs.ONEAGENTS,
@@ -70,6 +70,6 @@ def get_oneagents_tenantwide(cluster, tenant, params=None):
                                     params=params)
 
         oneagents.extend(response.json().get('hosts'))
-        nextPageKey = response.json().get('nextPageKey')
+        next_page_key = response.json().get('nextPageKey')
 
     return oneagents
