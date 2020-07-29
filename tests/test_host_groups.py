@@ -26,13 +26,5 @@ class TestHostGroupFunctions(unittest.TestCase):
     }
     self.assertEqual(command_tested, expected_result)
 
-  def test_get_host_groups_clusterwide(self):
-    parameters = {
-      "relativeTime": ["day"],
-      "includeDetails": [ "true" ],
-      "Api-Token": [CLUSTER["api_token"][TENANT]],
-    }
-
-
 if __name__ == '__main__':
   unittest.main()
