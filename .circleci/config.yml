@@ -20,7 +20,7 @@ jobs:
             pipenv install --dev
       - run:
           command: |
-            pipenv run python -m unittest tests/test_host_groups.py
+            pipenv run python -m unittest discover
       - store_test_results:
           path: test-results
       - store_artifacts:
