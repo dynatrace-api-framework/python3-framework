@@ -17,7 +17,7 @@ class TestHostGroupFunctions(unittest.TestCase):
     }
     mockserver_expectation_file = "tests/mockserver_expectations/mock_hostgroup_response_1.json"
     tooling_for_test.create_mockserver_expectation(
-        CLUSTER, TENANT, URL_PATH, "GET", parameters, response_payload_file=mockserver_expectation_file)
+        CLUSTER, TENANT, URL_PATH, "GET", parameters=parameters, response_payload_file=mockserver_expectation_file)
     command_tested = host_groups.get_host_groups_tenantwide(CLUSTER, TENANT)
 
     expected_result = {
