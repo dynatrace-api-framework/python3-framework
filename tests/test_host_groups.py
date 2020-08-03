@@ -9,15 +9,16 @@ TENANT = "tenant1"
 URL_PATH = "/api/v1/entity/infrastructure/hosts"
 
 class TestHostGroupFunctions(unittest.TestCase):
+  RESPONSE_DIR = "tests/mockserver_payloads/responses/host_groups/"
   def test_get_host_groups_tenantwide(self):
     parameters = {
         "relativeTime": ["day"],
         "includeDetails": [ "true" ],
         "Api-Token": [CLUSTER["api_token"][TENANT]],
     }
-    mockserver_expectation_file = "tests/mockserver_expectations/mock_hostgroup_response_1.json"
+    mockserver_response_file = f"{self.RESPONSE_DIR}mock_get_general_1.json"
     tooling_for_test.create_mockserver_expectation(
-        CLUSTER, TENANT, URL_PATH, "GET", parameters=parameters, response_payload_file=mockserver_expectation_file)
+        CLUSTER, TENANT, URL_PATH, "GET", parameters=parameters, response_file=mockserver_response_file)
     command_tested = host_groups.get_host_groups_tenantwide(CLUSTER, TENANT)
 
     expected_result = {
