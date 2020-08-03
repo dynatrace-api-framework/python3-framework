@@ -1,0 +1,16 @@
+{
+    "name":"Test Payload Daily",
+    "description":"Generating Payload for Test",
+    "suppression":"DETECT_PROBLEMS_AND_ALERT",
+    "schedule":{
+       "recurrenceType":"DAILY",
+       "start":"2020-01-01 00:00",
+       "end":"2020-01-02 00:00",
+       "zoneId":"America/Chicago",
+       "recurrence":{
+          "startTime":"23:00",
+          "durationMinutes":60
+       }
+    },
+    "type":"PLANNED"
+ }

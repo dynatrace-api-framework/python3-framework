@@ -1,6 +1,5 @@
 """Testing dynatrace.tenant.host_groups"""
 import unittest
-import json
 import user_variables
 from tests import tooling_for_test
 from dynatrace.tenant import host_groups
@@ -16,9 +15,9 @@ class TestHostGroupFunctions(unittest.TestCase):
         "includeDetails": [ "true" ],
         "Api-Token": [CLUSTER["api_token"][TENANT]],
     }
-    mockserver_expectation_file = "tests/mockserver_expectations/mock_hostgroup_1.json"
+    mockserver_expectation_file = "tests/mockserver_expectations/mock_hostgroup_response_1.json"
     tooling_for_test.create_mockserver_expectation(
-        CLUSTER, TENANT, URL_PATH, "GET", parameters, mockserver_expectation_file)
+        CLUSTER, TENANT, URL_PATH, "GET", parameters, response_payload_file=mockserver_expectation_file)
     command_tested = host_groups.get_host_groups_tenantwide(CLUSTER, TENANT)
 
     expected_result = {
