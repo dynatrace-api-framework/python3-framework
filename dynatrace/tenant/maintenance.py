@@ -15,13 +15,13 @@ class Suppression(Enum):
     Types of suppression for create Maintenance Window JSON. Suppression is required
 
     Args:
-        Enum (DETECT_PROBLEMS_AND_ALERT): Full Alerting. Entites in scope will have notes that a Maintenance Window was active
-        Enum (DETECT_PROBLEMS_DONT_ALERT): Problems detected but alerting profiles in that scope are not triggered
-        Enum (DONT_DETECT_PROBLEMS): Problem detection completely off for the scope
+        Enum (FULL_ALERTING): Full Alerting. Entites in scope will have notes that a Maintenance Window was active
+        Enum (DISABLE_ALERTING): Problems detected but alerting profiles in that scope are not triggered
+        Enum (DISABLE_DETECTION): Problem detection completely off for the scope
     """
-    DETECT_PROBLEMS_AND_ALERT = auto()
-    DETECT_PROBLEMS_DONT_ALERT = auto()
-    DONT_DETECT_PROBLEMS = auto()
+    FULL_ALERTING = "DETECT_PROBLEMS_AND_ALERT"
+    DISABLE_ALERTING = "DETECT_PROBLEMS_DONT_ALERT"
+    DISABLE_DETECTION = "DONT_DETECT_PROBLEMS"
 
 class Day(Enum):
     """
@@ -38,13 +38,13 @@ class Day(Enum):
         Enum (SUNDAY): SUNDAY
     """
 
-    MONDAY = auto()
-    TUESDAY = auto()
-    WEDNESDAY = auto()
-    THURSDAY = auto()
-    FRIDAY = auto()
-    SATURDAY = auto()
-    SUNDAY = auto()
+    MONDAY = "MONDAY"
+    TUESDAY = "TUESDAY"
+    WEDNESDAY = "WEDNESDAY"
+    THURSDAY = "THURSDAY"
+    FRIDAY = "FRIDAY"
+    SATURDAY = "SATURDAY"
+    SUNDAY = "SUNDAY"
 
 def validate_datetime(datetime_text, required_format):
     try:
