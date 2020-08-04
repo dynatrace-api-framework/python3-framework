@@ -4,9 +4,47 @@ import re
 import dynatrace.requests.request_handler as rh
 import user_variables as uv
 from dynatrace.exceptions import InvalidDateFormatException
+from enum import Enum, auto
 
 
 MZ_ENDPOINT = rh.TenantAPIs.MAINTENANCE_WINDOWS
+
+class Suppression(Enum):
+    """
+    *** NOT ACTIVE YET***
+    Types of suppression for create Maintenance Window JSON. Suppression is required
+
+    Args:
+        Enum (FULL_ALERTING): Full Alerting. Entites in scope will have notes that a Maintenance Window was active
+        Enum (DISABLE_ALERTING): Problems detected but alerting profiles in that scope are not triggered
+        Enum (DISABLE_DETECTION): Problem detection completely off for the scope
+    """
+    FULL_ALERTING = "DETECT_PROBLEMS_AND_ALERT"
+    DISABLE_ALERTING = "DETECT_PROBLEMS_DONT_ALERT"
+    DISABLE_DETECTION = "DONT_DETECT_PROBLEMS"
+
+class Day(Enum):
+    """
+    *** NOT ACTIVE YET ***
+    Day of the Week
+
+    Args:
+        Enum (MONDAY): MONDAY
+        Enum (TUESDAY): TUESDAY
+        Enum (WEDNESDAY): WEDNESDAY
+        Enum (THURSDAY): THURSDAY
+        Enum (FRIDAY): FRIDAY
+        Enum (SATURDAY): SATURDAY
+        Enum (SUNDAY): SUNDAY
+    """
+
+    MONDAY = "MONDAY"
+    TUESDAY = "TUESDAY"
+    WEDNESDAY = "WEDNESDAY"
+    THURSDAY = "THURSDAY"
+    FRIDAY = "FRIDAY"
+    SATURDAY = "SATURDAY"
+    SUNDAY = "SUNDAY"
 
 def validate_datetime(datetime_text, required_format):
     try:
@@ -118,7 +156,7 @@ def create_window(cluster, tenant, json):
                                 method=rh.HTTP.POST,
                                 endpoint=MZ_ENDPOINT,
                                 json=json)
-    return response.status_code
+    return response.json()
 
 
 def update_window(cluster, tenant, window_id, json):
