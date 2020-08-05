@@ -76,7 +76,7 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
         )
         maintenance_scope = maintenance.generate_scope(tags=[{'context': "CONTEXTLESS",'key': "testing"}])
         maintenance_json = maintenance.generate_window_json(
-            "Test Payload Daily",
+            "Test Payload Daily with Tag",
             "Generating Payload for Test",
             "DETECT_PROBLEMS_AND_ALERT",
             maintenance_schedule,
