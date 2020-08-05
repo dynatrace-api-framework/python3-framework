@@ -39,7 +39,7 @@ class TestGetProcesses(unittest.TestCase):
         testtools.create_mockserver_expectation(
             cluster=cluster,
             tenant=tenant,
-            url_path=url,
+            url_path=f"{url}/{process_id}",
             request_type="GET",
             response_file=response_file
         )
