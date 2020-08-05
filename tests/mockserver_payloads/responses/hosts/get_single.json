@@ -1,0 +1,70 @@
+{
+  "entityId": "HOST-9F74450267BAAE20",
+  "displayName": "host1123.radu.local",
+  "discoveredName": "host1123.radu.local",
+  "firstSeenTimestamp": 1594365724435,
+  "lastSeenTimestamp": 1596559448485,
+  "tags": [
+    {
+      "context": "CONTEXTLESS",
+      "key": "Application",
+      "value": "Super_App"
+    },
+    {
+      "context": "CONTEXTLESS",
+      "key": "Environment",
+      "value": "DEV"
+    }
+  ],
+  "fromRelationships": {},
+  "toRelationships": {
+    "isProcessOf": [
+      "PROCESS_GROUP_INSTANCE-7BDD5DC06168C858",
+      "PROCESS_GROUP_INSTANCE-726C522DDE0D2524",
+      "PROCESS_GROUP_INSTANCE-1238166A9681701C",
+      "PROCESS_GROUP_INSTANCE-829A8915392BFF28",
+      "PROCESS_GROUP_INSTANCE-6277FD97691C3FCB",
+      "PROCESS_GROUP_INSTANCE-0A37526FC2730958",
+      "PROCESS_GROUP_INSTANCE-F86303D27A8E830D",
+      "PROCESS_GROUP_INSTANCE-7C78AA98F4803D16",
+      "PROCESS_GROUP_INSTANCE-F9B6343E59930663"
+    ],
+    "isSiteOf": [
+      "GEOLOC_SITE-7580E62C914CAE61"
+    ],
+    "runsOn": [
+      "PROCESS_GROUP-4DE8442CCEAD2251",
+      "PROCESS_GROUP-6A2955530FA29616",
+      "PROCESS_GROUP-893E1F101431ADD1",
+      "PROCESS_GROUP-ACF6C23C63075E6F",
+      "PROCESS_GROUP-A93DF7C68AF50E3B",
+      "PROCESS_GROUP-719A10C7F5761D1B",
+      "PROCESS_GROUP-296B3416E647AAEA",
+      "PROCESS_GROUP-2F0439DE58E8F50B",
+      "PROCESS_GROUP-087AEE9E5099E4D2"
+    ]
+  },
+  "osType": "WINDOWS",
+  "osArchitecture": "X86",
+  "osVersion": "Windows Server 2012 Standard, ver. 6.2.9200",
+  "hypervisorType": "VMWARE",
+  "ipAddresses": [
+    "10.188.203.46"
+  ],
+  "bitness": "64bit",
+  "cpuCores": 1,
+  "logicalCpuCores": 1,
+  "monitoringMode": "FULL_STACK",
+  "networkZoneId": "default",
+  "consumedHostUnits": 0.25,
+  "managementZones": [
+    {
+      "id": "4173205628047632907",
+      "name": "MANAGE_ZONE_DEV"
+    }
+  ],
+  "hostGroup": {
+    "meId": "HOST_GROUP-FA0C3B0A6B7F4D78",
+    "name": "DEV_SUPERAPP_ZONE-A"
+  }
+}

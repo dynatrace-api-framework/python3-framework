@@ -1,0 +1,1381 @@
+[
+  {
+    "entityId": "HOST-9F74450267BAAE20",
+    "displayName": "host1123.radu.local",
+    "discoveredName": "host1123.radu.local",
+    "firstSeenTimestamp": 1594365724435,
+    "lastSeenTimestamp": 1596559448485,
+    "tags": [
+      {
+        "context": "CONTEXTLESS",
+        "key": "Application",
+        "value": "Super_App"
+      },
+      {
+        "context": "CONTEXTLESS",
+        "key": "Environment",
+        "value": "DEV"
+      }
+    ],
+    "fromRelationships": {},
+    "toRelationships": {
+      "isProcessOf": [
+        "PROCESS_GROUP_INSTANCE-7BDD5DC06168C858",
+        "PROCESS_GROUP_INSTANCE-726C522DDE0D2524",
+        "PROCESS_GROUP_INSTANCE-1238166A9681701C",
+        "PROCESS_GROUP_INSTANCE-829A8915392BFF28",
+        "PROCESS_GROUP_INSTANCE-6277FD97691C3FCB",
+        "PROCESS_GROUP_INSTANCE-0A37526FC2730958",
+        "PROCESS_GROUP_INSTANCE-F86303D27A8E830D",
+        "PROCESS_GROUP_INSTANCE-7C78AA98F4803D16",
+        "PROCESS_GROUP_INSTANCE-F9B6343E59930663"
+      ],
+      "isSiteOf": [
+        "GEOLOC_SITE-7580E62C914CAE61"
+      ],
+      "runsOn": [
+        "PROCESS_GROUP-4DE8442CCEAD2251",
+        "PROCESS_GROUP-6A2955530FA29616",
+        "PROCESS_GROUP-893E1F101431ADD1",
+        "PROCESS_GROUP-ACF6C23C63075E6F",
+        "PROCESS_GROUP-A93DF7C68AF50E3B",
+        "PROCESS_GROUP-719A10C7F5761D1B",
+        "PROCESS_GROUP-296B3416E647AAEA",
+        "PROCESS_GROUP-2F0439DE58E8F50B",
+        "PROCESS_GROUP-087AEE9E5099E4D2"
+      ]
+    },
+    "osType": "WINDOWS",
+    "osArchitecture": "X86",
+    "osVersion": "Windows Server 2012 Standard, ver. 6.2.9200",
+    "hypervisorType": "VMWARE",
+    "ipAddresses": [
+      "10.188.203.46"
+    ],
+    "bitness": "64bit",
+    "cpuCores": 1,
+    "logicalCpuCores": 1,
+    "monitoringMode": "FULL_STACK",
+    "networkZoneId": "default",
+    "consumedHostUnits": 0.25,
+    "managementZones": [
+      {
+        "id": "4173205628047632907",
+        "name": "MANAGE_ZONE_DEV"
+      }
+    ],
+    "hostGroup": {
+      "meId": "HOST_GROUP-FA0C3B0A6B7F4D78",
+      "name": "DEV_SUPERAPP_ZONE-A"
+    }
+  },
+  {
+    "entityId": "HOST-5B9CE4E4E14185FA",
+    "displayName": "eda.aphrodite.dev.eods.uk.eeca",
+    "discoveredName": "eda.aphrodite.dev.eods.uk.eeca",
+    "firstSeenTimestamp": 1595930453531,
+    "lastSeenTimestamp": 1596567537628,
+    "tags": [
+      {
+        "context": "CONTEXTLESS",
+        "key": "OS",
+        "value": "Linux"
+      }
+    ],
+    "fromRelationships": {
+      "isNetworkClientOfHost": [
+        "HOST-B667FC231C8B8DD3"
+      ]
+    },
+    "toRelationships": {
+      "isProcessOf": [
+        "PROCESS_GROUP_INSTANCE-A21F23DF2377CDF3",
+        "PROCESS_GROUP_INSTANCE-DDF57230A17C229B",
+        "PROCESS_GROUP_INSTANCE-8EC7F099B79DE446",
+        "PROCESS_GROUP_INSTANCE-45B761529113B950",
+        "PROCESS_GROUP_INSTANCE-DC819D1A1D4BD277",
+        "PROCESS_GROUP_INSTANCE-6CD25C7F9F3EA7B4",
+        "PROCESS_GROUP_INSTANCE-94CCA21312F222E9",
+        "PROCESS_GROUP_INSTANCE-370D49A5BE8CD98F",
+        "PROCESS_GROUP_INSTANCE-8EA3C7CC429BC058",
+        "PROCESS_GROUP_INSTANCE-3E9F8129DED1826A",
+        "PROCESS_GROUP_INSTANCE-48B3556CC2F4EC85",
+        "PROCESS_GROUP_INSTANCE-387D1C89E2A32B65",
+        "PROCESS_GROUP_INSTANCE-853875A0D767AC6A",
+        "PROCESS_GROUP_INSTANCE-B29164D385A8123C"
+      ],
+      "isSiteOf": [
+        "GEOLOC_SITE-7580E62C914CAE61",
+        "AWS_AVAILABILITY_ZONE-4FA4A4BB20C71342"
+      ],
+      "isNetworkClientOfHost": [
+        "HOST-B667FC231C8B8DD3"
+      ],
+      "runsOn": [
+        "PROCESS_GROUP-F612B535AB74A08A",
+        "PROCESS_GROUP-0765BFB1555AEC64",
+        "PROCESS_GROUP-5D3213D3CEE71BFC",
+        "PROCESS_GROUP-7BE59F151DF1E05F",
+        "PROCESS_GROUP-1D024AE6C849FC39",
+        "PROCESS_GROUP-77FDC8C1A93F7189",
+        "PROCESS_GROUP-D55B147D56DC61BC",
+        "PROCESS_GROUP-28699B8D57AACB48",
+        "PROCESS_GROUP-8F167A901E185CA4",
+        "PROCESS_GROUP-57D66C1273F88C3D",
+        "PROCESS_GROUP-374EE57952100044",
+        "PROCESS_GROUP-82AC69032E524B5E",
+        "PROCESS_GROUP-B1C069EABEFCD191"
+      ]
+    },
+    "osType": "LINUX",
+    "osArchitecture": "X86",
+    "osVersion": "Red Hat Enterprise Linux Server 7.6 (Maipo) (kernel 3.10.0-1062.12.1.el7.x86_64)",
+    "hypervisorType": "KVM",
+    "ipAddresses": [
+      "10.226.144.161"
+    ],
+    "bitness": "64bit",
+    "cpuCores": 1,
+    "logicalCpuCores": 2,
+    "cloudType": "EC2",
+    "monitoringMode": "FULL_STACK",
+    "networkZoneId": "default",
+    "agentVersion": {
+      "major": 1,
+      "minor": 185,
+      "revision": 137,
+      "timestamp": "20200212-183600",
+      "sourceRevision": ""
+    },
+    "consumedHostUnits": 0.25,
+    "userLevel": "SUPERUSER",
+    "managementZones": [
+      {
+        "id": "5557749485955049446",
+        "name": "AWS_EODS_SHARED"
+      }
+    ],
+    "awsSecurityGroup": [
+      "eods-dev-aphrodite-eda",
+      "eods-dev-shared-eda"
+    ],
+    "awsInstanceType": "t3.medium",
+    "amiId": "ami-0b196892c728a382c",
+    "awsInstanceId": "i-0f1a3ac209daf5032",
+    "hostGroup": {
+      "meId": "HOST_GROUP-8692976EA85437E7",
+      "name": "DEV_AWS_SHARED"
+    }
+  },
+  {
+    "entityId": "HOST-421D60DB4A2EA929",
+    "displayName": "eda.ascend.dev.eods.uk.eeca",
+    "discoveredName": "eda.ascend.dev.eods.uk.eeca",
+    "firstSeenTimestamp": 1596185232748,
+    "lastSeenTimestamp": 1596567554260,
+    "tags": [
+      {
+        "context": "CONTEXTLESS",
+        "key": "OS",
+        "value": "Linux"
+      }
+    ],
+    "fromRelationships": {
+      "isNetworkClientOfHost": [
+        "HOST-4399C32AF24910D5",
+        "HOST-E6234CDBD5DD63DF"
+      ]
+    },
+    "toRelationships": {
+      "isProcessOf": [
+        "PROCESS_GROUP_INSTANCE-C474F60F0A130E48",
+        "PROCESS_GROUP_INSTANCE-0CF25E0DFD16B8EA",
+        "PROCESS_GROUP_INSTANCE-7553D84034518B67",
+        "PROCESS_GROUP_INSTANCE-1C3F2EA649460DBB",
+        "PROCESS_GROUP_INSTANCE-8D4D262CB99D0E3A",
+        "PROCESS_GROUP_INSTANCE-974674A61CF2C895",
+        "PROCESS_GROUP_INSTANCE-2E8CCD9A15E3F55C",
+        "PROCESS_GROUP_INSTANCE-AEB6F70607F20436",
+        "PROCESS_GROUP_INSTANCE-5132D153699BC056",
+        "PROCESS_GROUP_INSTANCE-1D3151BD9706D607",
+        "PROCESS_GROUP_INSTANCE-D0BC8B6AC86E43AB",
+        "PROCESS_GROUP_INSTANCE-9CB9F19F7C0880B9",
+        "PROCESS_GROUP_INSTANCE-3016E7EE560C3DEF",
+        "PROCESS_GROUP_INSTANCE-2C4D0EFE814130C6"
+      ],
+      "isSiteOf": [
+        "GEOLOC_SITE-7580E62C914CAE61",
+        "AWS_AVAILABILITY_ZONE-4FA4A4BB20C71342"
+      ],
+      "isNetworkClientOfHost": [
+        "HOST-4399C32AF24910D5",
+        "HOST-E6234CDBD5DD63DF"
+      ],
+      "runsOn": [
+        "PROCESS_GROUP-F612B535AB74A08A",
+        "PROCESS_GROUP-0765BFB1555AEC64",
+        "PROCESS_GROUP-5D3213D3CEE71BFC",
+        "PROCESS_GROUP-7BE59F151DF1E05F",
+        "PROCESS_GROUP-1D024AE6C849FC39",
+        "PROCESS_GROUP-D55B147D56DC61BC",
+        "PROCESS_GROUP-28699B8D57AACB48",
+        "PROCESS_GROUP-8F167A901E185CA4",
+        "PROCESS_GROUP-57D66C1273F88C3D",
+        "PROCESS_GROUP-374EE57952100044",
+        "PROCESS_GROUP-82AC69032E524B5E",
+        "PROCESS_GROUP-FAA604E684B7708E",
+        "PROCESS_GROUP-B1C069EABEFCD191"
+      ]
+    },
+    "osType": "LINUX",
+    "osArchitecture": "X86",
+    "osVersion": "Red Hat Enterprise Linux Server 7.6 (Maipo) (kernel 3.10.0-1062.12.1.el7.x86_64)",
+    "hypervisorType": "KVM",
+    "ipAddresses": [
+      "10.226.144.176"
+    ],
+    "bitness": "64bit",
+    "cpuCores": 1,
+    "logicalCpuCores": 2,
+    "cloudType": "EC2",
+    "monitoringMode": "FULL_STACK",
+    "networkZoneId": "default",
+    "agentVersion": {
+      "major": 1,
+      "minor": 185,
+      "revision": 137,
+      "timestamp": "20200212-183600",
+      "sourceRevision": ""
+    },
+    "consumedHostUnits": 0.25,
+    "userLevel": "SUPERUSER",
+    "managementZones": [
+      {
+        "id": "5557749485955049446",
+        "name": "AWS_EODS_SHARED"
+      }
+    ],
+    "awsSecurityGroup": [
+      "eods-dev-shared-eda",
+      "eods-dev-ascend-eda"
+    ],
+    "awsInstanceType": "t3.medium",
+    "amiId": "ami-0a41565f4b7a71076",
+    "awsInstanceId": "i-0227f5311abf531ce",
+    "hostGroup": {
+      "meId": "HOST_GROUP-8692976EA85437E7",
+      "name": "AWS_EODS_SHARED"
+    }
+  },
+  {
+    "entityId": "HOST-413F4F394098A24D",
+    "displayName": "eda.brazilgds.dev.eods.uk.eeca",
+    "discoveredName": "eda.brazilgds.dev.eods.uk.eeca",
+    "firstSeenTimestamp": 1596190372236,
+    "lastSeenTimestamp": 1596567533507,
+    "tags": [
+      {
+        "context": "CONTEXTLESS",
+        "key": "OS",
+        "value": "Linux"
+      },
+      {
+        "context": "CONTEXTLESS",
+        "key": "Alerting_Queue",
+        "value": "SUPPORT"
+      }
+    ],
+    "fromRelationships": {
+      "isNetworkClientOfHost": [
+        "HOST-DEDC11439C4F6377"
+      ]
+    },
+    "toRelationships": {
+      "isProcessOf": [
+        "PROCESS_GROUP_INSTANCE-03A1FD721E7792EA",
+        "PROCESS_GROUP_INSTANCE-2DAEE2781F55FE38",
+        "PROCESS_GROUP_INSTANCE-47B3054A7FF34EAD",
+        "PROCESS_GROUP_INSTANCE-0665A89C4C1C88A3",
+        "PROCESS_GROUP_INSTANCE-8E6F09CEB32B055E",
+        "PROCESS_GROUP_INSTANCE-91B8F7693E08AEF7",
+        "PROCESS_GROUP_INSTANCE-C22D72ACEE844255",
+        "PROCESS_GROUP_INSTANCE-C756D9ED00A5052C",
+        "PROCESS_GROUP_INSTANCE-94645B441644C3F1",
+        "PROCESS_GROUP_INSTANCE-7671F7A23EE78003",
+        "PROCESS_GROUP_INSTANCE-9F9BDE7D76BE8BDD",
+        "PROCESS_GROUP_INSTANCE-9237C3DDF06510D7",
+        "PROCESS_GROUP_INSTANCE-1B20974DE5BF0869",
+        "PROCESS_GROUP_INSTANCE-AB2626A4FA4B4C76",
+        "PROCESS_GROUP_INSTANCE-5210FEB1632DCB32"
+      ],
+      "isSiteOf": [
+        "GEOLOC_SITE-7580E62C914CAE61",
+        "AWS_AVAILABILITY_ZONE-4FA4A4BB20C71342"
+      ],
+      "isNetworkClientOfHost": [
+        "HOST-DEDC11439C4F6377"
+      ],
+      "runsOn": [
+        "PROCESS_GROUP-F612B535AB74A08A",
+        "PROCESS_GROUP-0765BFB1555AEC64",
+        "PROCESS_GROUP-5D3213D3CEE71BFC",
+        "PROCESS_GROUP-7BE59F151DF1E05F",
+        "PROCESS_GROUP-1D024AE6C849FC39",
+        "PROCESS_GROUP-77FDC8C1A93F7189",
+        "PROCESS_GROUP-D55B147D56DC61BC",
+        "PROCESS_GROUP-28699B8D57AACB48",
+        "PROCESS_GROUP-8F167A901E185CA4",
+        "PROCESS_GROUP-57D66C1273F88C3D",
+        "PROCESS_GROUP-374EE57952100044",
+        "PROCESS_GROUP-82AC69032E524B5E",
+        "PROCESS_GROUP-FAA604E684B7708E",
+        "PROCESS_GROUP-B1C069EABEFCD191"
+      ]
+    },
+    "osType": "LINUX",
+    "osArchitecture": "X86",
+    "osVersion": "Red Hat Enterprise Linux Server 7.6 (Maipo) (kernel 3.10.0-1062.12.1.el7.x86_64)",
+    "hypervisorType": "KVM",
+    "ipAddresses": [
+      "10.226.144.190"
+    ],
+    "bitness": "64bit",
+    "cpuCores": 1,
+    "logicalCpuCores": 2,
+    "cloudType": "EC2",
+    "monitoringMode": "FULL_STACK",
+    "networkZoneId": "default",
+    "agentVersion": {
+      "major": 1,
+      "minor": 185,
+      "revision": 137,
+      "timestamp": "20200212-183600",
+      "sourceRevision": ""
+    },
+    "consumedHostUnits": 0.25,
+    "userLevel": "SUPERUSER",
+    "managementZones": [
+      {
+        "id": "5557749485955049446",
+        "name": "AWS_EODS_SHARED"
+      }
+    ],
+    "awsSecurityGroup": [
+      "eods-dev-brazilgds-eda",
+      "eods-dev-shared-eda"
+    ],
+    "awsInstanceType": "t3.medium",
+    "amiId": "ami-0a41565f4b7a71076",
+    "awsInstanceId": "i-04050a5a2bfc20c77",
+    "hostGroup": {
+      "meId": "HOST_GROUP-8692976EA85437E7",
+      "name": "AWS_EODS_SHARED"
+    }
+  },
+  {
+    "entityId": "HOST-E6234CDBD5DD63DF",
+    "displayName": "eda.exegol.dev.eods.uk.eeca",
+    "discoveredName": "eda.exegol.dev.eods.uk.eeca",
+    "firstSeenTimestamp": 1596524643794,
+    "lastSeenTimestamp": 1596567543866,
+    "tags": [
+      {
+        "context": "CONTEXTLESS",
+        "key": "OS",
+        "value": "Linux"
+      },
+      {
+        "context": "CONTEXTLESS",
+        "key": "Alerting_Queue",
+        "value": "SUPPORT"
+      }
+    ],
+    "fromRelationships": {
+      "isNetworkClientOfHost": [
+        "HOST-421D60DB4A2EA929"
+      ]
+    },
+    "toRelationships": {
+      "isProcessOf": [
+        "PROCESS_GROUP_INSTANCE-0B5B8CE18D930808",
+        "PROCESS_GROUP_INSTANCE-29730A2C266EC4CC",
+        "PROCESS_GROUP_INSTANCE-56F828839C899057",
+        "PROCESS_GROUP_INSTANCE-9AD062F556E05603",
+        "PROCESS_GROUP_INSTANCE-EFC07978167CBF23",
+        "PROCESS_GROUP_INSTANCE-8AB2E19A8A103FAA",
+        "PROCESS_GROUP_INSTANCE-3887DD9FE3FB4A4F",
+        "PROCESS_GROUP_INSTANCE-F50CFD53F6680AA0",
+        "PROCESS_GROUP_INSTANCE-604ADA0F95E0C4BE",
+        "PROCESS_GROUP_INSTANCE-9865AA2CFE0674F5",
+        "PROCESS_GROUP_INSTANCE-2C03688E54CBDC5B",
+        "PROCESS_GROUP_INSTANCE-337858A683010263",
+        "PROCESS_GROUP_INSTANCE-7635A326839A45D4",
+        "PROCESS_GROUP_INSTANCE-D16DF440ABA24191"
+      ],
+      "isSiteOf": [
+        "GEOLOC_SITE-7580E62C914CAE61",
+        "AWS_AVAILABILITY_ZONE-4FA4A4BB20C71342"
+      ],
+      "isNetworkClientOfHost": [
+        "HOST-421D60DB4A2EA929"
+      ],
+      "runsOn": [
+        "PROCESS_GROUP-F612B535AB74A08A",
+        "PROCESS_GROUP-0765BFB1555AEC64",
+        "PROCESS_GROUP-5D3213D3CEE71BFC",
+        "PROCESS_GROUP-7BE59F151DF1E05F",
+        "PROCESS_GROUP-1D024AE6C849FC39",
+        "PROCESS_GROUP-D55B147D56DC61BC",
+        "PROCESS_GROUP-28699B8D57AACB48",
+        "PROCESS_GROUP-8F167A901E185CA4",
+        "PROCESS_GROUP-57D66C1273F88C3D",
+        "PROCESS_GROUP-374EE57952100044",
+        "PROCESS_GROUP-82AC69032E524B5E",
+        "PROCESS_GROUP-FAA604E684B7708E",
+        "PROCESS_GROUP-B1C069EABEFCD191"
+      ]
+    },
+    "osType": "LINUX",
+    "osArchitecture": "X86",
+    "osVersion": "Red Hat Enterprise Linux Server 7.6 (Maipo) (kernel 3.10.0-1062.12.1.el7.x86_64)",
+    "hypervisorType": "KVM",
+    "ipAddresses": [
+      "10.226.144.177"
+    ],
+    "bitness": "64bit",
+    "cpuCores": 1,
+    "logicalCpuCores": 2,
+    "cloudType": "EC2",
+    "monitoringMode": "FULL_STACK",
+    "networkZoneId": "default",
+    "agentVersion": {
+      "major": 1,
+      "minor": 185,
+      "revision": 137,
+      "timestamp": "20200212-183600",
+      "sourceRevision": ""
+    },
+    "consumedHostUnits": 0.5,
+    "userLevel": "SUPERUSER",
+    "managementZones": [
+      {
+        "id": "5557749485955049446",
+        "name": "AWS_EODS_SHARED"
+      }
+    ],
+    "awsSecurityGroup": [
+      "eods-dev-shared-eda",
+      "eods-dev-exegol-eda"
+    ],
+    "awsInstanceType": "t3.large",
+    "amiId": "ami-00446e862ac45b149",
+    "awsInstanceId": "i-0c9b5315f41124dbd",
+    "hostGroup": {
+      "meId": "HOST_GROUP-8692976EA85437E7",
+      "name": "AWS_EODS_SHARED"
+    }
+  },
+  {
+    "entityId": "HOST-DEDC11439C4F6377",
+    "displayName": "eda.exegol.dev.eods.uk.eeca",
+    "discoveredName": "eda.exegol.dev.eods.uk.eeca",
+    "firstSeenTimestamp": 1596242536965,
+    "lastSeenTimestamp": 1596523700852,
+    "tags": [
+      {
+        "context": "CONTEXTLESS",
+        "key": "OS",
+        "value": "Linux"
+      },
+      {
+        "context": "CONTEXTLESS",
+        "key": "Alerting_Queue",
+        "value": "SUPPORT"
+      }
+    ],
+    "fromRelationships": {
+      "isNetworkClientOfHost": [
+        "HOST-413F4F394098A24D"
+      ]
+    },
+    "toRelationships": {
+      "isProcessOf": [
+        "PROCESS_GROUP_INSTANCE-0B87053ECA9302CB",
+        "PROCESS_GROUP_INSTANCE-E992A9D8E2304139",
+        "PROCESS_GROUP_INSTANCE-70714018883520DF",
+        "PROCESS_GROUP_INSTANCE-5133C5933F2890B3",
+        "PROCESS_GROUP_INSTANCE-ADCF32A8AA21D404",
+        "PROCESS_GROUP_INSTANCE-58B58797DC72C416",
+        "PROCESS_GROUP_INSTANCE-CDF3A0CBBFFA0A08",
+        "PROCESS_GROUP_INSTANCE-00788007AA694AE7",
+        "PROCESS_GROUP_INSTANCE-B24DBC02C3823F02",
+        "PROCESS_GROUP_INSTANCE-7D8F35669570D4E8",
+        "PROCESS_GROUP_INSTANCE-58930C0AA7201822",
+        "PROCESS_GROUP_INSTANCE-6D954DBD8B599781",
+        "PROCESS_GROUP_INSTANCE-B29453B6005AB7E5",
+        "PROCESS_GROUP_INSTANCE-30904F76A54966F0",
+        "PROCESS_GROUP_INSTANCE-439E2D9CE96C770C",
+        "PROCESS_GROUP_INSTANCE-118C57B46FFCC464"
+      ],
+      "isSiteOf": [
+        "GEOLOC_SITE-7580E62C914CAE61",
+        "AWS_AVAILABILITY_ZONE-4FA4A4BB20C71342"
+      ],
+      "isNetworkClientOfHost": [
+        "HOST-413F4F394098A24D"
+      ],
+      "runsOn": [
+        "PROCESS_GROUP-F612B535AB74A08A",
+        "PROCESS_GROUP-0765BFB1555AEC64",
+        "PROCESS_GROUP-5D3213D3CEE71BFC",
+        "PROCESS_GROUP-7BE59F151DF1E05F",
+        "PROCESS_GROUP-1D024AE6C849FC39",
+        "PROCESS_GROUP-77FDC8C1A93F7189",
+        "PROCESS_GROUP-D55B147D56DC61BC",
+        "PROCESS_GROUP-28699B8D57AACB48",
+        "PROCESS_GROUP-B62F90EC2186CCF3",
+        "PROCESS_GROUP-8F167A901E185CA4",
+        "PROCESS_GROUP-57D66C1273F88C3D",
+        "PROCESS_GROUP-374EE57952100044",
+        "PROCESS_GROUP-82AC69032E524B5E",
+        "PROCESS_GROUP-B1C069EABEFCD191",
+        "PROCESS_GROUP-FAA604E684B7708E"
+      ]
+    },
+    "osType": "LINUX",
+    "osArchitecture": "X86",
+    "osVersion": "Red Hat Enterprise Linux Server 7.6 (Maipo) (kernel 3.10.0-1062.12.1.el7.x86_64)",
+    "hypervisorType": "KVM",
+    "ipAddresses": [
+      "10.226.144.191"
+    ],
+    "bitness": "64bit",
+    "cpuCores": 1,
+    "logicalCpuCores": 2,
+    "cloudType": "EC2",
+    "monitoringMode": "FULL_STACK",
+    "networkZoneId": "default",
+    "consumedHostUnits": 0.5,
+    "managementZones": [
+      {
+        "id": "5557749485955049446",
+        "name": "AWS_EODS_SHARED"
+      }
+    ],
+    "awsSecurityGroup": [
+      "eods-dev-shared-eda",
+      "eods-dev-exegol-eda"
+    ],
+    "awsInstanceType": "t3.large",
+    "amiId": "ami-03f1877fb9d2f6094",
+    "awsInstanceId": "i-0749617d1ef4342bc",
+    "hostGroup": {
+      "meId": "HOST_GROUP-8692976EA85437E7",
+      "name": "AWS_EODS_SHARED"
+    }
+  },
+  {
+    "entityId": "HOST-B667FC231C8B8DD3",
+    "displayName": "eda.gaia.dev.eods.uk.eeca",
+    "discoveredName": "eda.gaia.dev.eods.uk.eeca",
+    "firstSeenTimestamp": 1595843874728,
+    "lastSeenTimestamp": 1596439377370,
+    "tags": [
+      {
+        "context": "CONTEXTLESS",
+        "key": "OS",
+        "value": "Linux"
+      },
+      {
+        "context": "CONTEXTLESS",
+        "key": "Alerting_Queue",
+        "value": "SUPPORT"
+      }
+    ],
+    "fromRelationships": {
+      "isNetworkClientOfHost": [
+        "HOST-5B9CE4E4E14185FA"
+      ]
+    },
+    "toRelationships": {
+      "isProcessOf": [
+        "PROCESS_GROUP_INSTANCE-7364F89D49309AE0",
+        "PROCESS_GROUP_INSTANCE-68C36D672AADA443",
+        "PROCESS_GROUP_INSTANCE-D1E45549D386DC67",
+        "PROCESS_GROUP_INSTANCE-A5484DAB3F3EE4AC",
+        "PROCESS_GROUP_INSTANCE-40E7F7CF6A6919F1",
+        "PROCESS_GROUP_INSTANCE-DAF651624346D1A6",
+        "PROCESS_GROUP_INSTANCE-40E382F35D47986B",
+        "PROCESS_GROUP_INSTANCE-F13DF7666B32BF1A",
+        "PROCESS_GROUP_INSTANCE-37F8B8E865F00148",
+        "PROCESS_GROUP_INSTANCE-2D3E7F97AF294DBA",
+        "PROCESS_GROUP_INSTANCE-300E6AF75CB62AB2"
+      ],
+      "isSiteOf": [
+        "GEOLOC_SITE-7580E62C914CAE61",
+        "AWS_AVAILABILITY_ZONE-4FA4A4BB20C71342"
+      ],
+      "isNetworkClientOfHost": [
+        "HOST-5B9CE4E4E14185FA"
+      ],
+      "runsOn": [
+        "PROCESS_GROUP-F612B535AB74A08A",
+        "PROCESS_GROUP-0765BFB1555AEC64",
+        "PROCESS_GROUP-5D3213D3CEE71BFC",
+        "PROCESS_GROUP-7BE59F151DF1E05F",
+        "PROCESS_GROUP-1D024AE6C849FC39",
+        "PROCESS_GROUP-77FDC8C1A93F7189",
+        "PROCESS_GROUP-B38E65573551425E",
+        "PROCESS_GROUP-28699B8D57AACB48",
+        "PROCESS_GROUP-57D66C1273F88C3D",
+        "PROCESS_GROUP-374EE57952100044",
+        "PROCESS_GROUP-82AC69032E524B5E",
+        "PROCESS_GROUP-B1C069EABEFCD191"
+      ]
+    },
+    "osType": "LINUX",
+    "osArchitecture": "X86",
+    "osVersion": "Red Hat Enterprise Linux Server 7.6 (Maipo) (kernel 3.10.0-1062.12.1.el7.x86_64)",
+    "hypervisorType": "KVM",
+    "ipAddresses": [
+      "10.226.144.160"
+    ],
+    "bitness": "64bit",
+    "cpuCores": 1,
+    "logicalCpuCores": 2,
+    "cloudType": "EC2",
+    "monitoringMode": "FULL_STACK",
+    "networkZoneId": "default",
+    "consumedHostUnits": 0.25,
+    "managementZones": [
+      {
+        "id": "5557749485955049446",
+        "name": "AWS_EODS_SHARED"
+      }
+    ],
+    "awsSecurityGroup": [
+      "eods-dev-gaia-eda",
+      "eods-dev-shared-eda"
+    ],
+    "awsInstanceType": "t3.medium",
+    "amiId": "ami-02760d44609a734b9",
+    "awsInstanceId": "i-09ce4aa19402e2fca",
+    "hostGroup": {
+      "meId": "HOST_GROUP-8692976EA85437E7",
+      "name": "AWS_EODS_SHARED"
+    }
+  },
+  {
+    "entityId": "HOST-7A728806A05336AC",
+    "displayName": "eda.gaia.dev.eods.uk.eeca",
+    "discoveredName": "eda.gaia.dev.eods.uk.eeca",
+    "firstSeenTimestamp": 1596440075964,
+    "lastSeenTimestamp": 1596567334915,
+    "tags": [
+      {
+        "context": "CONTEXTLESS",
+        "key": "OS",
+        "value": "Linux"
+      },
+      {
+        "context": "CONTEXTLESS",
+        "key": "Alerting_Queue",
+        "value": "SUPPORT"
+      }
+    ],
+    "fromRelationships": {
+      "isNetworkClientOfHost": [
+        "HOST-6D6EAA89DCBA960A"
+      ]
+    },
+    "toRelationships": {
+      "isProcessOf": [
+        "PROCESS_GROUP_INSTANCE-16E32547FF9E6AD9",
+        "PROCESS_GROUP_INSTANCE-695D398E83E65FD3",
+        "PROCESS_GROUP_INSTANCE-FC1B1ED2E06E91CD",
+        "PROCESS_GROUP_INSTANCE-666F8EDCBDFEA602",
+        "PROCESS_GROUP_INSTANCE-86A66804E2E55934",
+        "PROCESS_GROUP_INSTANCE-AF299C7BF68F5710",
+        "PROCESS_GROUP_INSTANCE-4D3C309DDE2C14E2",
+        "PROCESS_GROUP_INSTANCE-B522CEF153E091BF",
+        "PROCESS_GROUP_INSTANCE-76FF566A1900C5C4",
+        "PROCESS_GROUP_INSTANCE-0957891719F167E5",
+        "PROCESS_GROUP_INSTANCE-0DABC17A11907B18",
+        "PROCESS_GROUP_INSTANCE-4B13F843F126982C",
+        "PROCESS_GROUP_INSTANCE-A4D6194296751F3C"
+      ],
+      "isSiteOf": [
+        "GEOLOC_SITE-7580E62C914CAE61",
+        "AWS_AVAILABILITY_ZONE-4FA4A4BB20C71342"
+      ],
+      "isNetworkClientOfHost": [
+        "HOST-6D6EAA89DCBA960A"
+      ],
+      "runsOn": [
+        "PROCESS_GROUP-F612B535AB74A08A",
+        "PROCESS_GROUP-0765BFB1555AEC64",
+        "PROCESS_GROUP-5D3213D3CEE71BFC",
+        "PROCESS_GROUP-7BE59F151DF1E05F",
+        "PROCESS_GROUP-1D024AE6C849FC39",
+        "PROCESS_GROUP-B38E65573551425E",
+        "PROCESS_GROUP-D55B147D56DC61BC",
+        "PROCESS_GROUP-28699B8D57AACB48",
+        "PROCESS_GROUP-8F167A901E185CA4",
+        "PROCESS_GROUP-57D66C1273F88C3D",
+        "PROCESS_GROUP-374EE57952100044",
+        "PROCESS_GROUP-82AC69032E524B5E",
+        "PROCESS_GROUP-B1C069EABEFCD191"
+      ]
+    },
+    "osType": "LINUX",
+    "osArchitecture": "X86",
+    "osVersion": "Red Hat Enterprise Linux Server 7.6 (Maipo) (kernel 3.10.0-1062.12.1.el7.x86_64)",
+    "hypervisorType": "KVM",
+    "ipAddresses": [
+      "10.226.144.252"
+    ],
+    "bitness": "64bit",
+    "cpuCores": 1,
+    "logicalCpuCores": 2,
+    "cloudType": "EC2",
+    "monitoringMode": "FULL_STACK",
+    "networkZoneId": "default",
+    "agentVersion": {
+      "major": 1,
+      "minor": 185,
+      "revision": 137,
+      "timestamp": "20200212-183600",
+      "sourceRevision": ""
+    },
+    "consumedHostUnits": 0.25,
+    "userLevel": "SUPERUSER",
+    "managementZones": [
+      {
+        "id": "5557749485955049446",
+        "name": "AWS_EODS_SHARED"
+      }
+    ],
+    "awsSecurityGroup": [
+      "eods-dev-gaia-eda",
+      "eods-dev-shared-eda"
+    ],
+    "awsInstanceType": "t3.medium",
+    "amiId": "ami-03f1877fb9d2f6094",
+    "awsInstanceId": "i-0955c2c29e3157ccf",
+    "hostGroup": {
+      "meId": "HOST_GROUP-8692976EA85437E7",
+      "name": "AWS_EODS_SHARED"
+    }
+  },
+  {
+    "entityId": "HOST-EDE2A188CB4C77B1",
+    "displayName": "eda.hestia.dev.eods.uk.eeca",
+    "discoveredName": "eda.hestia.dev.eods.uk.eeca",
+    "firstSeenTimestamp": 1595425521418,
+    "lastSeenTimestamp": 1596567386740,
+    "tags": [
+      {
+        "context": "CONTEXTLESS",
+        "key": "OS",
+        "value": "Linux"
+      },
+      {
+        "context": "CONTEXTLESS",
+        "key": "Alerting_Queue",
+        "value": "SUPPORT"
+      }
+    ],
+    "fromRelationships": {
+      "isNetworkClientOfHost": [
+        "HOST-752E1FB58ABB01A6"
+      ]
+    },
+    "toRelationships": {
+      "isProcessOf": [
+        "PROCESS_GROUP_INSTANCE-334630CCFD6A5E21",
+        "PROCESS_GROUP_INSTANCE-250CE79C1D6F4E7B",
+        "PROCESS_GROUP_INSTANCE-81D8D4FC4769FFA7",
+        "PROCESS_GROUP_INSTANCE-6B8B375C8B71D0D0",
+        "PROCESS_GROUP_INSTANCE-873DAF8BE2257760",
+        "PROCESS_GROUP_INSTANCE-C0D9A551713FE025",
+        "PROCESS_GROUP_INSTANCE-96B5396E1B0D626F",
+        "PROCESS_GROUP_INSTANCE-FECD1000E8F91ECE",
+        "PROCESS_GROUP_INSTANCE-8429E0656F083B99",
+        "PROCESS_GROUP_INSTANCE-FD651A51F83C50B9",
+        "PROCESS_GROUP_INSTANCE-81730CC994812BC4",
+        "PROCESS_GROUP_INSTANCE-663A8FCC78ED3826"
+      ],
+      "isSiteOf": [
+        "GEOLOC_SITE-7580E62C914CAE61",
+        "AWS_AVAILABILITY_ZONE-4FA4A4BB20C71342"
+      ],
+      "runsOn": [
+        "PROCESS_GROUP-F612B535AB74A08A",
+        "PROCESS_GROUP-0765BFB1555AEC64",
+        "PROCESS_GROUP-5D3213D3CEE71BFC",
+        "PROCESS_GROUP-7BE59F151DF1E05F",
+        "PROCESS_GROUP-1115D1BB3693C8B8",
+        "PROCESS_GROUP-1D024AE6C849FC39",
+        "PROCESS_GROUP-7184C606962EE406",
+        "PROCESS_GROUP-77FDC8C1A93F7189",
+        "PROCESS_GROUP-28699B8D57AACB48",
+        "PROCESS_GROUP-57D66C1273F88C3D",
+        "PROCESS_GROUP-374EE57952100044",
+        "PROCESS_GROUP-82AC69032E524B5E",
+        "PROCESS_GROUP-B1C069EABEFCD191"
+      ]
+    },
+    "osType": "LINUX",
+    "osArchitecture": "X86",
+    "osVersion": "Red Hat Enterprise Linux Server 7.6 (Maipo) (kernel 3.10.0-1062.12.1.el7.x86_64)",
+    "hypervisorType": "KVM",
+    "ipAddresses": [
+      "10.226.144.140"
+    ],
+    "bitness": "64bit",
+    "cpuCores": 1,
+    "logicalCpuCores": 2,
+    "cloudType": "EC2",
+    "monitoringMode": "FULL_STACK",
+    "networkZoneId": "default",
+    "agentVersion": {
+      "major": 1,
+      "minor": 185,
+      "revision": 137,
+      "timestamp": "20200212-183600",
+      "sourceRevision": ""
+    },
+    "consumedHostUnits": 0.25,
+    "userLevel": "SUPERUSER",
+    "managementZones": [
+      {
+        "id": "5557749485955049446",
+        "name": "AWS_EODS_SHARED"
+      }
+    ],
+    "awsSecurityGroup": [
+      "eods-dev-hestia-eda",
+      "eods-dev-shared-eda"
+    ],
+    "awsInstanceType": "t3.medium",
+    "amiId": "ami-048e11ed1aa982d34",
+    "awsInstanceId": "i-0c527af83fb5e5964",
+    "hostGroup": {
+      "meId": "HOST_GROUP-8692976EA85437E7",
+      "name": "AWS_EODS_SHARED"
+    }
+  },
+  {
+    "entityId": "HOST-350D8009776A920D",
+    "displayName": "eda.indiagds.dev.eods.uk.eeca",
+    "discoveredName": "eda.indiagds.dev.eods.uk.eeca",
+    "firstSeenTimestamp": 1593783034963,
+    "lastSeenTimestamp": 1596567529326,
+    "tags": [
+      {
+        "context": "CONTEXTLESS",
+        "key": "OS",
+        "value": "Linux"
+      },
+      {
+        "context": "CONTEXTLESS",
+        "key": "Alerting_Queue",
+        "value": "SUPPORT"
+      }
+    ],
+    "fromRelationships": {},
+    "toRelationships": {
+      "isProcessOf": [
+        "PROCESS_GROUP_INSTANCE-9A5CE817E2B4D9FE",
+        "PROCESS_GROUP_INSTANCE-C2F55AA979C65E18",
+        "PROCESS_GROUP_INSTANCE-B36416DD3757356C",
+        "PROCESS_GROUP_INSTANCE-E056947421B6F3B1",
+        "PROCESS_GROUP_INSTANCE-4BC7AB263964692E",
+        "PROCESS_GROUP_INSTANCE-024338920915B043",
+        "PROCESS_GROUP_INSTANCE-EBA9114D414CBB9D",
+        "PROCESS_GROUP_INSTANCE-DAB4E357847D9514",
+        "PROCESS_GROUP_INSTANCE-243D27A71401EA5F",
+        "PROCESS_GROUP_INSTANCE-84DEAA5E46984F15",
+        "PROCESS_GROUP_INSTANCE-2622318154DFFB72",
+        "PROCESS_GROUP_INSTANCE-599C2D4828A7CE78",
+        "PROCESS_GROUP_INSTANCE-E042FBEFB962ED19",
+        "PROCESS_GROUP_INSTANCE-FA5DC6FE84D9351E",
+        "PROCESS_GROUP_INSTANCE-E3C89AF1198FA66D"
+      ],
+      "isSiteOf": [
+        "GEOLOC_SITE-7580E62C914CAE61",
+        "AWS_AVAILABILITY_ZONE-4FA4A4BB20C71342"
+      ],
+      "runsOn": [
+        "PROCESS_GROUP-F612B535AB74A08A",
+        "PROCESS_GROUP-0765BFB1555AEC64",
+        "PROCESS_GROUP-5D3213D3CEE71BFC",
+        "PROCESS_GROUP-7BE59F151DF1E05F",
+        "PROCESS_GROUP-1D024AE6C849FC39",
+        "PROCESS_GROUP-77FDC8C1A93F7189",
+        "PROCESS_GROUP-D55B147D56DC61BC",
+        "PROCESS_GROUP-28699B8D57AACB48",
+        "PROCESS_GROUP-8F167A901E185CA4",
+        "PROCESS_GROUP-57D66C1273F88C3D",
+        "PROCESS_GROUP-374EE57952100044",
+        "PROCESS_GROUP-82AC69032E524B5E",
+        "PROCESS_GROUP-FAA604E684B7708E",
+        "PROCESS_GROUP-B1C069EABEFCD191"
+      ]
+    },
+    "osType": "LINUX",
+    "osArchitecture": "X86",
+    "osVersion": "Red Hat Enterprise Linux Server 7.6 (Maipo) (kernel 3.10.0-1062.12.1.el7.x86_64)",
+    "hypervisorType": "KVM",
+    "ipAddresses": [
+      "10.226.144.136"
+    ],
+    "bitness": "64bit",
+    "cpuCores": 1,
+    "logicalCpuCores": 2,
+    "cloudType": "EC2",
+    "monitoringMode": "FULL_STACK",
+    "networkZoneId": "default",
+    "agentVersion": {
+      "major": 1,
+      "minor": 185,
+      "revision": 137,
+      "timestamp": "20200212-183600",
+      "sourceRevision": ""
+    },
+    "consumedHostUnits": 0.5,
+    "userLevel": "SUPERUSER",
+    "managementZones": [
+      {
+        "id": "5557749485955049446",
+        "name": "AWS_EODS_SHARED"
+      }
+    ],
+    "awsSecurityGroup": [
+      "eods-dev-shared-eda",
+      "eods-dev-indiagds-eda"
+    ],
+    "awsInstanceType": "t3.large",
+    "amiId": "ami-0ce88eb2646dd6eac",
+    "awsInstanceId": "i-0069235aa24092781",
+    "hostGroup": {
+      "meId": "HOST_GROUP-8692976EA85437E7",
+      "name": "AWS_EODS_SHARED"
+    }
+  },
+  {
+    "entityId": "HOST-6D6EAA89DCBA960A",
+    "displayName": "eda.jeds.dev.eods.uk.eeca",
+    "discoveredName": "eda.jeds.dev.eods.uk.eeca",
+    "firstSeenTimestamp": 1596098871283,
+    "lastSeenTimestamp": 1596567349283,
+    "tags": [
+      {
+        "context": "CONTEXTLESS",
+        "key": "OS",
+        "value": "Linux"
+      },
+      {
+        "context": "CONTEXTLESS",
+        "key": "Alerting_Queue",
+        "value": "SUPPORT"
+      }
+    ],
+    "fromRelationships": {
+      "isNetworkClientOfHost": [
+        "HOST-7A728806A05336AC"
+      ]
+    },
+    "toRelationships": {
+      "isProcessOf": [
+        "PROCESS_GROUP_INSTANCE-B3CA3BCDEA9CBF9A",
+        "PROCESS_GROUP_INSTANCE-BB5992E1761F5789",
+        "PROCESS_GROUP_INSTANCE-3036CA29518BDD50",
+        "PROCESS_GROUP_INSTANCE-14F58D2B2E92D7C9",
+        "PROCESS_GROUP_INSTANCE-77F967D5FCA1F315",
+        "PROCESS_GROUP_INSTANCE-24E4D4127FFD8646",
+        "PROCESS_GROUP_INSTANCE-155BEFD4FB7C9C59",
+        "PROCESS_GROUP_INSTANCE-5A201212A2C5B444",
+        "PROCESS_GROUP_INSTANCE-A23EEC7E2F093119",
+        "PROCESS_GROUP_INSTANCE-B835BEF48A66F7B6",
+        "PROCESS_GROUP_INSTANCE-EB073C5D9C87316B",
+        "PROCESS_GROUP_INSTANCE-041C0B46FE2D4AAC",
+        "PROCESS_GROUP_INSTANCE-7E411B01FF0FFF75",
+        "PROCESS_GROUP_INSTANCE-01FF07C88377CA7F"
+      ],
+      "isSiteOf": [
+        "GEOLOC_SITE-7580E62C914CAE61",
+        "AWS_AVAILABILITY_ZONE-4FA4A4BB20C71342"
+      ],
+      "isNetworkClientOfHost": [
+        "HOST-7A728806A05336AC"
+      ],
+      "runsOn": [
+        "PROCESS_GROUP-F612B535AB74A08A",
+        "PROCESS_GROUP-0765BFB1555AEC64",
+        "PROCESS_GROUP-5D3213D3CEE71BFC",
+        "PROCESS_GROUP-7BE59F151DF1E05F",
+        "PROCESS_GROUP-1D024AE6C849FC39",
+        "PROCESS_GROUP-77FDC8C1A93F7189",
+        "PROCESS_GROUP-B38E65573551425E",
+        "PROCESS_GROUP-D55B147D56DC61BC",
+        "PROCESS_GROUP-28699B8D57AACB48",
+        "PROCESS_GROUP-8F167A901E185CA4",
+        "PROCESS_GROUP-57D66C1273F88C3D",
+        "PROCESS_GROUP-374EE57952100044",
+        "PROCESS_GROUP-82AC69032E524B5E",
+        "PROCESS_GROUP-B1C069EABEFCD191"
+      ]
+    },
+    "osType": "LINUX",
+    "osArchitecture": "X86",
+    "osVersion": "Red Hat Enterprise Linux Server 7.6 (Maipo) (kernel 3.10.0-1062.12.1.el7.x86_64)",
+    "hypervisorType": "KVM",
+    "ipAddresses": [
+      "10.226.144.250"
+    ],
+    "bitness": "64bit",
+    "cpuCores": 1,
+    "logicalCpuCores": 2,
+    "cloudType": "EC2",
+    "monitoringMode": "FULL_STACK",
+    "networkZoneId": "default",
+    "agentVersion": {
+      "major": 1,
+      "minor": 185,
+      "revision": 137,
+      "timestamp": "20200212-183600",
+      "sourceRevision": ""
+    },
+    "consumedHostUnits": 0.25,
+    "userLevel": "SUPERUSER",
+    "managementZones": [
+      {
+        "id": "5557749485955049446",
+        "name": "AWS_EODS_SHARED"
+      }
+    ],
+    "awsSecurityGroup": [
+      "eods-dev-jeds-eda",
+      "eods-dev-shared-eda"
+    ],
+    "awsInstanceType": "t3.medium",
+    "amiId": "ami-02f52db0f39b16e7d",
+    "awsInstanceId": "i-0a534fbb876e94607",
+    "hostGroup": {
+      "meId": "HOST_GROUP-8692976EA85437E7",
+      "name": "AWS_EODS_SHARED"
+    }
+  },
+  {
+    "entityId": "HOST-405742DD38D0564F",
+    "displayName": "eda.morpheus.dev.eods.uk.eeca",
+    "discoveredName": "eda.morpheus.dev.eods.uk.eeca",
+    "firstSeenTimestamp": 1596005374982,
+    "lastSeenTimestamp": 1596567516902,
+    "tags": [
+      {
+        "context": "CONTEXTLESS",
+        "key": "OS",
+        "value": "Linux"
+      },
+      {
+        "context": "CONTEXTLESS",
+        "key": "Alerting_Queue",
+        "value": "SUPPORT"
+      }
+    ],
+    "fromRelationships": {
+      "isNetworkClientOfHost": [
+        "HOST-4399C32AF24910D5"
+      ]
+    },
+    "toRelationships": {
+      "isProcessOf": [
+        "PROCESS_GROUP_INSTANCE-9EF3D3990EF67FDF",
+        "PROCESS_GROUP_INSTANCE-1A51DEAECD6EBA9A",
+        "PROCESS_GROUP_INSTANCE-EB1BBCAD2F72C245",
+        "PROCESS_GROUP_INSTANCE-12FB702F43DAC1BF",
+        "PROCESS_GROUP_INSTANCE-7719FA4646AF7401",
+        "PROCESS_GROUP_INSTANCE-8F07042ACB63F15C",
+        "PROCESS_GROUP_INSTANCE-2140323046FA9179",
+        "PROCESS_GROUP_INSTANCE-950C56A06E0C37F3",
+        "PROCESS_GROUP_INSTANCE-8B29FEDB21622A61",
+        "PROCESS_GROUP_INSTANCE-C63ED40978EDF12E",
+        "PROCESS_GROUP_INSTANCE-3B3A6D4BBA718854",
+        "PROCESS_GROUP_INSTANCE-F60BA59802FE681B",
+        "PROCESS_GROUP_INSTANCE-5378F3551B653F30",
+        "PROCESS_GROUP_INSTANCE-2CC6EF9C671D0A3A"
+      ],
+      "isSiteOf": [
+        "GEOLOC_SITE-7580E62C914CAE61",
+        "AWS_AVAILABILITY_ZONE-4FA4A4BB20C71342"
+      ],
+      "isNetworkClientOfHost": [
+        "HOST-4399C32AF24910D5"
+      ],
+      "runsOn": [
+        "PROCESS_GROUP-F612B535AB74A08A",
+        "PROCESS_GROUP-0765BFB1555AEC64",
+        "PROCESS_GROUP-5D3213D3CEE71BFC",
+        "PROCESS_GROUP-7BE59F151DF1E05F",
+        "PROCESS_GROUP-1D024AE6C849FC39",
+        "PROCESS_GROUP-B38E65573551425E",
+        "PROCESS_GROUP-D55B147D56DC61BC",
+        "PROCESS_GROUP-28699B8D57AACB48",
+        "PROCESS_GROUP-8F167A901E185CA4",
+        "PROCESS_GROUP-57D66C1273F88C3D",
+        "PROCESS_GROUP-374EE57952100044",
+        "PROCESS_GROUP-82AC69032E524B5E",
+        "PROCESS_GROUP-FAA604E684B7708E",
+        "PROCESS_GROUP-B1C069EABEFCD191"
+      ]
+    },
+    "osType": "LINUX",
+    "osArchitecture": "X86",
+    "osVersion": "Red Hat Enterprise Linux Server 7.6 (Maipo) (kernel 3.10.0-1062.12.1.el7.x86_64)",
+    "hypervisorType": "KVM",
+    "ipAddresses": [
+      "10.226.144.174"
+    ],
+    "bitness": "64bit",
+    "cpuCores": 1,
+    "logicalCpuCores": 2,
+    "cloudType": "EC2",
+    "monitoringMode": "FULL_STACK",
+    "networkZoneId": "default",
+    "agentVersion": {
+      "major": 1,
+      "minor": 185,
+      "revision": 137,
+      "timestamp": "20200212-183600",
+      "sourceRevision": ""
+    },
+    "consumedHostUnits": 0.25,
+    "userLevel": "SUPERUSER",
+    "managementZones": [
+      {
+        "id": "5557749485955049446",
+        "name": "AWS_EODS_SHARED"
+      }
+    ],
+    "awsSecurityGroup": [
+      "eods-dev-morpheus-eda",
+      "eods-dev-shared-eda"
+    ],
+    "awsInstanceType": "t3.medium",
+    "amiId": "ami-02f52db0f39b16e7d",
+    "awsInstanceId": "i-0122160aacbb13ba3",
+    "hostGroup": {
+      "meId": "HOST_GROUP-8692976EA85437E7",
+      "name": "AWS_EODS_SHARED"
+    }
+  },
+  {
+    "entityId": "HOST-4399C32AF24910D5",
+    "displayName": "eda.sofiaqa.dev.eods.uk.eeca",
+    "discoveredName": "eda.sofiaqa.dev.eods.uk.eeca",
+    "firstSeenTimestamp": 1595425419743,
+    "lastSeenTimestamp": 1596567525176,
+    "tags": [
+      {
+        "context": "CONTEXTLESS",
+        "key": "OS",
+        "value": "Linux"
+      },
+      {
+        "context": "CONTEXTLESS",
+        "key": "Alerting_Queue",
+        "value": "SUPPORT"
+      }
+    ],
+    "fromRelationships": {
+      "isNetworkClientOfHost": [
+        "HOST-421D60DB4A2EA929",
+        "HOST-405742DD38D0564F"
+      ]
+    },
+    "toRelationships": {
+      "isProcessOf": [
+        "PROCESS_GROUP_INSTANCE-E71904BAC6A65EA5",
+        "PROCESS_GROUP_INSTANCE-2F086E6BAD844CA0",
+        "PROCESS_GROUP_INSTANCE-A99B934F3FA051F7",
+        "PROCESS_GROUP_INSTANCE-67B034846C4CEA75",
+        "PROCESS_GROUP_INSTANCE-C5F055FEB274B7B4",
+        "PROCESS_GROUP_INSTANCE-50B672A2D1FC79AA",
+        "PROCESS_GROUP_INSTANCE-F4292764D018FC1B",
+        "PROCESS_GROUP_INSTANCE-33600EA8F97CB445",
+        "PROCESS_GROUP_INSTANCE-9D3D526EC46F3945",
+        "PROCESS_GROUP_INSTANCE-7315D06DB535C9B3",
+        "PROCESS_GROUP_INSTANCE-3C170C0FB469B00B"
+      ],
+      "isSiteOf": [
+        "GEOLOC_SITE-7580E62C914CAE61",
+        "AWS_AVAILABILITY_ZONE-4FA4A4BB20C71342"
+      ],
+      "isNetworkClientOfHost": [
+        "HOST-421D60DB4A2EA929",
+        "HOST-405742DD38D0564F"
+      ],
+      "runsOn": [
+        "PROCESS_GROUP-F612B535AB74A08A",
+        "PROCESS_GROUP-0765BFB1555AEC64",
+        "PROCESS_GROUP-5D3213D3CEE71BFC",
+        "PROCESS_GROUP-7BE59F151DF1E05F",
+        "PROCESS_GROUP-1D024AE6C849FC39",
+        "PROCESS_GROUP-77FDC8C1A93F7189",
+        "PROCESS_GROUP-28699B8D57AACB48",
+        "PROCESS_GROUP-57D66C1273F88C3D",
+        "PROCESS_GROUP-374EE57952100044",
+        "PROCESS_GROUP-82AC69032E524B5E",
+        "PROCESS_GROUP-B1C069EABEFCD191"
+      ]
+    },
+    "osType": "LINUX",
+    "osArchitecture": "X86",
+    "osVersion": "Red Hat Enterprise Linux Server 7.6 (Maipo) (kernel 3.10.0-1062.12.1.el7.x86_64)",
+    "hypervisorType": "KVM",
+    "ipAddresses": [
+      "10.226.144.175"
+    ],
+    "bitness": "64bit",
+    "cpuCores": 1,
+    "logicalCpuCores": 2,
+    "cloudType": "EC2",
+    "monitoringMode": "FULL_STACK",
+    "networkZoneId": "default",
+    "agentVersion": {
+      "major": 1,
+      "minor": 185,
+      "revision": 137,
+      "timestamp": "20200212-183600",
+      "sourceRevision": ""
+    },
+    "consumedHostUnits": 0.25,
+    "userLevel": "SUPERUSER",
+    "managementZones": [
+      {
+        "id": "5557749485955049446",
+        "name": "AWS_EODS_SHARED"
+      }
+    ],
+    "awsSecurityGroup": [
+      "eods-dev-shared-eda",
+      "eods-dev-sofiaqa-eda"
+    ],
+    "awsInstanceType": "t3.medium",
+    "amiId": "ami-048e11ed1aa982d34",
+    "awsInstanceId": "i-01158fb516cc1882b",
+    "hostGroup": {
+      "meId": "HOST_GROUP-8692976EA85437E7",
+      "name": "AWS_EODS_SHARED"
+    }
+  },
+  {
+    "entityId": "HOST-752E1FB58ABB01A6",
+    "displayName": "eda.testkibana.dev.eods.uk.eeca",
+    "discoveredName": "eda.testkibana.dev.eods.uk.eeca",
+    "firstSeenTimestamp": 1592896258226,
+    "lastSeenTimestamp": 1596567568688,
+    "tags": [
+      {
+        "context": "CONTEXTLESS",
+        "key": "OS",
+        "value": "Linux"
+      },
+      {
+        "context": "CONTEXTLESS",
+        "key": "Alerting_Queue",
+        "value": "SUPPORT"
+      }
+    ],
+    "fromRelationships": {},
+    "toRelationships": {
+      "isProcessOf": [
+        "PROCESS_GROUP_INSTANCE-58151B6C30C89632",
+        "PROCESS_GROUP_INSTANCE-4260A72EF4C423E8",
+        "PROCESS_GROUP_INSTANCE-BA7E59427908A6B5",
+        "PROCESS_GROUP_INSTANCE-A0750BC8DC67601A",
+        "PROCESS_GROUP_INSTANCE-7C1E2A24C93009CA",
+        "PROCESS_GROUP_INSTANCE-F3478961CA86A6C7",
+        "PROCESS_GROUP_INSTANCE-94CEA4B98C81917F",
+        "PROCESS_GROUP_INSTANCE-C8450A437F254F0F",
+        "PROCESS_GROUP_INSTANCE-CC5BAC0D0013D2CA",
+        "PROCESS_GROUP_INSTANCE-19BFB2F4D5765DD3",
+        "PROCESS_GROUP_INSTANCE-5827CBC26581E935",
+        "PROCESS_GROUP_INSTANCE-AB8A8EF1BC9D2836",
+        "PROCESS_GROUP_INSTANCE-A105402BE0932764",
+        "PROCESS_GROUP_INSTANCE-9C58C0F66EFB3E6C",
+        "PROCESS_GROUP_INSTANCE-B677ABDA0185EBF3",
+        "PROCESS_GROUP_INSTANCE-D42BEE0DAAF2A5AE",
+        "PROCESS_GROUP_INSTANCE-32392E4FC97880EF",
+        "PROCESS_GROUP_INSTANCE-7EABFD171B7DB61D"
+      ],
+      "isSiteOf": [
+        "GEOLOC_SITE-7580E62C914CAE61",
+        "AWS_AVAILABILITY_ZONE-4FA4A4BB20C71342"
+      ],
+      "isNetworkClientOfHost": [
+        "HOST-EDE2A188CB4C77B1"
+      ],
+      "runsOn": [
+        "PROCESS_GROUP-F612B535AB74A08A",
+        "PROCESS_GROUP-0765BFB1555AEC64",
+        "PROCESS_GROUP-5D3213D3CEE71BFC",
+        "PROCESS_GROUP-7BE59F151DF1E05F",
+        "PROCESS_GROUP-5C7D243AE1CD33CA",
+        "PROCESS_GROUP-79AF9C7B3182E51B",
+        "PROCESS_GROUP-1115D1BB3693C8B8",
+        "PROCESS_GROUP-1D024AE6C849FC39",
+        "PROCESS_GROUP-28699B8D57AACB48",
+        "PROCESS_GROUP-D55B147D56DC61BC",
+        "PROCESS_GROUP-8F167A901E185CA4",
+        "PROCESS_GROUP-57D66C1273F88C3D",
+        "PROCESS_GROUP-374EE57952100044",
+        "PROCESS_GROUP-82AC69032E524B5E",
+        "PROCESS_GROUP-A105F1B82049A408",
+        "PROCESS_GROUP-3C74CEE5747023B4",
+        "PROCESS_GROUP-E53DDEE9533F67FF"
+      ]
+    },
+    "osType": "LINUX",
+    "osArchitecture": "X86",
+    "osVersion": "Red Hat Enterprise Linux Server 7.6 (Maipo) (kernel 3.10.0-1062.12.1.el7.x86_64)",
+    "hypervisorType": "KVM",
+    "ipAddresses": [
+      "10.226.144.147"
+    ],
+    "bitness": "64bit",
+    "cpuCores": 1,
+    "logicalCpuCores": 2,
+    "cloudType": "EC2",
+    "monitoringMode": "FULL_STACK",
+    "networkZoneId": "default",
+    "agentVersion": {
+      "major": 1,
+      "minor": 185,
+      "revision": 137,
+      "timestamp": "20200212-183600",
+      "sourceRevision": ""
+    },
+    "consumedHostUnits": 0.5,
+    "userLevel": "SUPERUSER",
+    "managementZones": [
+      {
+        "id": "5557749485955049446",
+        "name": "AWS_EODS_SHARED"
+      }
+    ],
+    "awsSecurityGroup": [
+      "eods-dev-shared-eda",
+      "eods-dev-testkibana-eda"
+    ],
+    "awsInstanceType": "m5.large",
+    "amiId": "ami-0e1f7043cd799a9fc",
+    "awsInstanceId": "i-0588f65cba4550089",
+    "hostGroup": {
+      "meId": "HOST_GROUP-8692976EA85437E7",
+      "name": "AWS_EODS_SHARED"
+    }
+  }
+]
