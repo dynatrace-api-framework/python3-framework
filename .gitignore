@@ -6,7 +6,8 @@ variable_sets/*
 scripts/*
 templates/*
 
-.vscode/
+**.vscode**
+**venv**
 
 user_variables.py
 sandbox_script.py
