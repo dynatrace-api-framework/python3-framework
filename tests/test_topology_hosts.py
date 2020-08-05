@@ -15,14 +15,11 @@ response_dir = "tests/mockserver_payloads/responses/hosts"
 
 
 class TestGetHosts(unittest.TestCase):
-    """
-    Tests cases for fetching topology hosts.
-    """
+    """Tests cases for fetching topology hosts."""
 
     def test_get_all_hosts(self):
-        """
-        Test fetching all hosts
-        """
+        """Test fetching all hosts"""
+
         response_file = f"{response_dir}/get_all.json"
 
         testtools.create_mockserver_expectation(
@@ -37,9 +34,8 @@ class TestGetHosts(unittest.TestCase):
         self.assertEqual(result, testtools.expected_payload(response_file))
 
     def test_get_single_host(self):
-        """
-        Test fetching a specific host
-        """
+        """Test fetching a specific host"""
+
         host_id = "HOST-9F74450267BAAE20"
         response_file = f"{response_dir}/get_single.json"
 
@@ -55,9 +51,8 @@ class TestGetHosts(unittest.TestCase):
         self.assertEqual(result, testtools.expected_payload(response_file))
 
     def test_get_host_count(self):
-        """
-        Test getting the count of hosts in a tenant.
-        """
+        """Test getting the count of hosts in a tenant."""
+
         response_file = f"{response_dir}/get_all.json"
         testtools.create_mockserver_expectation(
             cluster=cluster,
@@ -73,9 +68,8 @@ class TestGetHosts(unittest.TestCase):
         self.assertEqual(result, 14)
 
     def test_get_host_units(self):
-        """
-        Tests getting the consumed host units in a tenant.
-        """
+        """Tests getting the consumed host units in a tenant."""
+
         response_file = f"{response_dir}/get_all.json"
         testtools.create_mockserver_expectation(
             cluster=cluster,
@@ -92,13 +86,11 @@ class TestGetHosts(unittest.TestCase):
 
 
 class TestHostTagging(unittest.TestCase):
-    """
-    Test cases for testing host-level tagging.
-    """
+    """Test cases for testing host-level tagging."""
+
     def test_add_tags(self):
-        """
-        Test adding two tags to a specific host.
-        """
+        """Test adding two tags to a specific host."""
+
         host_id = "HOST-9F74450267BAAE20"
         request_file = f"{request_dir}/tags.json"
         tags = ["demo", "example"]
@@ -116,9 +108,8 @@ class TestHostTagging(unittest.TestCase):
         self.assertEqual(result, 201)
 
     def test_delete_tags(self):
-        """
-        Test deleting a tag from a specific host.
-        """
+        """Test deleting a tag from a specific host."""
+
         host_id = "HOST-9F74450267BAAE20"
         tag = "demo"
 
