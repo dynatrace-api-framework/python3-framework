@@ -34,6 +34,7 @@ class TestGetProcesses(unittest.TestCase):
     def test_get_single_process(self):
         """Tests getting one specific process."""
         response_file = f"{response_dir}/get_one_pgi.json"
+        process_id = "PROCESS_GROUP_INSTANCE-718687D9E9D0D7CE"
 
         testtools.create_mockserver_expectation(
             cluster=cluster,
@@ -43,7 +44,7 @@ class TestGetProcesses(unittest.TestCase):
             response_file=response_file
         )
 
-        result = process.get_processes_tenantwide(cluster, tenant)
+        result = process.get_process(cluster, tenant, process_id)
         self.assertEqual(result, testtools.expected_payload(response_file))
 
 
