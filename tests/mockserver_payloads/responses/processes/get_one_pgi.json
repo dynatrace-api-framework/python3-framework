@@ -1,0 +1,37 @@
+{
+  "entityId": "PROCESS_GROUP_INSTANCE-718687D9E9D0D7CE",
+  "displayName": "Code*Service.exe",
+  "discoveredName": "Code*Service.exe",
+  "firstSeenTimestamp": 1595746260000,
+  "lastSeenTimestamp": 1596659400000,
+  "tags": [],
+  "fromRelationships": {
+    "isProcessOf": [
+      "HOST-80AA2D475F709672"
+    ],
+    "isInstanceOf": [
+      "PROCESS_GROUP-859E1549052CD876"
+    ],
+    "isNetworkClientOf": [
+      "PROCESS_GROUP_INSTANCE-402BEC123CA7FA83"
+    ]
+  },
+  "toRelationships": {
+    "runsOnProcessGroupInstance": [
+      "SERVICE-C12BF59DA3B51679",
+      "SERVICE-B71ADA892013D156"
+    ]
+  },
+  "metadata": {
+    "commandLineArgs": [
+      "C:\\Program\\ Files\\Code42\\Code42Service.exe"
+    ],
+    "executables": [
+      "Code*Service.exe"
+    ],
+    "executablePaths": [
+      "C:/Program Files/Code*/Code*Service.exe",
+      "C:\\PROGRAM FILES\\CODE42\\CODE42SERVICE.EXE"
+    ]
+  }
+}
