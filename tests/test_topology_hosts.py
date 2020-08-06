@@ -65,7 +65,7 @@ class TestGetHosts(unittest.TestCase):
         )
 
         result = hosts.get_host_count_tenantwide(cluster, tenant)
-        self.assertEqual(result, 14)
+        self.assertEqual(result, 3)
 
     def test_get_host_units(self):
         """Tests getting the consumed host units in a tenant."""
@@ -80,7 +80,7 @@ class TestGetHosts(unittest.TestCase):
         )
 
         result = hosts.get_host_units_tenantwide(cluster, tenant)
-        self.assertEqual(result, 4.5)
+        self.assertEqual(result, 4)
 
         hosts.set_host_properties
 
@@ -91,7 +91,7 @@ class TestHostTagging(unittest.TestCase):
     def test_add_tags(self):
         """Test adding two tags to a specific host."""
 
-        host_id = "HOST-9F74450267BAAE20"
+        host_id = "HOST-ABC123DEF456GHIJ"
         request_file = f"{request_dir}/tags.json"
         tags = ["demo", "example"]
 
@@ -110,7 +110,7 @@ class TestHostTagging(unittest.TestCase):
     def test_delete_tags(self):
         """Test deleting a tag from a specific host."""
 
-        host_id = "HOST-9F74450267BAAE20"
+        host_id = "HOST-ABC123DEF456GHIJ"
         tag = "demo"
 
         testtools.create_mockserver_expectation(
