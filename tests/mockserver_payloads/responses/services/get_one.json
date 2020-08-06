@@ -1,0 +1,51 @@
+{
+    "entityId": "SERVICE-C12BF59DA3B51679",
+    "displayName": "/",
+    "discoveredName": "/",
+    "firstSeenTimestamp": 1595746255774,
+    "lastSeenTimestamp": 1596699715160,
+    "tags": [],
+    "fromRelationships": {
+        "runsOnProcessGroupInstance": [
+            "PROCESS_GROUP_INSTANCE-718687D9E9D0D7CE"
+        ],
+        "runsOn": [
+            "PROCESS_GROUP-859E1549052CD876"
+        ]
+    },
+    "toRelationships": {
+        "calls": [
+            "SERVICE-B71ADA892013D156"
+        ]
+    },
+    "agentTechnologyType": "JAVA",
+    "serviceTechnologyTypes": [
+        "Java"
+    ],
+    "serviceType": "WebRequest",
+    "softwareTechnologies": [
+        {
+            "type": "APACHE_HTTP_CLIENT_SYNC",
+            "edition": null,
+            "version": "4.5.2"
+        },
+        {
+            "type": "JETTY",
+            "edition": null,
+            "version": "9.4.27.v20200227"
+        },
+        {
+            "type": "JAVA",
+            "edition": "OpenJDK",
+            "version": "11.0.4"
+        },
+        {
+            "type": "SQLITE",
+            "edition": null,
+            "version": null
+        }
+    ],
+    "webApplicationId": "/",
+    "webServerName": "localhost",
+    "contextRoot": "/"
+}
