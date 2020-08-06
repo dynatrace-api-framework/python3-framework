@@ -70,7 +70,7 @@ class TestPGTags(unittest.TestCase):
     def test_add_pg_tags(self):
         """Test adding two tags to the PG."""
         pg_id = "PROCESS_GROUP-859E1549052CD876"
-        request_file = f"{response_dir}/tags.json"
+        request_file = f"{request_dir}/tags.json"
         tags = ["demo", "example"]
 
         testtools.create_mockserver_expectation(
