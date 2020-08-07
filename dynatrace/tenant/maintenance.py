@@ -9,6 +9,7 @@ from enum import Enum, auto
 
 MZ_ENDPOINT = rh.TenantAPIs.MAINTENANCE_WINDOWS
 
+
 class Suppression(Enum):
     """
     Types of suppression for create Maintenance Window JSON. Suppression is required
@@ -29,7 +30,7 @@ class Suppression(Enum):
         return self.name
 
 
-class Day(Enum):
+class DayOfWeek(Enum):
     """
     Day of the Week
 
@@ -57,6 +58,7 @@ class Day(Enum):
     def __repr__(self):
         return self.name
 
+
 class Context(Enum):
     """Tag Contexts that are available"""
     AWS = auto()
@@ -73,6 +75,8 @@ class Context(Enum):
 
     def __repr__(self):
         return self.name
+
+
 class RecurrenceType(Enum):
     """Recurrence of the Maintenance Window"""
     DAILY = auto()
@@ -85,6 +89,7 @@ class RecurrenceType(Enum):
 
     def __repr__(self):
         return self.name
+
 
 class FilterType(Enum):
     """All Filter Types available for tag filters"""
@@ -187,51 +192,61 @@ class FilterType(Enum):
     def __repr__(self):
         return self.name
 
+
 def validate_datetime(datetime_text, required_format):
     try:
         datetime.datetime.strptime(datetime_text, required_format)
     except ValueError:
         raise InvalidDateFormatException(required_format)
 
+
 def generate_tag_scope(tag, filter_type=None, management_zone_id=None):
     tag_payload = {}
 
     if management_zone_id:
-        tag_payload ['managementZoneId'] = str(management_zone_id)
+        tag_payload['mzId'] = str(management_zone_id)
 
-    if isinstance (tag, list) and len(tag) > 0:
-        tag_payload ['tags'] = tag
-    elif isinstance (tag, dict):
-        tag_payload ['tags'] = [tag]
-    elif isinstance (tag, str):
-        tag_payload ['tags'] = [{'context': "CONTEXTLESS",'key': tag}]
+    if filter_type:
+        if filter_type in FilterType._member_names_:
+            tag_payload['type'] = filter_type
+        else:
+            raise ValueError(
+                "Invalid Filter Type! " +
+                "Please Refer to Enum or Dynatrace Documentation"
+            )
+
+    if isinstance(tag, list) and len(tag) > 0:
+        tag_payload['tags'] = tag
+    elif isinstance(tag, dict):
+        tag_payload['tags'] = [tag]
+    elif isinstance(tag, str):
+        tag_payload['tags'] = [{'context': "CONTEXTLESS", 'key': tag}]
 
     return tag_payload
 
-def generate_scope(entities=None, filter_type=None, management_zone_id=None, tags=None, match_any_tag=True):
+
+def generate_scope(entities=None, tags=None, filter_type=None, management_zone_id=None, match_any_tag=True):
     if entities is None:
         entities = []
     matches = []
     matches_payload = {}
-    # if isinstance(filter_type, str):
-        # matches_payload['type'] = filter_type
 
-    if match_any_tag and isinstance(tags, list) and len(tags)>1:
+    if match_any_tag and isinstance(tags, list) and len(tags) > 1:
         for tag in tags:
             matches.append(
-                    generate_tag_scope(
-                            tag,
-                            filter_type=filter_type,
-                            management_zone_id=management_zone_id
-                    )
+                generate_tag_scope(
+                    tag,
+                    filter_type=filter_type,
+                    management_zone_id=management_zone_id
+                )
             )
     else:
         matches.append(
-                generate_tag_scope(
-                        tags,
-                        filter_type=filter_type,
-                        management_zone_id=management_zone_id
-                )
+            generate_tag_scope(
+                tags,
+                filter_type=filter_type,
+                management_zone_id=management_zone_id
+            )
         )
 
     # if isinstance(match_any_tag, bool):
@@ -262,14 +277,10 @@ def generate_window_json(name, description, suppression, schedule, scope=None, i
 def generate_schedule(recurrence_type, start_time, duration, range_start, range_end, day=None, zoneId=None,):
     """Create schedule structure for maintenance window"""
     # This structure requires a lot of input validation
-    types_available = ["DAILY", "MONTHLY", "ONCE", "WEEKLY"]
-    days_of_week = ["FRIDAY", "MONDAY", "SATURDAY",
-                    "SUNDAY", "THURSDAY", "TUESDAY", "WEDNESDAY"]
-
     recurrence_type = str(recurrence_type).upper()
 
     # Check Recurrence
-    if recurrence_type not in types_available:
+    if recurrence_type not in RecurrenceType._member_names_:
         raise ValueError(
             "Invalid Recurrence Type! Allowed values are: ONCE, DAILY, WEEKLY, MONTHLY")
 
@@ -304,11 +315,11 @@ def generate_schedule(recurrence_type, start_time, duration, range_start, range_
     # Check Weekly Day
     if recurrence_type == "WEEKLY":
         day = str(day).upper()
-        if day in days_of_week:
+        if day in DayOfWeek._member_names_:
             schedule['recurrence']['dayOfWeek'] = day
         else:
             raise ValueError("Invalid Weekly Day! Allowed values are "
-                            + "SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY")
+                             + "SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY")
 
     # Check Monthly Day
     if recurrence_type == "MONTHLY":

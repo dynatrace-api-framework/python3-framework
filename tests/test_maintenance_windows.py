@@ -9,6 +9,7 @@ CLUSTER = user_variables.FULL_SET["mockserver1"]
 TENANT = "tenant1"
 URL_PATH = TenantAPIs.MAINTENANCE_WINDOWS
 
+
 class TestMaintenanceWindowCreate(unittest.TestCase):
     """Test Cases for Creating a Maintenance Window"""
     REQUEST_DIR = "tests/mockserver_payloads/requests/maintenance/"
@@ -43,7 +44,8 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
             is_planned=True
         )
         result = maintenance.create_window(CLUSTER, TENANT, maintenance_json)
-        self.assertEqual(result, tooling_for_test.expected_payload(mockserver_response_file))
+        self.assertEqual(result, tooling_for_test.expected_payload(
+            mockserver_response_file))
 
     def test_create_daily_single_tag(self):
         """Testing create daily Maintenance Window with a single tag scope"""
@@ -64,17 +66,19 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
             "2020-01-01 00:00",
             "2020-01-02 00:00"
         )
-        maintenance_scope = maintenance.generate_scope(tags=[{'context': "CONTEXTLESS",'key': "testing"}])
+        maintenance_scope = maintenance.generate_scope(
+            tags=[{'context': "CONTEXTLESS", 'key': "testing"}])
         maintenance_json = maintenance.generate_window_json(
             "Test Payload Daily",
             "Generating Payload for Test",
             "DETECT_PROBLEMS_AND_ALERT",
             maintenance_schedule,
-            scope= maintenance_scope,
+            scope=maintenance_scope,
             is_planned=True
         )
         result = maintenance.create_window(CLUSTER, TENANT, maintenance_json)
-        self.assertEqual(result, tooling_for_test.expected_payload(mockserver_response_file))
+        self.assertEqual(result, tooling_for_test.expected_payload(
+            mockserver_response_file))
 
     def test_create_daily_tags_and(self):
         """Testing Payloads with multiple tags in an \"AND\" configuration"""
@@ -97,22 +101,23 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
             "2020-01-02 00:00"
         )
         maintenance_scope = maintenance.generate_scope(
-                tags=[
-                        {'context': "CONTEXTLESS",'key': "testing"},
-                        {'context': "CONTEXTLESS",'key': "testing2"}
-                ],
-                match_any_tag=False
+            tags=[
+                {'context': "CONTEXTLESS", 'key': "testing"},
+                {'context': "CONTEXTLESS", 'key': "testing2"}
+            ],
+            match_any_tag=False
         )
         maintenance_json = maintenance.generate_window_json(
             "Test Payload Daily",
             "Generating Payload for Test",
             "DETECT_PROBLEMS_AND_ALERT",
             maintenance_schedule,
-            scope= maintenance_scope,
+            scope=maintenance_scope,
             is_planned=True
         )
         result = maintenance.create_window(CLUSTER, TENANT, maintenance_json)
-        self.assertEqual(result, tooling_for_test.expected_payload(mockserver_response_file))
+        self.assertEqual(result, tooling_for_test.expected_payload(
+            mockserver_response_file))
 
     def test_create_daily_tags_or(self):
         """Testing Payloads with multiple tags in an \"AND\" configuration"""
@@ -135,22 +140,53 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
             "2020-01-02 00:00"
         )
         maintenance_scope = maintenance.generate_scope(
-                tags=[
-                        {'context': "CONTEXTLESS",'key': "testing"},
-                        {'context': "CONTEXTLESS",'key': "testing2"}
-                ],
-                match_any_tag=True
+            tags=[
+                {'context': "CONTEXTLESS", 'key': "testing"},
+                {'context': "CONTEXTLESS", 'key': "testing2"}
+            ],
+            match_any_tag=True
         )
         maintenance_json = maintenance.generate_window_json(
             "Test Payload Daily",
             "Generating Payload for Test",
             "DETECT_PROBLEMS_AND_ALERT",
             maintenance_schedule,
-            scope= maintenance_scope,
+            scope=maintenance_scope,
             is_planned=True
         )
         result = maintenance.create_window(CLUSTER, TENANT, maintenance_json)
-        self.assertEqual(result, tooling_for_test.expected_payload(mockserver_response_file))
+        self.assertEqual(result, tooling_for_test.expected_payload(
+            mockserver_response_file))
+
 
 if __name__ == '__main__':
     unittest.main()
+
+# CREATE TESTS LEFT:
+# ONCE TEST
+# WEEKLY TEST
+# MONTHLY TEST
+
+# Single Entity
+# Multi Entity
+# Single Tag with Filter Type
+# Mutli Tags with Filter Type
+# Single Tag with Management Zone
+# Multi Tags with Management Zone
+
+# EXCEPTION TEST CASES:
+# INVALID RECURRENCE
+# INVALID WEEK DAY
+# INVALID MONTH DAY
+# WEEK DAY NOT SUPPLIED
+# MONTH DAY NOT SUPPLIED
+# MONTHLY DAY OUT OF SCOPE (31 in 30 day month)
+# INVALID FILTER_TYPE
+# MANAGEMENT_ZONE WITHOUT TAG
+# FILTER_TYPE WITHOUT TAG
+
+# OTHER TEST CASES:
+# GET ALL WINDOWS
+# GET DETAILS OF WINDOW
+# DELETE WINDOW
+# UPDATE WINDOW
