@@ -20,6 +20,11 @@
                 "context": "CONTEXTLESS",
                 "key": "testing"
             }]
+        }, {
+            "tags": [{
+                "context": "CONTEXTLESS",
+                "key": "testing2"
+            }]
         }]
     }
 }
