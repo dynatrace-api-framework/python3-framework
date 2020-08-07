@@ -59,7 +59,7 @@ def create_mockserver_expectation(cluster, tenant, url_path, request_type, **kwa
 
     logging.debug(expectation)
 
-    expectation_url = f"https://{cluster.get('url')}/mockserver/expectation"
+    expectation_url = f"{generate_tenant_url(cluster, tenant)}/mockserver/expectation"
     test_req = requests.request(
         "PUT",
         expectation_url,

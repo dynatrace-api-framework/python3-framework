@@ -30,6 +30,10 @@ def get_env_layer_entities(cluster, tenant, layer, params=None):
     layer_list = ['applications', 'hosts',
                   'processes', 'process-groups', 'services']
     check_valid_layer(layer, layer_list)
+
+    if not params:
+        params = {}
+
     response = rh.make_api_call(
         cluster=cluster,
         tenant=tenant,
@@ -44,6 +48,10 @@ def get_env_layer_entity(cluster, tenant, layer, entity, params=None):
     layer_list = ['applications', 'hosts',
                   'processes', 'process-groups', 'services']
     check_valid_layer(layer, layer_list)
+
+    if not params:
+        params = {}
+
     response = rh.make_api_call(
         cluster=cluster,
         tenant=tenant,
@@ -70,6 +78,8 @@ def set_env_layer_properties(cluster, tenant, layer, entity, prop_json):
 
 def get_env_layer_count(cluster, tenant, layer, params=None):
     """Get total hosts in an environment"""
+    if not params:
+        params = {}
 
     layer_list = ['applications', 'hosts',
                   'processes', 'process-groups', 'services']
@@ -90,6 +100,10 @@ def get_env_layer_count(cluster, tenant, layer, params=None):
 
 def get_cluster_layer_count(cluster, layer, params=None):
     """Get total count for all environments in cluster"""
+
+    if not params:
+        params = {}
+
     cluster_layer_count = 0
     for env_key in cluster['tenant']:
         cluster_layer_count += get_env_layer_count(cluster=cluster,
@@ -101,6 +115,9 @@ def get_cluster_layer_count(cluster, layer, params=None):
 
 def get_set_layer_count(full_set, layer, params=None):
     """Get total count for all clusters definied in variable file"""
+    if not params:
+        params = {}
+
     full_set_layer_count = 0
     for cluster in full_set.values():
         full_set_layer_count += get_cluster_layer_count(cluster,
