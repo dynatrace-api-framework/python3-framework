@@ -14,19 +14,19 @@ class Suppression(Enum):
     Types of suppression for create Maintenance Window JSON. Suppression is required
 
     Args:
-        Enum (FULL_ALERTING): Full Alerting. Entites in scope will have notes that a Maintenance Window was active
-        Enum (DISABLE_ALERTING): Problems detected but alerting profiles in that scope are not triggered
-        Enum (DISABLE_DETECTION): Problem detection completely off for the scope
+        Enum (DETECT_PROBLEMS_AND_ALERT): Full Alerting. Entites in scope will have notes that a Maintenance Window was active
+        Enum (DETECT_PROBLEMS_DONT_ALERT): Problems detected but alerting profiles in that scope are not triggered
+        Enum (DONT_DETECT_PROBLEMS): Problem detection completely off for the scope
     """
-    FULL_ALERTING = "DETECT_PROBLEMS_AND_ALERT"
-    DISABLE_ALERTING = "DETECT_PROBLEMS_DONT_ALERT"
-    DISABLE_DETECTION = "DONT_DETECT_PROBLEMS"
+    DETECT_PROBLEMS_AND_ALERT = auto()
+    DETECT_PROBLEMS_DONT_ALERT = auto()
+    DONT_DETECT_PROBLEMS = auto()
 
     def __str__(self):
-        return self.value
+        return self.name
 
     def __repr__(self):
-        return self.value
+        return self.name
 
 
 class Day(Enum):
@@ -50,6 +50,136 @@ class Day(Enum):
     FRIDAY = auto()
     SATURDAY = auto()
     SUNDAY = auto()
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return self.name
+
+class Context(Enum):
+    """Tag Contexts that are available"""
+    AWS = auto()
+    AWS_GENERIC = auto()
+    AZURE = auto()
+    CLOUD_FOUNDRY = auto()
+    CONTEXTLESS = auto()
+    ENVIRONMENT = auto()
+    GOOGLE_CLOUD = auto()
+    KUBERNETES = auto()
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return self.name
+class RecurrenceType(Enum):
+    """Recurrence of the Maintenance Window"""
+    DAILY = auto()
+    MONTHLY = auto()
+    ONCE = auto()
+    WEEKLY = auto()
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return self.name
+
+class FilterType(Enum):
+    """All Filter Types available for tag filters"""
+    APM_SECURITY_GATEWAY = auto()
+    APPLICATION = auto()
+    APPLICATION_METHOD = auto()
+    APPLICATION_METHOD_GROUP = auto()
+    APPMON_SERVER = auto()
+    APPMON_SYSTEM_PROFILE = auto()
+    AUTO_SCALING_GROUP = auto()
+    AUXILIARY_SYNTHETIC_TEST = auto()
+    AWS_APPLICATION_LOAD_BALANCER = auto()
+    AWS_AVAILABILITY_ZONE = auto()
+    AWS_CREDENTIALS = auto()
+    AWS_LAMBDA_FUNCTION = auto()
+    AWS_NETWORK_LOAD_BALANCER = auto()
+    AZURE_API_MANAGEMENT_SERVICE = auto()
+    AZURE_APPLICATION_GATEWAY = auto()
+    AZURE_COSMOS_DB = auto()
+    AZURE_CREDENTIALS = auto()
+    AZURE_EVENT_HUB = auto()
+    AZURE_EVENT_HUB_NAMESPACE = auto()
+    AZURE_FUNCTION_APP = auto()
+    AZURE_IOT_HUB = auto()
+    AZURE_LOAD_BALANCER = auto()
+    AZURE_MGMT_GROUP = auto()
+    AZURE_REDIS_CACHE = auto()
+    AZURE_REGION = auto()
+    AZURE_SERVICE_BUS_NAMESPACE = auto()
+    AZURE_SERVICE_BUS_QUEUE = auto()
+    AZURE_SERVICE_BUS_TOPIC = auto()
+    AZURE_SQL_DATABASE = auto()
+    AZURE_SQL_ELASTIC_POOL = auto()
+    AZURE_SQL_SERVER = auto()
+    AZURE_STORAGE_ACCOUNT = auto()
+    AZURE_SUBSCRIPTION = auto()
+    AZURE_TENANT = auto()
+    AZURE_VM = auto()
+    AZURE_VM_SCALE_SET = auto()
+    AZURE_WEB_APP = auto()
+    CF_APPLICATION = auto()
+    CF_FOUNDATION = auto()
+    CINDER_VOLUME = auto()
+    CLOUD_APPLICATION = auto()
+    CLOUD_APPLICATION_INSTANCE = auto()
+    CLOUD_APPLICATION_NAMESPACE = auto()
+    CONTAINER_GROUP = auto()
+    CONTAINER_GROUP_INSTANCE = auto()
+    CUSTOM_APPLICATION = auto()
+    CUSTOM_DEVICE = auto()
+    CUSTOM_DEVICE_GROUP = auto()
+    DCRUM_APPLICATION = auto()
+    DCRUM_SERVICE = auto()
+    DCRUM_SERVICE_INSTANCE = auto()
+    DEVICE_APPLICATION_METHOD = auto()
+    DISK = auto()
+    DOCKER_CONTAINER_GROUP = auto()
+    DOCKER_CONTAINER_GROUP_INSTANCE = auto()
+    DYNAMO_DB_TABLE = auto()
+    EBS_VOLUME = auto()
+    EC2_INSTANCE = auto()
+    ELASTIC_LOAD_BALANCER = auto()
+    ENVIRONMENT = auto()
+    EXTERNAL_SYNTHETIC_TEST_STEP = auto()
+    GCP_ZONE = auto()
+    GEOLOCATION = auto()
+    GEOLOC_SITE = auto()
+    GOOGLE_COMPUTE_ENGINE = auto()
+    HOST = auto()
+    HOST_GROUP = auto()
+    HTTP_CHECK = auto()
+    HTTP_CHECK_STEP = auto()
+    HYPERVISOR = auto()
+    KUBERNETES_CLUSTER = auto()
+    KUBERNETES_NODE = auto()
+    MOBILE_APPLICATION = auto()
+    NETWORK_INTERFACE = auto()
+    NEUTRON_SUBNET = auto()
+    OPENSTACK_PROJECT = auto()
+    OPENSTACK_REGION = auto()
+    OPENSTACK_VM = auto()
+    OS = auto()
+    PROCESS_GROUP = auto()
+    PROCESS_GROUP_INSTANCE = auto()
+    RELATIONAL_DATABASE_SERVICE = auto()
+    SERVICE = auto()
+    SERVICE_INSTANCE = auto()
+    SERVICE_METHOD = auto()
+    SERVICE_METHOD_GROUP = auto()
+    SWIFT_CONTAINER = auto()
+    SYNTHETIC_LOCATION = auto()
+    SYNTHETIC_TEST = auto()
+    SYNTHETIC_TEST_STEP = auto()
+    VIRTUALMACHINE = auto()
+    VMWARE_DATACENTER = auto()
 
     def __str__(self):
         return self.name
