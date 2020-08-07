@@ -11,7 +11,6 @@ MZ_ENDPOINT = rh.TenantAPIs.MAINTENANCE_WINDOWS
 
 class Suppression(Enum):
     """
-    *** NOT ACTIVE YET***
     Types of suppression for create Maintenance Window JSON. Suppression is required
 
     Args:
@@ -23,9 +22,15 @@ class Suppression(Enum):
     DISABLE_ALERTING = "DETECT_PROBLEMS_DONT_ALERT"
     DISABLE_DETECTION = "DONT_DETECT_PROBLEMS"
 
+    def __str__(self):
+        return self.value
+
+    def __repr__(self):
+        return self.value
+
+
 class Day(Enum):
     """
-    *** NOT ACTIVE YET ***
     Day of the Week
 
     Args:
@@ -38,13 +43,19 @@ class Day(Enum):
         Enum (SUNDAY): SUNDAY
     """
 
-    MONDAY = "MONDAY"
-    TUESDAY = "TUESDAY"
-    WEDNESDAY = "WEDNESDAY"
-    THURSDAY = "THURSDAY"
-    FRIDAY = "FRIDAY"
-    SATURDAY = "SATURDAY"
-    SUNDAY = "SUNDAY"
+    MONDAY = auto()
+    TUESDAY = auto()
+    WEDNESDAY = auto()
+    THURSDAY = auto()
+    FRIDAY = auto()
+    SATURDAY = auto()
+    SUNDAY = auto()
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return self.name
 
 def validate_datetime(datetime_text, required_format):
     try:
@@ -52,20 +63,50 @@ def validate_datetime(datetime_text, required_format):
     except ValueError:
         raise InvalidDateFormatException(required_format)
 
+def generate_tag_scope(tag, filter_type=None, management_zone_id=None):
+    tag_payload = {}
 
-def generate_scope(entities=None, filter_type=None, management_zone_id=None, tags=None, matches_any_tag=False):
+    if management_zone_id:
+        tag_payload ['managementZoneId'] = str(management_zone_id)
+
+    if isinstance (tag, list) and len(tag) > 0:
+        tag_payload ['tags'] = tag
+    elif isinstance (tag, dict):
+        tag_payload ['tags'] = [tag]
+    elif isinstance (tag, str):
+        tag_payload ['tags'] = [{'context': "CONTEXTLESS",'key': tag}]
+
+    return tag_payload
+
+def generate_scope(entities=None, filter_type=None, management_zone_id=None, tags=None, match_any_tag=True):
     if entities is None:
         entities = []
     matches = []
     matches_payload = {}
-    if isinstance(filter_type, str):
-        matches_payload['type'] = filter_type
-    if management_zone_id:
-        matches_payload['managementZoneId'] = management_zone_id
-    if isinstance(tags, list):
-        matches_payload['tags'] = tags
+    # if isinstance(filter_type, str):
+        # matches_payload['type'] = filter_type
 
-    matches.append(matches_payload)
+    if match_any_tag and isinstance(tags, list) and len(tags)>1:
+        for tag in tags:
+            matches.append(
+                    generate_tag_scope(
+                            tag,
+                            filter_type=filter_type,
+                            management_zone_id=management_zone_id
+                    )
+            )
+    else:
+        matches.append(
+                generate_tag_scope(
+                        tags,
+                        filter_type=filter_type,
+                        management_zone_id=management_zone_id
+                )
+        )
+
+    # if isinstance(match_any_tag, bool):
+    #     matches_payload['tagsCombination'] = "OR" if match_any_tag \
+    #             else "AND"
 
     scope = {
         'entities': entities,
