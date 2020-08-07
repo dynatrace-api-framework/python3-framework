@@ -1,6 +1,4 @@
-"""
-Test Cases For Maintenance Windows.
-"""
+"""Test Cases For Maintenance Windows."""
 import unittest
 import user_variables
 from tests import tooling_for_test
@@ -11,14 +9,8 @@ CLUSTER = user_variables.FULL_SET["mockserver1"]
 TENANT = "tenant1"
 URL_PATH = TenantAPIs.MAINTENANCE_WINDOWS
 
-
 class TestMaintenanceWindowCreate(unittest.TestCase):
-    """
-    Test Cases for Creating a Maintenance Window
-
-    Args:
-        unittest ([type]): [description]
-    """
+    """Test Cases for Creating a Maintenance Window"""
     REQUEST_DIR = "tests/mockserver_payloads/requests/maintenance/"
     RESPONSE_DIR = "tests/mockserver_payloads/responses/maintenance/"
 
@@ -54,11 +46,9 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
         self.assertEqual(result, tooling_for_test.expected_payload(mockserver_response_file))
 
     def test_create_daily_single_tag(self):
-        """
-        Testing create daily Maintenance Window with a single tag scope
-        """
+        """Testing create daily Maintenance Window with a single tag scope"""
         mockserver_request_file = f"{self.REQUEST_DIR}mock_create_daily_single_tag_1.json"
-        mockserver_response_file = f"{self.RESPONSE_DIR}mock_create_daily_single_tag_1.json"
+        mockserver_response_file = f"{self.RESPONSE_DIR}mock_create_daily_1.json"
         tooling_for_test.create_mockserver_expectation(
             CLUSTER,
             TENANT,
@@ -76,7 +66,83 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
         )
         maintenance_scope = maintenance.generate_scope(tags=[{'context': "CONTEXTLESS",'key': "testing"}])
         maintenance_json = maintenance.generate_window_json(
-            "Test Payload Daily with Tag",
+            "Test Payload Daily",
+            "Generating Payload for Test",
+            "DETECT_PROBLEMS_AND_ALERT",
+            maintenance_schedule,
+            scope= maintenance_scope,
+            is_planned=True
+        )
+        result = maintenance.create_window(CLUSTER, TENANT, maintenance_json)
+        self.assertEqual(result, tooling_for_test.expected_payload(mockserver_response_file))
+
+    def test_create_daily_tags_and(self):
+        """Testing Payloads with multiple tags in an \"AND\" configuration"""
+        mockserver_request_file = f"{self.REQUEST_DIR}mock_create_daily_multi_tags_and_1.json"
+        mockserver_response_file = f"{self.RESPONSE_DIR}mock_create_daily_1.json"
+
+        tooling_for_test.create_mockserver_expectation(
+            CLUSTER,
+            TENANT,
+            URL_PATH,
+            "POST",
+            request_file=mockserver_request_file,
+            response_file=mockserver_response_file,
+        )
+        maintenance_schedule = maintenance.generate_schedule(
+            "DAILY",
+            "23:00",
+            60,
+            "2020-01-01 00:00",
+            "2020-01-02 00:00"
+        )
+        maintenance_scope = maintenance.generate_scope(
+                tags=[
+                        {'context': "CONTEXTLESS",'key': "testing"},
+                        {'context': "CONTEXTLESS",'key': "testing2"}
+                ],
+                match_any_tag=False
+        )
+        maintenance_json = maintenance.generate_window_json(
+            "Test Payload Daily",
+            "Generating Payload for Test",
+            "DETECT_PROBLEMS_AND_ALERT",
+            maintenance_schedule,
+            scope= maintenance_scope,
+            is_planned=True
+        )
+        result = maintenance.create_window(CLUSTER, TENANT, maintenance_json)
+        self.assertEqual(result, tooling_for_test.expected_payload(mockserver_response_file))
+
+    def test_create_daily_tags_or(self):
+        """Testing Payloads with multiple tags in an \"AND\" configuration"""
+        mockserver_request_file = f"{self.REQUEST_DIR}mock_create_daily_multi_tags_or_1.json"
+        mockserver_response_file = f"{self.RESPONSE_DIR}mock_create_daily_1.json"
+
+        tooling_for_test.create_mockserver_expectation(
+            CLUSTER,
+            TENANT,
+            URL_PATH,
+            "POST",
+            request_file=mockserver_request_file,
+            response_file=mockserver_response_file,
+        )
+        maintenance_schedule = maintenance.generate_schedule(
+            "DAILY",
+            "23:00",
+            60,
+            "2020-01-01 00:00",
+            "2020-01-02 00:00"
+        )
+        maintenance_scope = maintenance.generate_scope(
+                tags=[
+                        {'context': "CONTEXTLESS",'key': "testing"},
+                        {'context': "CONTEXTLESS",'key': "testing2"}
+                ],
+                match_any_tag=True
+        )
+        maintenance_json = maintenance.generate_window_json(
+            "Test Payload Daily",
             "Generating Payload for Test",
             "DETECT_PROBLEMS_AND_ALERT",
             maintenance_schedule,
