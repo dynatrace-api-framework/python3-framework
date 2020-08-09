@@ -6,8 +6,8 @@ from tests import tooling_for_test as testtools
 from dynatrace.requests.request_handler import TenantAPIs
 from dynatrace.tenant.topology import services
 
-cluster = FULL_SET.get('mock_cluster')
-tenant = 'mock_tenant'
+cluster = FULL_SET.get('mockserver1')
+tenant = 'tenant1'
 url = f"{TenantAPIs.V1_TOPOLOGY}/services"
 request_dir = "tests/mockserver_payloads/requests/services"
 response_dir = "tests/mockserver_payloads/responses/services"
@@ -34,7 +34,7 @@ class TestGetServices(unittest.TestCase):
     def test_get_single_svc(self):
         """Test fetching single service"""
         response_file = f"{response_dir}/get_one.json"
-        svc_id = "SERVICE-C12BF59DA3B51679"
+        svc_id = "SERVICE-ABC123DEF456GHI7"
 
         testtools.create_mockserver_expectation(
             cluster=cluster,
@@ -68,7 +68,7 @@ class TestServiceTags(unittest.TestCase):
 
     def test_add_svc_tags(self):
         """Test adding two tags to the service."""
-        svc_id = "SERVICE-C12BF59DA3B51679"
+        svc_id = "SERVICE-ABC123DEF456GHI7"
         request_file = f"{request_dir}/tags.json"
         tags = ["demo", "example"]
 
