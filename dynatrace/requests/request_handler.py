@@ -1,6 +1,7 @@
 """Make API Request to available Dynatrace API"""
 import requests
 import time
+import functools
 from dynatrace.exceptions import InvalidAPIResponseException, ManagedClusterOnlyException
 from enum import Enum, auto
 
@@ -80,6 +81,30 @@ class HTTP(Enum):
         return self.name
 
 
+def slow_down(func):
+    """
+    Decorator for slowing down API requests. In case of SaaS limits are as low
+    as 50/min. If current call is within the last 25% remaining requests (until
+    the limit is reached) then a slow down of 1 sec is applied.
+    *** Should only use to decorate API-calling functions ***
+    """
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        response = func(*args, **kwargs)
+
+        # Standard Dynatrace response headers
+        req_remaining = int(response.headers.get('x-ratelimit-remaining'))
+        req_limit = int(response.headers.get('x-ratelimit-limit'))
+        # If 75% requests already made, slow down
+        print(f"{req_remaining} = {(req_remaining/req_limit)*100}%")
+        if req_remaining/req_limit <= 0.25:
+            time.sleep(1)
+
+        return response
+    return wrapper
+
+
+@slow_down
 def make_api_call(cluster, endpoint, tenant=None, params=None, json=None, method=HTTP.GET):
     '''
     Function makes an API call in a safe way, taking into account the rate limits.
