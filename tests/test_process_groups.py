@@ -6,8 +6,8 @@ from tests import tooling_for_test as testtools
 from dynatrace.requests.request_handler import TenantAPIs
 from dynatrace.tenant.topology import process_groups
 
-cluster = FULL_SET.get('mock_cluster')
-tenant = 'mock_tenant'
+cluster = FULL_SET.get('mockserver1')
+tenant = 'tenant1'
 url = f"{TenantAPIs.V1_TOPOLOGY}/infrastructure/process-groups"
 request_dir = "tests/mockserver_payloads/requests/processes"
 response_dir = "tests/mockserver_payloads/responses/processes"
@@ -34,7 +34,7 @@ class TestGetPGs(unittest.TestCase):
     def test_get_single_pg(self):
         """Test fetching single PG"""
         response_file = f"{response_dir}/get_one_pg.json"
-        pg_id = "PROCESS_GROUP-859E1549052CD876"
+        pg_id = "PROCESS_GROUP-ABC123DEF456GHI7"
 
         testtools.create_mockserver_expectation(
             cluster=cluster,
