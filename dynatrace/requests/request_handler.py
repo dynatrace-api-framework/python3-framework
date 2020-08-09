@@ -201,7 +201,7 @@ def v2_get_results_whole(cluster, endpoint, item, tenant=None, params=None):
     # In the case of multi-page, get the rest
     cursor = response.get('nextPageKey')
     if cursor:
-        response[item].extend(__get_multipage_results(
+        response[item].extend(__get_v2_multipage_results(
             cluster=cluster,
             endpoint=endpoint,
             tenant=tenant,
