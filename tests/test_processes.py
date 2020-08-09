@@ -6,7 +6,7 @@ from tests import tooling_for_test as testtools
 from dynatrace.requests.request_handler import TenantAPIs
 from dynatrace.tenant.topology import process
 
-cluster = FULL_SET.get('mockcluster1')
+cluster = FULL_SET.get('mockserver1')
 tenant = 'tenant1'
 url = f"{TenantAPIs.V1_TOPOLOGY}/infrastructure/processes"
 request_dir = "tests/mockserver_payloads/requests/processes"
