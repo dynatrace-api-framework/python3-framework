@@ -122,7 +122,7 @@ def make_api_call(cluster, endpoint, tenant=None, params=None, json=None, method
     return response
 
 
-def __get_multipage_results(cluster, endpoint, cursor, item, tenant=None):
+def __get_v2_multipage_results(cluster, endpoint, cursor, item, tenant=None):
     """
     Private function: not intended for calling from outside of this module.
     Retrieves subsequent pages of multi-page API call and gathers just the
