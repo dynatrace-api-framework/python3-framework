@@ -4,6 +4,7 @@ import user_variables
 from tests import tooling_for_test
 from dynatrace.tenant import maintenance
 from dynatrace.requests.request_handler import TenantAPIs
+from dynatrace.exceptions import InvalidDateFormatException
 
 CLUSTER = user_variables.FULL_SET["mockserver1"]
 TENANT = "tenant1"
@@ -261,23 +262,23 @@ class TestMaintenanceExceptions(unittest.TestCase):
         """Testing exception thrown for invalid recurrence type"""
         with self.assertRaises(ValueError) as context:
             maintenance_schedule = maintenance.generate_schedule(
-                "HOURLY",
-                "23:00",
-                60,
-                "2020-01-01 00:00",
-                "2020-01-02 00:00",
+                    "HOURLY",
+                    "23:00",
+                    60,
+                    "2020-01-01 00:00",
+                    "2020-01-02 00:00",
             )
         self.assertTrue("Invalid Recurrence Type!" in str(context.exception))
     def test_invalid_day_of_week(self):
         """Testing exception thrown for invalid dayOfWeek"""
         with self.assertRaises(ValueError) as context:
             maintenance_schedule = maintenance.generate_schedule(
-                maintenance.RecurrenceType.WEEKLY,
-                "23:00",
-                60,
-                "2020-01-01 00:00",
-                "2020-01-02 00:00",
-                day=1
+                    maintenance.RecurrenceType.WEEKLY,
+                    "23:00",
+                    60,
+                    "2020-01-01 00:00",
+                    "2020-01-02 00:00",
+                    day=1
             )
         self.assertTrue("Invalid Weekly Day!" in str(context.exception))
     
@@ -285,12 +286,12 @@ class TestMaintenanceExceptions(unittest.TestCase):
         """Testing exception thrown for invalid dayOfMonth for incorrect int"""
         with self.assertRaises(ValueError) as context:
             maintenance_schedule = maintenance.generate_schedule(
-                maintenance.RecurrenceType.MONTHLY,
-                "23:00",
-                60,
-                "2020-01-01 00:00",
-                "2020-01-02 00:00",
-                day=32
+                    maintenance.RecurrenceType.MONTHLY,
+                    "23:00",
+                    60,
+                    "2020-01-01 00:00",
+                    "2020-01-02 00:00",
+                    day=32
             )
         self.assertTrue("Invalid Monthly Day!" in str(context.exception))
 
@@ -298,12 +299,12 @@ class TestMaintenanceExceptions(unittest.TestCase):
         """Testing exception thrown for invalid dayOfMonth for a non-int"""
         with self.assertRaises(TypeError) as context:
             maintenance_schedule = maintenance.generate_schedule(
-                maintenance.RecurrenceType.MONTHLY,
-                "23:00",
-                60,
-                "2020-01-01 00:00",
-                "2020-01-02 00:00",
-                day="Eleven"
+                    maintenance.RecurrenceType.MONTHLY,
+                    "23:00",
+                    60,
+                    "2020-01-01 00:00",
+                    "2020-01-02 00:00",
+                    day="Eleven"
             )
         self.assertTrue("Invalid type for Day of Month! Int between 1-31 required" in str(context.exception))
 
@@ -311,11 +312,11 @@ class TestMaintenanceExceptions(unittest.TestCase):
         """Weekly Maintenance Window with no dayOfWeek supplied"""
         with self.assertRaises(Exception) as context:
             maintenance_schedule = maintenance.generate_schedule(
-                maintenance.RecurrenceType.WEEKLY,
-                "23:00",
-                60,
-                "2020-01-01 00:00",
-                "2020-01-02 00:00",
+                    maintenance.RecurrenceType.WEEKLY,
+                    "23:00",
+                    60,
+                    "2020-01-01 00:00",
+                    "2020-01-02 00:00",
             )
         self.assertTrue("Invalid Weekly Day!" in str(context.exception))
 
@@ -323,13 +324,34 @@ class TestMaintenanceExceptions(unittest.TestCase):
         """Monthly Maintenance Window with no dayOfMonth supplied"""
         with self.assertRaises(Exception) as context:
             maintenance_schedule = maintenance.generate_schedule(
-                maintenance.RecurrenceType.MONTHLY,
-                "23:00",
-                60,
-                "2020-01-01 00:00",
-                "2020-01-02 00:00",
+                    maintenance.RecurrenceType.MONTHLY,
+                    "23:00",
+                    60,
+                    "2020-01-01 00:00",
+                    "2020-01-02 00:00",
             )
         self.assertTrue("Invalid type for Day of Month!" in str(context.exception))
+
+    def test_invalid_datetime_format(self):
+        """Test invalid datetime supplied to trigger ValueError"""
+        #TODO Fix Exceoption to have a message as first arg
+        with self.assertRaises(InvalidDateFormatException) as context:
+            maintenance_schedule = maintenance.generate_schedule(
+                    maintenance.RecurrenceType.DAILY,
+                    "23:00",
+                    60,
+                    "2020-01-01 00:00",
+                    "2020-01-02"
+            )
+        self.assertTrue("%Y-%m-%d %H:%M" in (msg := str(context.exception)), msg)
+    def test_invalid_filter_type(self):
+        """Invalid Filter_Type"""
+        with self.assertRaises(ValueError) as context:
+            maintenance_scope = maintenance.generate_scope(
+                    tags=[{'context': "CONTEXTLESS", 'key': "testing"}],
+                    filter_type="INVALID_TYPE"
+            )
+        self.assertTrue("Invalid Filter Type" in (msg := str(context.exception)), msg)
 
 
 class TestMaintenanceEnumTypes(unittest.TestCase):
@@ -433,7 +455,6 @@ if __name__ == '__main__':
 # Multi Tags with Management Zone
 
 # EXCEPTION TEST CASES:
-# INVALID FILTER_TYPE
 # MANAGEMENT_ZONE WITHOUT TAG
 # FILTER_TYPE WITHOUT TAG
 
