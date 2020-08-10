@@ -16,7 +16,6 @@ class TestHostGroupFunctions(unittest.TestCase):
         parameters = {
             "relativeTime": ["day"],
             "includeDetails": ["true"],
-            "Api-Token": [CLUSTER["api_token"][TENANT]],
         }
         mockserver_response_file = f"{self.RESPONSE_DIR}mock_get_general_1.json"
         tooling_for_test.create_mockserver_expectation(

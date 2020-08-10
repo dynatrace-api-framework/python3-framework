@@ -61,7 +61,7 @@ class TestGetPGs(unittest.TestCase):
 
         result = process_groups.get_process_group_count_tenantwide(cluster,
                                                                    tenant)
-        self.assertEqual(result, 4)
+        self.assertEqual(result, 3)
 
 
 class TestPGTags(unittest.TestCase):

@@ -8,7 +8,7 @@ from dynatrace.tenant.topology import services
 
 cluster = FULL_SET.get('mockserver1')
 tenant = 'tenant1'
-url = f"{TenantAPIs.V1_TOPOLOGY}/services"
+url = f"{TenantAPIs.V1_TOPOLOGY}/infrastructure/services"
 request_dir = "tests/mockserver_payloads/requests/services"
 response_dir = "tests/mockserver_payloads/responses/services"
 

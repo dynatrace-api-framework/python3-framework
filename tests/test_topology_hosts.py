@@ -7,8 +7,8 @@ from tests import tooling_for_test as testtools
 from dynatrace.requests.request_handler import TenantAPIs
 from dynatrace.tenant.topology import hosts
 
-cluster = FULL_SET.get('mock_cluster')
-tenant = 'mock_tenant'
+CLUSTER = FULL_SET["mockserver1"]
+TENANT = "tenant1"
 url = f"{TenantAPIs.V1_TOPOLOGY}/infrastructure/hosts"
 request_dir = "tests/mockserver_payloads/requests/hosts"
 response_dir = "tests/mockserver_payloads/responses/hosts"
@@ -23,14 +23,14 @@ class TestGetHosts(unittest.TestCase):
         response_file = f"{response_dir}/get_all.json"
 
         testtools.create_mockserver_expectation(
-            cluster=cluster,
-            tenant=tenant,
+            cluster=CLUSTER,
+            tenant=TENANT,
             url_path=url,
             request_type="GET",
             response_file=response_file
         )
 
-        result = hosts.get_hosts_tenantwide(cluster, tenant)
+        result = hosts.get_hosts_tenantwide(CLUSTER, TENANT)
         self.assertEqual(result, testtools.expected_payload(response_file))
 
     def test_get_single_host(self):
@@ -40,14 +40,14 @@ class TestGetHosts(unittest.TestCase):
         response_file = f"{response_dir}/get_single.json"
 
         testtools.create_mockserver_expectation(
-            cluster=cluster,
-            tenant=tenant,
+            cluster=CLUSTER,
+            tenant=TENANT,
             url_path=f"{url}/{host_id}",
             request_type="GET",
             response_file=response_file
         )
 
-        result = hosts.get_host(cluster, tenant, host_id)
+        result = hosts.get_host(CLUSTER, TENANT, host_id)
         self.assertEqual(result, testtools.expected_payload(response_file))
 
     def test_get_host_count(self):
@@ -55,8 +55,8 @@ class TestGetHosts(unittest.TestCase):
 
         response_file = f"{response_dir}/get_all.json"
         testtools.create_mockserver_expectation(
-            cluster=cluster,
-            tenant=tenant,
+            cluster=CLUSTER,
+            tenant=TENANT,
             url_path=url,
             request_type="GET",
             response_file=response_file,
@@ -64,7 +64,7 @@ class TestGetHosts(unittest.TestCase):
                             includeDetails=['False'])
         )
 
-        result = hosts.get_host_count_tenantwide(cluster, tenant)
+        result = hosts.get_host_count_tenantwide(CLUSTER, TENANT)
         self.assertEqual(result, 3)
 
     def test_get_host_units(self):
@@ -72,14 +72,14 @@ class TestGetHosts(unittest.TestCase):
 
         response_file = f"{response_dir}/get_all.json"
         testtools.create_mockserver_expectation(
-            cluster=cluster,
-            tenant=tenant,
+            cluster=CLUSTER,
+            tenant=TENANT,
             url_path=url,
             request_type="GET",
             response_file=response_file
         )
 
-        result = hosts.get_host_units_tenantwide(cluster, tenant)
+        result = hosts.get_host_units_tenantwide(CLUSTER, TENANT)
         self.assertEqual(result, 4)
 
         hosts.set_host_properties
@@ -96,15 +96,15 @@ class TestHostTagging(unittest.TestCase):
         tags = ["demo", "example"]
 
         testtools.create_mockserver_expectation(
-            cluster=cluster,
-            tenant=tenant,
+            cluster=CLUSTER,
+            tenant=TENANT,
             request_type="POST",
             url_path=f"{url}/{host_id}",
             request_file=request_file,
             response_code=201
         )
 
-        result = hosts.add_host_tags(cluster, tenant, host_id, tags)
+        result = hosts.add_host_tags(CLUSTER, TENANT, host_id, tags)
         self.assertEqual(result, 201)
 
     def test_delete_tags(self):
@@ -114,14 +114,14 @@ class TestHostTagging(unittest.TestCase):
         tag = "demo"
 
         testtools.create_mockserver_expectation(
-            cluster=cluster,
-            tenant=tenant,
+            cluster=CLUSTER,
+            tenant=TENANT,
             url_path=f"{url}/{host_id}/tags/{tag}",
             request_type="DELETE",
             response_code=204
         )
 
-        result = hosts.delete_host_tag(cluster, tenant, host_id, tag)
+        result = hosts.delete_host_tag(CLUSTER, TENANT, host_id, tag)
         self.assertEqual(204, result.status_code)
 
 
