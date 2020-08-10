@@ -249,10 +249,6 @@ def generate_scope(entities=None, tags=None, filter_type=None, management_zone_i
             )
         )
 
-    # if isinstance(match_any_tag, bool):
-    #     matches_payload['tagsCombination'] = "OR" if match_any_tag \
-    #             else "AND"
-
     scope = {
         'entities': entities,
         'matches': matches
