@@ -298,11 +298,59 @@ class TestEnumTypes(unittest.TestCase):
         self.assertIsInstance(maintenance.FilterType.__repr__(suppression), str)
 
 
+class TestTagParsing(unittest.TestCase):
+    def test_tag_variations(self):
+        """Testing various ways tags need to be parsed"""
+        # Test 1 - Key
+        # Test 2 - Key, Value
+        # Test 3 - Context, Key and Value
+        # Test 4 - Key with Colon, Value
+        # Test 5 - Key with Colon, Value Blank
+        # Test 6 - Context, Key with Colon and Value
+        # Test 7 - Context, Key
+        # Test 8 - Context, Key with square brackets
+        # Test 9 - Context, Key with colon and squares
+        # Test 10 - Empty Context with squares
+        
+        test_tag_list = [
+                "Key",                                      
+                "Key:Value",                                
+                "[Context]Key:Value",                       
+                "Key:withColon:Value",                      
+                "Key:withColon:",                           
+                "[Context]Key:withColon:Value",             
+                "[Context]Key",                             
+                "[Context][KeywithSquares]",                
+                "[Context][KeyWithSquares]:AndColons:Value",
+                "[][KeywithSquares]",                      
+        ]
+
+        test_tag_expected_results = [
+                {'context': 'CONTEXTLESS', 'key': 'Key'},
+                {'context': 'CONTEXTLESS', 'key': 'Key:Value'},
+                {'context': 'Context', 'key': 'Key:Value'},
+                {'context': 'CONTEXTLESS', 'key': 'Key:withColon:Value'},
+                {'context': 'CONTEXTLESS', 'key': 'Key:withColon:'},
+                {'context': 'Context', 'key': 'Key:withColon:Value'},
+                {'context': 'Context', 'key': 'Key'},
+                {'context': 'Context', 'key': '[KeywithSquares]'},
+                {'context': 'Context', 'key': '[KeyWithSquares]:AndColons:Value'},
+                {'context': 'CONTEXTLESS', 'key': '[][KeywithSquares]'},
+        ]
+
+        all_tests_passed = True
+        for i in range(0, len(test_tag_list)):
+            processed_tag = test_tag_list[i]
+            self.assertTrue(
+                    (result := maintenance.parse_tag(processed_tag)) == test_tag_expected_results[i], 
+                    f"Test {i}: {result} did not match {test_tag_expected_results[i]}")
+
 if __name__ == '__main__':
     unittest.main()
 
 # CREATE TESTS LEFT:
-# MONTHLY TEST
+# INCORRECT DAY OF WEEK
+# INCORRECT DAY OF MONTH
 
 # Single Entity
 # Multi Entity
