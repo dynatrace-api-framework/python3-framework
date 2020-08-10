@@ -14,6 +14,8 @@ def create_mockserver_expectation(cluster, tenant, url_path, request_type, **kwa
             "queryStringParameters": {
                 "Api-Token": [cluster.get('api_token').get(tenant)]
             },
+            "path": url_path,
+            "method": request_type
         },
         "httpResponse": {
             "statusCode": 200
@@ -28,7 +30,7 @@ def create_mockserver_expectation(cluster, tenant, url_path, request_type, **kwa
     logging.debug(f"KWARGS {kwargs}")
     # Paramaters should always at least have Api-Token
     if 'parameters' in kwargs:
-        expectation["httpRequest"]["queryStringParameters"] = kwargs['parameters']
+        expectation["httpRequest"]["queryStringParameters"].update(kwargs['parameters'])
 
     if "request_file" in kwargs:
         with open(kwargs['request_file']) as f:
@@ -50,7 +52,7 @@ def create_mockserver_expectation(cluster, tenant, url_path, request_type, **kwa
         }
 
     if "response_code" in kwargs:
-        expectation['httpResponse']['statusCode'] = kwargs['response_code']
+        expectation["httpResponse"]["statusCode"] = kwargs["response_code"]
 
     if "mock_id" in kwargs:
         expectation["id"] = kwargs["mock_id"]
