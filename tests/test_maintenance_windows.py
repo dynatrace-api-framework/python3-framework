@@ -224,8 +224,8 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
             mockserver_response_file))
 
     def test_create_monthly_no_scope(self):
-        """Testing Payloads with WEEKLY recurrance type"""
-        mockserver_request_file = f"{self.REQUEST_DIR}mock_create_weekly_1.json"
+        """Testing Payloads with MONTHLY recurrance type"""
+        mockserver_request_file = f"{self.REQUEST_DIR}mock_create_monthly_1.json"
         mockserver_response_file = f"{self.RESPONSE_DIR}mock_create_1.json"
 
         tooling_for_test.create_mockserver_expectation(
