@@ -347,7 +347,7 @@ class TestMaintenanceExceptions(unittest.TestCase):
                     TEST_RANGE_START,
                     "2020-01-02"
             )
-        self.assertTrue("%Y-%m-%d %H:%M" in (msg := str(context.exception)), msg)
+        self.assertTrue("Incorrect Date " in context.exception.message, context.exception.message)
     def test_invalid_filter_type(self):
         """Invalid Filter_Type"""
         with self.assertRaises(ValueError) as context:
