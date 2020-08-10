@@ -319,7 +319,7 @@ class TestMaintenanceExceptions(unittest.TestCase):
             )
         self.assertTrue("Invalid Weekly Day!" in str(context.exception))
 
-    def test_no_day_of_week_supplied(self):
+    def test_no_day_of_month_supplied(self):
         """Monthly Maintenance Window with no dayOfMonth supplied"""
         with self.assertRaises(Exception) as context:
             maintenance_schedule = maintenance.generate_schedule(
