@@ -256,7 +256,83 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
         self.assertEqual(result, tooling_for_test.expected_payload(
             mockserver_response_file))
 
-class TestEnumTypes(unittest.TestCase):
+class TestMaintenanceExceptions(unittest.TestCase):
+    def test_invalid_recurrence_type(self):
+        """Testing exception thrown for invalid recurrence type"""
+        with self.assertRaises(ValueError) as context:
+            maintenance_schedule = maintenance.generate_schedule(
+                "HOURLY",
+                "23:00",
+                60,
+                "2020-01-01 00:00",
+                "2020-01-02 00:00",
+            )
+        self.assertTrue("Invalid Recurrence Type!" in str(context.exception))
+    def test_invalid_day_of_week(self):
+        """Testing exception thrown for invalid dayOfWeek"""
+        with self.assertRaises(ValueError) as context:
+            maintenance_schedule = maintenance.generate_schedule(
+                maintenance.RecurrenceType.WEEKLY,
+                "23:00",
+                60,
+                "2020-01-01 00:00",
+                "2020-01-02 00:00",
+                day=1
+            )
+        self.assertTrue("Invalid Weekly Day!" in str(context.exception))
+    
+    def test_invalid_day_of_month_value(self):
+        """Testing exception thrown for invalid dayOfMonth for incorrect int"""
+        with self.assertRaises(ValueError) as context:
+            maintenance_schedule = maintenance.generate_schedule(
+                maintenance.RecurrenceType.MONTHLY,
+                "23:00",
+                60,
+                "2020-01-01 00:00",
+                "2020-01-02 00:00",
+                day=32
+            )
+        self.assertTrue("Invalid Monthly Day!" in str(context.exception))
+
+    def test_invalid_day_of_month_type(self):
+        """Testing exception thrown for invalid dayOfMonth for a non-int"""
+        with self.assertRaises(TypeError) as context:
+            maintenance_schedule = maintenance.generate_schedule(
+                maintenance.RecurrenceType.MONTHLY,
+                "23:00",
+                60,
+                "2020-01-01 00:00",
+                "2020-01-02 00:00",
+                day="Eleven"
+            )
+        self.assertTrue("Invalid type for Day of Month! Int between 1-31 required" in str(context.exception))
+
+    def test_no_day_of_week_supplied(self):
+        """Weekly Maintenance Window with no dayOfWeek supplied"""
+        with self.assertRaises(Exception) as context:
+            maintenance_schedule = maintenance.generate_schedule(
+                maintenance.RecurrenceType.WEEKLY,
+                "23:00",
+                60,
+                "2020-01-01 00:00",
+                "2020-01-02 00:00",
+            )
+        self.assertTrue("Invalid Weekly Day!" in str(context.exception))
+
+    def test_no_day_of_week_supplied(self):
+        """Monthly Maintenance Window with no dayOfMonth supplied"""
+        with self.assertRaises(Exception) as context:
+            maintenance_schedule = maintenance.generate_schedule(
+                maintenance.RecurrenceType.MONTHLY,
+                "23:00",
+                60,
+                "2020-01-01 00:00",
+                "2020-01-02 00:00",
+            )
+        self.assertTrue("Invalid type for Day of Month!" in str(context.exception))
+
+
+class TestMaintenanceEnumTypes(unittest.TestCase):
     def test_suppression_enum_str(self):
         suppression = maintenance.Suppression(maintenance.Suppression.DETECT_PROBLEMS_AND_ALERT)
         self.assertIsInstance(maintenance.Suppression.__str__(suppression), str)
@@ -349,9 +425,6 @@ if __name__ == '__main__':
     unittest.main()
 
 # CREATE TESTS LEFT:
-# INCORRECT DAY OF WEEK
-# INCORRECT DAY OF MONTH
-
 # Single Entity
 # Multi Entity
 # Single Tag with Filter Type
@@ -360,12 +433,6 @@ if __name__ == '__main__':
 # Multi Tags with Management Zone
 
 # EXCEPTION TEST CASES:
-# INVALID RECURRENCE
-# INVALID WEEK DAY
-# INVALID MONTH DAY
-# WEEK DAY NOT SUPPLIED
-# MONTH DAY NOT SUPPLIED
-# MONTHLY DAY OUT OF SCOPE (31 in 30 day month)
 # INVALID FILTER_TYPE
 # MANAGEMENT_ZONE WITHOUT TAG
 # FILTER_TYPE WITHOUT TAG
