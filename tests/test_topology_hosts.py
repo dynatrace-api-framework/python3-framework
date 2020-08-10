@@ -9,9 +9,9 @@ from dynatrace.tenant.topology import hosts
 
 CLUSTER = FULL_SET["mockserver1"]
 TENANT = "tenant1"
-url = f"{TenantAPIs.V1_TOPOLOGY}/infrastructure/hosts"
-request_dir = "tests/mockserver_payloads/requests/hosts"
-response_dir = "tests/mockserver_payloads/responses/hosts"
+URL_PATH = f"{TenantAPIs.V1_TOPOLOGY}/infrastructure/hosts"
+REQUEST_DIR = "tests/mockserver_payloads/requests/hosts"
+RESPONSE_DIR = "tests/mockserver_payloads/responses/hosts"
 
 
 class TestGetHosts(unittest.TestCase):
@@ -20,12 +20,12 @@ class TestGetHosts(unittest.TestCase):
     def test_get_all_hosts(self):
         """Test fetching all hosts"""
 
-        response_file = f"{response_dir}/get_all.json"
+        response_file = f"{RESPONSE_DIR}/get_all.json"
 
         testtools.create_mockserver_expectation(
             cluster=CLUSTER,
             tenant=TENANT,
-            url_path=url,
+            url_path=URL_PATH,
             request_type="GET",
             response_file=response_file
         )
@@ -37,12 +37,12 @@ class TestGetHosts(unittest.TestCase):
         """Test fetching a specific host"""
 
         host_id = "HOST-9F74450267BAAE20"
-        response_file = f"{response_dir}/get_single.json"
+        response_file = f"{RESPONSE_DIR}/get_single.json"
 
         testtools.create_mockserver_expectation(
             cluster=CLUSTER,
             tenant=TENANT,
-            url_path=f"{url}/{host_id}",
+            url_path=f"{URL_PATH}/{host_id}",
             request_type="GET",
             response_file=response_file
         )
@@ -53,11 +53,11 @@ class TestGetHosts(unittest.TestCase):
     def test_get_host_count(self):
         """Test getting the count of hosts in a tenant."""
 
-        response_file = f"{response_dir}/get_all.json"
+        response_file = f"{RESPONSE_DIR}/get_all.json"
         testtools.create_mockserver_expectation(
             cluster=CLUSTER,
             tenant=TENANT,
-            url_path=url,
+            url_path=URL_PATH,
             request_type="GET",
             response_file=response_file,
             parameters=dict(relativeTime=['day'],
@@ -70,11 +70,11 @@ class TestGetHosts(unittest.TestCase):
     def test_get_host_units(self):
         """Tests getting the consumed host units in a tenant."""
 
-        response_file = f"{response_dir}/get_all.json"
+        response_file = f"{RESPONSE_DIR}/get_all.json"
         testtools.create_mockserver_expectation(
             cluster=CLUSTER,
             tenant=TENANT,
-            url_path=url,
+            url_path=URL_PATH,
             request_type="GET",
             response_file=response_file
         )
@@ -92,14 +92,14 @@ class TestHostTagging(unittest.TestCase):
         """Test adding two tags to a specific host."""
 
         host_id = "HOST-ABC123DEF456GHIJ"
-        request_file = f"{request_dir}/tags.json"
+        request_file = f"{REQUEST_DIR}/tags.json"
         tags = ["demo", "example"]
 
         testtools.create_mockserver_expectation(
             cluster=CLUSTER,
             tenant=TENANT,
             request_type="POST",
-            url_path=f"{url}/{host_id}",
+            url_path=f"{URL_PATH}/{host_id}",
             request_file=request_file,
             response_code=201
         )
@@ -116,7 +116,7 @@ class TestHostTagging(unittest.TestCase):
         testtools.create_mockserver_expectation(
             cluster=CLUSTER,
             tenant=TENANT,
-            url_path=f"{url}/{host_id}/tags/{tag}",
+            url_path=f"{URL_PATH}/{host_id}/tags/{tag}",
             request_type="DELETE",
             response_code=204
         )
