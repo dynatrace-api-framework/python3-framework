@@ -8,7 +8,7 @@ from dynatrace.exceptions import InvalidDateFormatException
 
 CLUSTER = user_variables.FULL_SET["mockserver1"]
 TENANT = "tenant1"
-URL_PATH = TenantAPIs.MAINTENANCE_WINDOWS
+URL_PATH = str(TenantAPIs.MAINTENANCE_WINDOWS)
 TEST_RANGE_START = "2020-01-01 00:00"
 TEST_RANGE_END = "2020-01-02 00:00"
 TEST_PAYLOAD_TITLE = "Test Payload"
