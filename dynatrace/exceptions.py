@@ -11,10 +11,7 @@ class InvalidAPIResponseException (Exception):
 
 class InvalidDateFormatException(ValueError):
     def __init__(self, required_format):
-        self.required_format = required_format
-        print("Incorrect Date for following entry: %s",
-              required_format, file=stderr)
-
+        self.message = f"Incorrect Date for following entry: {required_format}"
 
 class InvalidScopeException(ValueError):
     def __init__(self, required_format):

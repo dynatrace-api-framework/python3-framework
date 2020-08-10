@@ -19,6 +19,9 @@
             "tags": [{
                 "context": "CONTEXTLESS",
                 "key": "testing"
+            }, {
+                "context": "CONTEXTLESS",
+                "key": "testing2"
             }]
         }]
     }
