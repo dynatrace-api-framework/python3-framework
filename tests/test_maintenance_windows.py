@@ -9,6 +9,10 @@ from dynatrace.exceptions import InvalidDateFormatException
 CLUSTER = user_variables.FULL_SET["mockserver1"]
 TENANT = "tenant1"
 URL_PATH = TenantAPIs.MAINTENANCE_WINDOWS
+TEST_RANGE_START = "2020-01-01 00:00"
+TEST_RANGE_END = "2020-01-02 00:00"
+TEST_PAYLOAD_TITLE = "Test Payload"
+TEST_PAYLOAD_DESC = "Generating Payload for Test"
 
 
 class TestMaintenanceWindowCreate(unittest.TestCase):
@@ -31,16 +35,16 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
             response_file=mockserver_response_file,
         )
         maintenance_schedule = maintenance.generate_schedule(
-            "DAILY",
+            maintenance.RecurrenceType.DAILY,
             "23:00",
             60,
-            "2020-01-01 00:00",
-            "2020-01-02 00:00"
+            TEST_RANGE_START,
+            TEST_RANGE_END
         )
         maintenance_json = maintenance.generate_window_json(
-            "Test Payload",
-            "Generating Payload for Test",
-            "DETECT_PROBLEMS_AND_ALERT",
+            TEST_PAYLOAD_TITLE,
+            TEST_PAYLOAD_DESC,
+            maintenance.Suppression.DETECT_PROBLEMS_AND_ALERT,
             maintenance_schedule,
             is_planned=True
         )
@@ -61,18 +65,18 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
             response_file=mockserver_response_file,
         )
         maintenance_schedule = maintenance.generate_schedule(
-            "DAILY",
+            maintenance.RecurrenceType.DAILY,
             "23:00",
             60,
-            "2020-01-01 00:00",
-            "2020-01-02 00:00"
+            TEST_RANGE_START,
+            TEST_RANGE_END
         )
         maintenance_scope = maintenance.generate_scope(
             tags=[{'context': "CONTEXTLESS", 'key': "testing"}])
         maintenance_json = maintenance.generate_window_json(
-            "Test Payload",
-            "Generating Payload for Test",
-            "DETECT_PROBLEMS_AND_ALERT",
+            TEST_PAYLOAD_TITLE,
+            TEST_PAYLOAD_DESC,
+            maintenance.Suppression.DETECT_PROBLEMS_AND_ALERT,
             maintenance_schedule,
             scope=maintenance_scope,
             is_planned=True
@@ -95,11 +99,11 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
             response_file=mockserver_response_file,
         )
         maintenance_schedule = maintenance.generate_schedule(
-            "DAILY",
+            maintenance.RecurrenceType.DAILY,
             "23:00",
             60,
-            "2020-01-01 00:00",
-            "2020-01-02 00:00"
+            TEST_RANGE_START,
+            TEST_RANGE_END
         )
         maintenance_scope = maintenance.generate_scope(
             tags=[
@@ -109,9 +113,9 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
             match_any_tag=False
         )
         maintenance_json = maintenance.generate_window_json(
-            "Test Payload",
-            "Generating Payload for Test",
-            "DETECT_PROBLEMS_AND_ALERT",
+            TEST_PAYLOAD_TITLE,
+            TEST_PAYLOAD_DESC,
+            maintenance.Suppression.DETECT_PROBLEMS_AND_ALERT,
             maintenance_schedule,
             scope=maintenance_scope,
             is_planned=True
@@ -134,11 +138,11 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
             response_file=mockserver_response_file,
         )
         maintenance_schedule = maintenance.generate_schedule(
-            "DAILY",
+            maintenance.RecurrenceType.DAILY,
             "23:00",
             60,
-            "2020-01-01 00:00",
-            "2020-01-02 00:00"
+            TEST_RANGE_START,
+            TEST_RANGE_END
         )
         maintenance_scope = maintenance.generate_scope(
             tags=[
@@ -148,9 +152,9 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
             match_any_tag=True
         )
         maintenance_json = maintenance.generate_window_json(
-            "Test Payload",
-            "Generating Payload for Test",
-            "DETECT_PROBLEMS_AND_ALERT",
+            TEST_PAYLOAD_TITLE,
+            TEST_PAYLOAD_DESC,
+            maintenance.Suppression.DETECT_PROBLEMS_AND_ALERT,
             maintenance_schedule,
             scope=maintenance_scope,
             is_planned=True
@@ -177,13 +181,13 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
             #TODO Remove need for these variables. ONCE does not use them
             "23:00",
             60,
-            "2020-01-01 00:00",
-            "2020-01-02 00:00"
+            TEST_RANGE_START,
+            TEST_RANGE_END
         )
         maintenance_json = maintenance.generate_window_json(
-            "Test Payload",
-            "Generating Payload for Test",
-            "DETECT_PROBLEMS_AND_ALERT",
+            TEST_PAYLOAD_TITLE,
+            TEST_PAYLOAD_DESC,
+            maintenance.Suppression.DETECT_PROBLEMS_AND_ALERT,
             maintenance_schedule,
             is_planned=True
         )
@@ -209,14 +213,14 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
             #TODO Remove need for these variables. ONCE does not use them
             "23:00",
             60,
-            "2020-01-01 00:00",
-            "2020-01-02 00:00",
+            TEST_RANGE_START,
+            TEST_RANGE_END,
             day=maintenance.DayOfWeek.SUNDAY
         )
         maintenance_json = maintenance.generate_window_json(
-            "Test Payload",
-            "Generating Payload for Test",
-            "DETECT_PROBLEMS_AND_ALERT",
+            TEST_PAYLOAD_TITLE,
+            TEST_PAYLOAD_DESC,
+            maintenance.Suppression.DETECT_PROBLEMS_AND_ALERT,
             maintenance_schedule,
             is_planned=True
         )
@@ -242,14 +246,14 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
             #TODO Remove need for these variables. ONCE does not use them
             "23:00",
             60,
-            "2020-01-01 00:00",
-            "2020-01-02 00:00",
+            TEST_RANGE_START,
+            TEST_RANGE_END,
             day=1
         )
         maintenance_json = maintenance.generate_window_json(
-            "Test Payload",
-            "Generating Payload for Test",
-            "DETECT_PROBLEMS_AND_ALERT",
+            TEST_PAYLOAD_TITLE,
+            TEST_PAYLOAD_DESC,
+            maintenance.Suppression.DETECT_PROBLEMS_AND_ALERT,
             maintenance_schedule,
             is_planned=True
         )
@@ -261,23 +265,23 @@ class TestMaintenanceExceptions(unittest.TestCase):
     def test_invalid_recurrence_type(self):
         """Testing exception thrown for invalid recurrence type"""
         with self.assertRaises(ValueError) as context:
-            maintenance_schedule = maintenance.generate_schedule(
+            maintenance.generate_schedule(
                     "HOURLY",
                     "23:00",
                     60,
-                    "2020-01-01 00:00",
-                    "2020-01-02 00:00",
+                    TEST_RANGE_START,
+                    TEST_RANGE_END,
             )
         self.assertTrue("Invalid Recurrence Type!" in str(context.exception))
     def test_invalid_day_of_week(self):
         """Testing exception thrown for invalid dayOfWeek"""
         with self.assertRaises(ValueError) as context:
-            maintenance_schedule = maintenance.generate_schedule(
+            maintenance.generate_schedule(
                     maintenance.RecurrenceType.WEEKLY,
                     "23:00",
                     60,
-                    "2020-01-01 00:00",
-                    "2020-01-02 00:00",
+                    TEST_RANGE_START,
+                    TEST_RANGE_END,
                     day=1
             )
         self.assertTrue("Invalid Weekly Day!" in str(context.exception))
@@ -285,12 +289,12 @@ class TestMaintenanceExceptions(unittest.TestCase):
     def test_invalid_day_of_month_value(self):
         """Testing exception thrown for invalid dayOfMonth for incorrect int"""
         with self.assertRaises(ValueError) as context:
-            maintenance_schedule = maintenance.generate_schedule(
+            maintenance.generate_schedule(
                     maintenance.RecurrenceType.MONTHLY,
                     "23:00",
                     60,
-                    "2020-01-01 00:00",
-                    "2020-01-02 00:00",
+                    TEST_RANGE_START,
+                    TEST_RANGE_END,
                     day=32
             )
         self.assertTrue("Invalid Monthly Day!" in str(context.exception))
@@ -298,12 +302,12 @@ class TestMaintenanceExceptions(unittest.TestCase):
     def test_invalid_day_of_month_type(self):
         """Testing exception thrown for invalid dayOfMonth for a non-int"""
         with self.assertRaises(TypeError) as context:
-            maintenance_schedule = maintenance.generate_schedule(
+            maintenance.generate_schedule(
                     maintenance.RecurrenceType.MONTHLY,
                     "23:00",
                     60,
-                    "2020-01-01 00:00",
-                    "2020-01-02 00:00",
+                    TEST_RANGE_START,
+                    TEST_RANGE_END,
                     day="Eleven"
             )
         self.assertTrue("Invalid type for Day of Month! Int between 1-31 required" in str(context.exception))
@@ -311,24 +315,24 @@ class TestMaintenanceExceptions(unittest.TestCase):
     def test_no_day_of_week_supplied(self):
         """Weekly Maintenance Window with no dayOfWeek supplied"""
         with self.assertRaises(Exception) as context:
-            maintenance_schedule = maintenance.generate_schedule(
+            maintenance.generate_schedule(
                     maintenance.RecurrenceType.WEEKLY,
                     "23:00",
                     60,
-                    "2020-01-01 00:00",
-                    "2020-01-02 00:00",
+                    TEST_RANGE_START,
+                    TEST_RANGE_END,
             )
         self.assertTrue("Invalid Weekly Day!" in str(context.exception))
 
     def test_no_day_of_month_supplied(self):
         """Monthly Maintenance Window with no dayOfMonth supplied"""
         with self.assertRaises(Exception) as context:
-            maintenance_schedule = maintenance.generate_schedule(
+            maintenance.generate_schedule(
                     maintenance.RecurrenceType.MONTHLY,
                     "23:00",
                     60,
-                    "2020-01-01 00:00",
-                    "2020-01-02 00:00",
+                    TEST_RANGE_START,
+                    TEST_RANGE_END,
             )
         self.assertTrue("Invalid type for Day of Month!" in str(context.exception))
 
@@ -336,18 +340,18 @@ class TestMaintenanceExceptions(unittest.TestCase):
         """Test invalid datetime supplied to trigger ValueError"""
         #TODO Fix Exceoption to have a message as first arg
         with self.assertRaises(InvalidDateFormatException) as context:
-            maintenance_schedule = maintenance.generate_schedule(
+            maintenance.generate_schedule(
                     maintenance.RecurrenceType.DAILY,
                     "23:00",
                     60,
-                    "2020-01-01 00:00",
+                    TEST_RANGE_START,
                     "2020-01-02"
             )
         self.assertTrue("%Y-%m-%d %H:%M" in (msg := str(context.exception)), msg)
     def test_invalid_filter_type(self):
         """Invalid Filter_Type"""
         with self.assertRaises(ValueError) as context:
-            maintenance_scope = maintenance.generate_scope(
+            maintenance.generate_scope(
                     tags=[{'context': "CONTEXTLESS", 'key': "testing"}],
                     filter_type="INVALID_TYPE"
             )
@@ -436,7 +440,6 @@ class TestTagParsing(unittest.TestCase):
                 {'context': 'CONTEXTLESS', 'key': '[][KeywithSquares]'},
         ]
 
-        all_tests_passed = True
         for i in range(0, len(test_tag_list)):
             processed_tag = test_tag_list[i]
             self.assertTrue(

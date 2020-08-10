@@ -229,7 +229,6 @@ def generate_scope(entities=None, tags=None, filter_type=None, management_zone_i
     if entities is None:
         entities = []
     matches = []
-    matches_payload = {}
 
     if match_any_tag and isinstance(tags, list) and len(tags) > 1:
         for tag in tags:
@@ -261,7 +260,7 @@ def generate_window_json(name, description, suppression, schedule, scope=None, i
     window_json = {
         "name": name,
         "description": description,
-        "suppression": suppression,
+        "suppression": str(suppression),
         "schedule": schedule
     }
     window_json['type'] = "PLANNED" if is_planned else "UNPLANNED"
