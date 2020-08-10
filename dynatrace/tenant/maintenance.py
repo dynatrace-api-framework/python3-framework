@@ -319,6 +319,8 @@ def generate_schedule(recurrence_type, start_time, duration, range_start, range_
 
     # Check Monthly Day
     if recurrence_type == "MONTHLY":
+        if not isinstance(day, int):
+            raise TypeError("Invalid type for Day of Month! Int between 1-31 required")
         if (1 <= int(day) <= 31):
             schedule['recurrence']['dayOfMonth'] = day
         else:
