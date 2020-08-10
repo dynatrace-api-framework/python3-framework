@@ -6,11 +6,11 @@ from tests import tooling_for_test as testtools
 from dynatrace.requests.request_handler import TenantAPIs
 from dynatrace.tenant.topology import process_groups
 
-cluster = FULL_SET.get('mockserver1')
-tenant = 'tenant1'
-url = f"{TenantAPIs.V1_TOPOLOGY}/infrastructure/process-groups"
-request_dir = "tests/mockserver_payloads/requests/processes"
-response_dir = "tests/mockserver_payloads/responses/processes"
+CLUSTER = FULL_SET.get('mockserver1')
+TENANT = 'tenant1'
+URL_PATH = f"{TenantAPIs.V1_TOPOLOGY}/infrastructure/process-groups"
+REQUEST_DIR = "tests/mockserver_payloads/requests/processes"
+RESPONSE_DIR = "tests/mockserver_payloads/responses/processes"
 
 
 class TestGetPGs(unittest.TestCase):
@@ -18,50 +18,50 @@ class TestGetPGs(unittest.TestCase):
 
     def test_get_all_pgs(self):
         """Test fetching all PGs"""
-        response_file = f"{response_dir}/get_all_pgs.json"
+        response_file = f"{RESPONSE_DIR}/get_all_pgs.json"
 
         testtools.create_mockserver_expectation(
-            cluster=cluster,
-            tenant=tenant,
-            url_path=url,
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=URL_PATH,
             request_type="GET",
             response_file=response_file
         )
 
-        result = process_groups.get_process_groups_tenantwide(cluster, tenant)
+        result = process_groups.get_process_groups_tenantwide(CLUSTER, TENANT)
         self.assertEqual(result, testtools.expected_payload(response_file))
 
     def test_get_single_pg(self):
         """Test fetching single PG"""
-        response_file = f"{response_dir}/get_one_pg.json"
+        response_file = f"{RESPONSE_DIR}/get_one_pg.json"
         pg_id = "PROCESS_GROUP-ABC123DEF456GHI7"
 
         testtools.create_mockserver_expectation(
-            cluster=cluster,
-            tenant=tenant,
-            url_path=f"{url}/{pg_id}",
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=f"{URL_PATH}/{pg_id}",
             request_type="GET",
             response_file=response_file
         )
 
-        result = process_groups.get_process_group(cluster, tenant, pg_id)
+        result = process_groups.get_process_group(CLUSTER, TENANT, pg_id)
         self.assertEqual(result, testtools.expected_payload(response_file))
 
     def test_get_pg_count(self):
         """Test getting the PG count tenantwide."""
-        response_file = f"{response_dir}/get_all_pgs.json"
+        response_file = f"{RESPONSE_DIR}/get_all_pgs.json"
 
         testtools.create_mockserver_expectation(
-            cluster=cluster,
-            tenant=tenant,
-            url_path=url,
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=URL_PATH,
             request_type="GET",
             response_file=response_file
         )
 
-        result = process_groups.get_process_group_count_tenantwide(cluster,
-                                                                   tenant)
-        self.assertEqual(result, 4)
+        result = process_groups.get_process_group_count_tenantwide(CLUSTER,
+                                                                   TENANT)
+        self.assertEqual(result, 3)
 
 
 class TestPGTags(unittest.TestCase):
@@ -70,19 +70,19 @@ class TestPGTags(unittest.TestCase):
     def test_add_pg_tags(self):
         """Test adding two tags to the PG."""
         pg_id = "PROCESS_GROUP-859E1549052CD876"
-        request_file = f"{request_dir}/tags.json"
+        request_file = f"{REQUEST_DIR}/tags.json"
         tags = ["demo", "example"]
 
         testtools.create_mockserver_expectation(
-            cluster=cluster,
-            tenant=tenant,
+            cluster=CLUSTER,
+            tenant=TENANT,
             request_type="POST",
-            url_path=f"{url}/{pg_id}",
+            url_path=f"{URL_PATH}/{pg_id}",
             request_file=request_file,
             response_code=201
         )
 
-        result = process_groups.add_process_group_tags(cluster, tenant,
+        result = process_groups.add_process_group_tags(CLUSTER, TENANT,
                                                        pg_id, tags)
         self.assertEqual(result, 201)
 

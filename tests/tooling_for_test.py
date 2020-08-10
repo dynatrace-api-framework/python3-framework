@@ -11,8 +11,8 @@ def create_mockserver_expectation(cluster, tenant, url_path, request_type, **kwa
     requests.packages.urllib3.disable_warnings()
     expectation = {
         "httpRequest": {
-            "queryStringParameters": {
-                "Api-Token": [cluster.get('api_token').get(tenant)]
+            "headers": {
+                "Authorization": [f"Api-Token {cluster.get('api_token').get(tenant)}"],
             },
             "path": url_path,
             "method": request_type
@@ -27,10 +27,11 @@ def create_mockserver_expectation(cluster, tenant, url_path, request_type, **kwa
         "id": "OneOff",
     }
 
+    logging.debug(f"URL PATH: {url_path}")
     logging.debug(f"KWARGS {kwargs}")
     # Paramaters should always at least have Api-Token
     if 'parameters' in kwargs:
-        expectation["httpRequest"]["queryStringParameters"].update(kwargs['parameters'])
+        expectation["httpRequest"]["queryStringParameters"] = kwargs['parameters']
 
     if "request_file" in kwargs:
         with open(kwargs['request_file']) as f:
