@@ -1,0 +1,17 @@
+{
+    "name": "Test Payload",
+    "description": "Generating Payload for Test",
+    "suppression": "DETECT_PROBLEMS_AND_ALERT",
+    "schedule": {
+        "recurrenceType": "MONTHLY",
+        "start": "2020-01-01 00:00",
+        "end": "2020-01-02 00:00",
+        "zoneId": "America/Chicago",
+        "recurrence": {
+            "startTime": "23:00",
+            "durationMinutes": 60,
+            "dayOfMonth": 1
+        }
+    },
+    "type": "PLANNED"
+}

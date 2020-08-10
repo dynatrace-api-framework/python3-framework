@@ -84,7 +84,7 @@ def make_api_call(cluster, endpoint, tenant=None, params=None, json=None, method
     '''
     Function makes an API call in a safe way, taking into account the rate limits.
     This will ensure the API call will always go through, with the program waiting for the limit to reset if needed.\n
-    
+
     @param cluster - Cluster dictionary from variable_set\n
     @param endpoint - API endpoint to call.\n
     @param tenant - String of tenant name used in cluster dictionary\n
@@ -101,31 +101,21 @@ def make_api_call(cluster, endpoint, tenant=None, params=None, json=None, method
 
     # Get correct token for the operation
     if 'onpremise' in str(endpoint) or 'cluster' in str(endpoint):
-        check_managed (cluster)
-        params['Api-Token'] = cluster['cluster_token']
+        check_managed(cluster)
+        headers = dict(Authorization=f"Api-Token {cluster['cluster_token']}")
     else:
-        params['Api-Token'] = cluster['api_token'][tenant]
+        headers = dict(Authorization=f"Api-Token {cluster['api_token'][tenant]}")
 
     # Loop to retry in case of rate limits
     while True:
-        if method == HTTP.GET:
-            response = requests.get(url=url,
-                                    params=params,
-                                    verify=cluster.get('verify_ssl'))
-        elif method == HTTP.PUT:
-            response = requests.put(url=url,
-                                    params=params,
-                                    verify=cluster.get('verify_ssl'),
-                                    json=json)
-        elif method == HTTP.POST:
-            response = requests.post(url=url,
-                                     params=params,
-                                     verify=cluster.get('verify_ssl'),
-                                     json=json)
-        elif method == HTTP.DELETE:
-            response = requests.delete(url=url,
-                                       params=params,
-                                       verify=cluster.get('verify_ssl'))
+        response = requests.request(
+            method=str(method),
+            url=url,
+            params=params,
+            headers=headers,
+            json=json,
+            verify=cluster.get('verify_ssl')
+        )
         if check_response(response):
             break
 
