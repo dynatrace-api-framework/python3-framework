@@ -1,0 +1,28 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.8.3
+        environment:
+          PIPENV_VENV_IN_PROJECT: true
+      - image: mockserver/mockserver
+        name: mockserver.mockserver
+    steps:
+      - checkout # check out source code to working directory
+      - run:
+          command: |
+            sudo chown -R circleci:circleci /usr/local/bin
+            sudo chown -R circleci:circleci /usr/local/lib/python3.8/site-packages
+      - run:
+          command: |
+            cp .circleci/mockserver.py user_variables.py
+            pip install pipenv
+            pipenv install --dev
+      - run:
+          command: |
+            pipenv run python -m unittest discover
+      - store_test_results:
+          path: test-results
+      - store_artifacts:
+          path: test-results
+          destination: tr1

@@ -6,7 +6,11 @@ variable_sets/*
 scripts/*
 templates/*
 
-.vscode/
+# Workspace settings and virtual environments
+**.vscode**
+**venv**
+# Framework log files
+***.log**
 
 user_variables.py
 sandbox_script.py

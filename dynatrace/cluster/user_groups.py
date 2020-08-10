@@ -11,91 +11,102 @@ MZ_USER_PERMISSONS = {
     "view_senstive": "VIEW_SENSITIVE_REQUEST_DATA"
 }
 
+
 def generate_group_name(template, user_type, tenant, app_name):
-  template = template.replace("{USER_TYPE}", user_type)
-  template = template.replace("{TENANT}", tenant)
-  template = template.replace("{APP_NAME}", app_name)
-  template = template.lower()
-  return template
+    template = template.replace("{USER_TYPE}", user_type)
+    template = template.replace("{TENANT}", tenant)
+    template = template.replace("{APP_NAME}", app_name)
+    template = template.lower()
+    return template
+
 
 def create_app_groups(cluster, app_name):
-  """Create Dynatrace User Groups for Applications"""
-  role_types = user_variables.USER_GROUPS['role_types']
-  role_tenants = user_variables.USER_GROUPS['role_tenants']
+    """Create Dynatrace User Groups for Applications"""
+    role_types = user_variables.USER_GROUPS['role_types']
+    role_tenants = user_variables.USER_GROUPS['role_tenants']
 
-  all_new_groups = {}
-  for current_tenant in role_tenants:
-    all_new_groups[current_tenant] = {}
-    for current_type_key, current_type_value in role_types.items():
-      group_id = generate_group_name(user_variables.USER_GROUP_TEMPLATE, current_type_value, current_tenant, app_name)
-      current_group = {
-          "isClusterAdminGroup": False,
-          "name":group_id,
-          "ldapGroupNames": [
-              group_id,
-          ],
-          "accessRight": {}
-      }
+    all_new_groups = {}
+    for current_tenant in role_tenants:
+        all_new_groups[current_tenant] = {}
+        for current_type_key, current_type_value in role_types.items():
+            group_id = generate_group_name(
+                user_variables.USER_GROUP_TEMPLATE, current_type_value, current_tenant, app_name)
+            current_group = {
+                "isClusterAdminGroup": False,
+                "name": group_id,
+                "ldapGroupNames": [
+                    group_id,
+                ],
+                "accessRight": {}
+            }
 
-      response = rh.cluster_post(
-          cluster,
-          "groups",
-          json=current_group
-      )
-      all_new_groups[current_tenant][current_type_key] = ((response.json())['id'])
-  return all_new_groups
+            response = rh.make_api_call(
+                cluster=cluster,
+                endpoint=rh.ClusterAPIs.GROUPS,
+                method=rh.HTTP.POST,
+                json=current_group
+            )
+            all_new_groups[current_tenant][current_type_key] = (
+                (response.json())['id'])
+    return all_new_groups
+
 
 def create_app_groups_setwide(app_name):
-  """Create Dynatrace User Groups for Applications"""
-  for cluster in user_variables.FULL_SET.values():
-    if cluster['is_managed']:
-      create_app_groups(cluster, app_name)
+    """Create Dynatrace User Groups for Applications"""
+    for cluster in user_variables.FULL_SET.values():
+        if cluster['is_managed']:
+            create_app_groups(cluster, app_name)
 
-def delete_app_groups (cluster, app_name):
-  role_types = user_variables.USER_GROUPS['role_types']
-  role_tenants = user_variables.USER_GROUPS['role_tenants']
-  
-  for current_tenant in role_tenants:
-    for current_type_value in role_types:
-      group_id = generate_group_name(user_variables.USER_GROUP_TEMPLATE, current_type_value, current_tenant, app_name)
-      group_id = ''.join(e for e in group_id if e.isalnum())
-      rh.cluster_delete(
-          cluster,
-          "groups/" + group_id
-      )
+
+def delete_app_groups(cluster, app_name):
+    role_types = user_variables.USER_GROUPS['role_types']
+    role_tenants = user_variables.USER_GROUPS['role_tenants']
+
+    for current_tenant in role_tenants:
+        for current_type_value in role_types:
+            group_id = generate_group_name(
+                user_variables.USER_GROUP_TEMPLATE, current_type_value, current_tenant, app_name)
+            group_id = ''.join(e for e in group_id if e.isalnum())
+            rh.make_api_call(
+                cluster=cluster,
+                method=rh.HTTP.DELETE,
+                endpoint=f"{rh.ClusterAPIs.GROUPS}/{group_id}"
+            )
+
 
 def delete_app_groups_setwide(app_name):
-  """Create Dynatrace User Groups for Applications"""
-  for cluster in user_variables.FULL_SET.values():
-    if cluster['is_managed']:
-      delete_app_groups(cluster, app_name)
+    """Create Dynatrace User Groups for Applications"""
+    for cluster in user_variables.FULL_SET.values():
+        if cluster['is_managed']:
+            delete_app_groups(cluster, app_name)
+
 
 def create_app_clusterwide(cluster, app_name, zones=None):
-  """Create App User Groups and Management Zones"""
-  # Create Standard App MZs
-  mz_list = {}
-  for tenant_key in cluster['tenant'].keys():
-    mzh.add_management_zone(
-        cluster,
-        tenant_key,
-        str.upper(app_name)
-    )
-    if tenant_key in zones:
-      mz_list[tenant_key] = []
-      for zone in zones[tenant_key]:
-        mz_id = mzh.add_management_zone(
+    """Create App User Groups and Management Zones"""
+    # Create Standard App MZs
+    mz_list = {}
+    for tenant_key in cluster['tenant'].keys():
+        mzh.add_management_zone(
             cluster,
             tenant_key,
-            str.upper(app_name),
-            zone
+            str.upper(app_name)
         )
-        if mz_id is not None:
-          mz_list[tenant_key].append(mz_id)
+        if tenant_key in zones:
+            mz_list[tenant_key] = []
+            for zone in zones[tenant_key]:
+                mz_id = mzh.add_management_zone(
+                    cluster,
+                    tenant_key,
+                    str.upper(app_name),
+                    zone
+                )
+                if mz_id is not None:
+                    mz_list[tenant_key].append(mz_id)
 
-  # Create User Groups
-  user_groups = create_app_groups(cluster, app_name)
-  print(user_groups)
+    # Create User Groups
+    user_groups = create_app_groups(cluster, app_name)
+    print(user_groups)
 
-  # for tenant in user_variables.USER_GROUPS['role_tenants']:
-  #   if "access_env" in user_groups [tenant]:
-  #     add_mz_to_user
+    # for tenant in user_variables.USER_GROUPS['role_tenants']:
+    #   if "access_env" in user_groups [tenant]:
+    #     add_mz_to_user

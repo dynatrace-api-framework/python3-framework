@@ -6,9 +6,10 @@ verify_ssl = true
 [dev-packages]
 pylint = "*"
 autopep8 = "*"
+coverage = "*"
 
 [packages]
 requests = "*"
 
 [requires]
-python_version = "3.4"
+python_version = "3.8"
