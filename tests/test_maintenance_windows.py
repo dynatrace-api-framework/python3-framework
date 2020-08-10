@@ -20,7 +20,7 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
         Testing create daily Maintenance Window with no scope
         """
         mockserver_request_file = f"{self.REQUEST_DIR}mock_create_daily_1.json"
-        mockserver_response_file = f"{self.RESPONSE_DIR}mock_create_daily_1.json"
+        mockserver_response_file = f"{self.RESPONSE_DIR}mock_create_1.json"
         tooling_for_test.create_mockserver_expectation(
             CLUSTER,
             TENANT,
@@ -37,7 +37,7 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
             "2020-01-02 00:00"
         )
         maintenance_json = maintenance.generate_window_json(
-            "Test Payload Daily",
+            "Test Payload",
             "Generating Payload for Test",
             "DETECT_PROBLEMS_AND_ALERT",
             maintenance_schedule,
@@ -50,7 +50,7 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
     def test_create_daily_single_tag(self):
         """Testing create daily Maintenance Window with a single tag scope"""
         mockserver_request_file = f"{self.REQUEST_DIR}mock_create_daily_single_tag_1.json"
-        mockserver_response_file = f"{self.RESPONSE_DIR}mock_create_daily_1.json"
+        mockserver_response_file = f"{self.RESPONSE_DIR}mock_create_1.json"
         tooling_for_test.create_mockserver_expectation(
             CLUSTER,
             TENANT,
@@ -69,7 +69,7 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
         maintenance_scope = maintenance.generate_scope(
             tags=[{'context': "CONTEXTLESS", 'key': "testing"}])
         maintenance_json = maintenance.generate_window_json(
-            "Test Payload Daily",
+            "Test Payload",
             "Generating Payload for Test",
             "DETECT_PROBLEMS_AND_ALERT",
             maintenance_schedule,
@@ -83,7 +83,7 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
     def test_create_daily_tags_and(self):
         """Testing Payloads with multiple tags in an \"AND\" configuration"""
         mockserver_request_file = f"{self.REQUEST_DIR}mock_create_daily_multi_tags_and_1.json"
-        mockserver_response_file = f"{self.RESPONSE_DIR}mock_create_daily_1.json"
+        mockserver_response_file = f"{self.RESPONSE_DIR}mock_create_1.json"
 
         tooling_for_test.create_mockserver_expectation(
             CLUSTER,
@@ -108,7 +108,7 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
             match_any_tag=False
         )
         maintenance_json = maintenance.generate_window_json(
-            "Test Payload Daily",
+            "Test Payload",
             "Generating Payload for Test",
             "DETECT_PROBLEMS_AND_ALERT",
             maintenance_schedule,
@@ -122,7 +122,7 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
     def test_create_daily_tags_or(self):
         """Testing Payloads with multiple tags in an \"AND\" configuration"""
         mockserver_request_file = f"{self.REQUEST_DIR}mock_create_daily_multi_tags_or_1.json"
-        mockserver_response_file = f"{self.RESPONSE_DIR}mock_create_daily_1.json"
+        mockserver_response_file = f"{self.RESPONSE_DIR}mock_create_1.json"
 
         tooling_for_test.create_mockserver_expectation(
             CLUSTER,
@@ -147,11 +147,109 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
             match_any_tag=True
         )
         maintenance_json = maintenance.generate_window_json(
-            "Test Payload Daily",
+            "Test Payload",
             "Generating Payload for Test",
             "DETECT_PROBLEMS_AND_ALERT",
             maintenance_schedule,
             scope=maintenance_scope,
+            is_planned=True
+        )
+        result = maintenance.create_window(CLUSTER, TENANT, maintenance_json)
+        self.assertEqual(result, tooling_for_test.expected_payload(
+            mockserver_response_file))
+
+    def test_create_once_no_scope(self):
+        """Testing Payloads with ONCE recurrance type"""
+        mockserver_request_file = f"{self.REQUEST_DIR}mock_create_once_1.json"
+        mockserver_response_file = f"{self.RESPONSE_DIR}mock_create_1.json"
+
+        tooling_for_test.create_mockserver_expectation(
+            CLUSTER,
+            TENANT,
+            URL_PATH,
+            "POST",
+            request_file=mockserver_request_file,
+            response_file=mockserver_response_file,
+        )
+        maintenance_schedule = maintenance.generate_schedule(
+            maintenance.RecurrenceType.ONCE,
+            #TODO Remove need for these variables. ONCE does not use them
+            "23:00",
+            60,
+            "2020-01-01 00:00",
+            "2020-01-02 00:00"
+        )
+        maintenance_json = maintenance.generate_window_json(
+            "Test Payload",
+            "Generating Payload for Test",
+            "DETECT_PROBLEMS_AND_ALERT",
+            maintenance_schedule,
+            is_planned=True
+        )
+        result = maintenance.create_window(CLUSTER, TENANT, maintenance_json)
+        self.assertEqual(result, tooling_for_test.expected_payload(
+            mockserver_response_file))
+
+    def test_create_weekly_no_scope(self):
+        """Testing Payloads with WEEKLY recurrance type"""
+        mockserver_request_file = f"{self.REQUEST_DIR}mock_create_weekly_1.json"
+        mockserver_response_file = f"{self.RESPONSE_DIR}mock_create_1.json"
+
+        tooling_for_test.create_mockserver_expectation(
+            CLUSTER,
+            TENANT,
+            URL_PATH,
+            "POST",
+            request_file=mockserver_request_file,
+            response_file=mockserver_response_file,
+        )
+        maintenance_schedule = maintenance.generate_schedule(
+            maintenance.RecurrenceType.WEEKLY,
+            #TODO Remove need for these variables. ONCE does not use them
+            "23:00",
+            60,
+            "2020-01-01 00:00",
+            "2020-01-02 00:00",
+            day=maintenance.DayOfWeek.SUNDAY
+        )
+        maintenance_json = maintenance.generate_window_json(
+            "Test Payload",
+            "Generating Payload for Test",
+            "DETECT_PROBLEMS_AND_ALERT",
+            maintenance_schedule,
+            is_planned=True
+        )
+        result = maintenance.create_window(CLUSTER, TENANT, maintenance_json)
+        self.assertEqual(result, tooling_for_test.expected_payload(
+            mockserver_response_file))
+
+    def test_create_monthly_no_scope(self):
+        """Testing Payloads with WEEKLY recurrance type"""
+        mockserver_request_file = f"{self.REQUEST_DIR}mock_create_weekly_1.json"
+        mockserver_response_file = f"{self.RESPONSE_DIR}mock_create_1.json"
+
+        tooling_for_test.create_mockserver_expectation(
+            CLUSTER,
+            TENANT,
+            URL_PATH,
+            "POST",
+            request_file=mockserver_request_file,
+            response_file=mockserver_response_file,
+        )
+        maintenance_schedule = maintenance.generate_schedule(
+            maintenance.RecurrenceType.MONTHLY,
+            #TODO Remove need for these variables. ONCE does not use them
+            "23:00",
+            60,
+            "2020-01-01 00:00",
+            "2020-01-02 00:00",
+            day=1
+        )
+        maintenance_json = maintenance.generate_window_json(
+            "Test Payload",
+            "Generating Payload for Test",
+            "DETECT_PROBLEMS_AND_ALERT",
+            maintenance_schedule,
             is_planned=True
         )
         result = maintenance.create_window(CLUSTER, TENANT, maintenance_json)
@@ -204,8 +302,6 @@ if __name__ == '__main__':
     unittest.main()
 
 # CREATE TESTS LEFT:
-# ONCE TEST
-# WEEKLY TEST
 # MONTHLY TEST
 
 # Single Entity

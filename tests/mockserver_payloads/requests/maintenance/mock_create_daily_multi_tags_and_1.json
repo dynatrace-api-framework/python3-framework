@@ -1,5 +1,5 @@
 {
-    "name": "Test Payload Daily",
+    "name": "Test Payload",
     "description": "Generating Payload for Test",
     "suppression": "DETECT_PROBLEMS_AND_ALERT",
     "schedule": {
