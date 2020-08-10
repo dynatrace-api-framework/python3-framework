@@ -158,6 +158,47 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
         self.assertEqual(result, tooling_for_test.expected_payload(
             mockserver_response_file))
 
+class TestEnumTypes(unittest.TestCase):
+    def test_suppression_enum_str(self):
+        suppression = maintenance.Suppression(maintenance.Suppression.DETECT_PROBLEMS_AND_ALERT)
+        self.assertIsInstance(maintenance.Suppression.__str__(suppression), str)
+
+    def test_suppression_enum_repr(self):
+        suppression = maintenance.Suppression(maintenance.Suppression.DETECT_PROBLEMS_AND_ALERT)
+        self.assertIsInstance(maintenance.Suppression.__repr__(suppression), str)
+
+    def test_day_of_week_enum_str(self):
+        day_of_week = maintenance.DayOfWeek(maintenance.DayOfWeek.MONDAY)
+        self.assertIsInstance(maintenance.DayOfWeek.__str__(day_of_week), str)
+
+    def test_day_of_week_enum_repr(self):
+        day_of_week = maintenance.DayOfWeek(maintenance.DayOfWeek.MONDAY)
+        self.assertIsInstance(maintenance.DayOfWeek.__repr__(day_of_week), str)
+
+    def test_context_enum_str(self):
+        context = maintenance.Context(maintenance.Context.CONTEXTLESS)
+        self.assertIsInstance(maintenance.Context.__str__(context), str)
+
+    def test_context_enum_repr(self):
+        context = maintenance.Context(maintenance.Context.CONTEXTLESS)
+        self.assertIsInstance(maintenance.Context.__repr__(context), str)
+
+    def test_recurrence_type_enum_str(self):
+        recurrence_type = maintenance.RecurrenceType(maintenance.RecurrenceType.DAILY)
+        self.assertIsInstance(maintenance.RecurrenceType.__str__(recurrence_type), str)
+
+    def test_recurrence_type_enum_repr(self):
+        recurrence_type = maintenance.RecurrenceType(maintenance.RecurrenceType.DAILY)
+        self.assertIsInstance(maintenance.RecurrenceType.__repr__(recurrence_type), str)
+
+    def test_filter_type_enum_str(self):
+        suppression = maintenance.FilterType(maintenance.FilterType.APM_SECURITY_GATEWAY)
+        self.assertIsInstance(maintenance.FilterType.__str__(suppression), str)
+
+    def test_filter_type_enum_repr(self):
+        suppression = maintenance.FilterType(maintenance.FilterType.APM_SECURITY_GATEWAY)
+        self.assertIsInstance(maintenance.FilterType.__repr__(suppression), str)
+
 
 if __name__ == '__main__':
     unittest.main()
