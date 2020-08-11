@@ -15,7 +15,7 @@ class Suppression(Enum):
     Types of suppression for create Maintenance Window JSON. Suppression is required
 
     Args:
-        Enum (DETECT_PROBLEMS_AND_ALERT): Full Alerting. Entites in scope will have notes that a Maintenance Window was active
+        Enum (DETECT_PROBLEMS_AND_ALERT): Full Detection and Alerting during Maintenance Window
         Enum (DETECT_PROBLEMS_DONT_ALERT): Problems detected but alerting profiles in that scope are not triggered
         Enum (DONT_DETECT_PROBLEMS): Problem detection completely off for the scope
     """

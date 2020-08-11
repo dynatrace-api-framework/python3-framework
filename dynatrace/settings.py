@@ -1,8 +1,9 @@
 try:
     import user_variables
-    FILE_IMPORTED=True
+    FILE_IMPORTED = True
 except ImportError:
-    FILE_IMPORTED=False
+    FILE_IMPORTED = False
+
 
 class DefaultSettings():
     LOG_LEVEL = None
@@ -17,13 +18,13 @@ class DefaultSettings():
     # change_sensitive
 
     USER_GROUPS = {
-        "role_types":{
+        "role_types": {
             "access_env": "accessenv",
             "change_settings": "changesettings",
             "view_logs": "logviewer",
             "view_sensitive": "viewsensitive"
         },
-        "role_tenants":[
+        "role_tenants": [
             "nonprod",
             "prod"
         ]
@@ -34,8 +35,9 @@ class DefaultSettings():
 
 def get_setting(attribute):
     if FILE_IMPORTED and hasattr(user_variables, attribute):
-        return getattr(user_variables,attribute)
-    elif hasattr(DefaultSettings, attribute) :
+        return getattr(user_variables, attribute)
+    elif hasattr(DefaultSettings, attribute):
         return getattr(DefaultSettings, attribute)
     else:
-        raise AttributeError(f"{attribute} is not a valid user variable attribute!")
+        raise AttributeError(
+            f"{attribute} is not a valid user variable attribute!")
