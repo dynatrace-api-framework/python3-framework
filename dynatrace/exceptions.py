@@ -13,6 +13,7 @@ class InvalidDateFormatException(ValueError):
     def __init__(self, required_format):
         self.message = f"Incorrect Date for following entry: {required_format}"
 
+
 class InvalidScopeException(ValueError):
     def __init__(self, required_format):
         self.required_format = required_format

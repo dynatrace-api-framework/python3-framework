@@ -178,7 +178,7 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
         )
         maintenance_schedule = maintenance.generate_schedule(
             maintenance.RecurrenceType.ONCE,
-            #TODO Remove need for these variables. ONCE does not use them
+            # TODO Remove need for these variables. ONCE does not use them
             "23:00",
             60,
             TEST_RANGE_START,
@@ -210,7 +210,7 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
         )
         maintenance_schedule = maintenance.generate_schedule(
             maintenance.RecurrenceType.WEEKLY,
-            #TODO Remove need for these variables. ONCE does not use them
+            # TODO Remove need for these variables. ONCE does not use them
             "23:00",
             60,
             TEST_RANGE_START,
@@ -243,7 +243,7 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
         )
         maintenance_schedule = maintenance.generate_schedule(
             maintenance.RecurrenceType.MONTHLY,
-            #TODO Remove need for these variables. ONCE does not use them
+            # TODO Remove need for these variables. ONCE does not use them
             "23:00",
             60,
             TEST_RANGE_START,
@@ -261,41 +261,44 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
         self.assertEqual(result, tooling_for_test.expected_payload(
             mockserver_response_file))
 
+
 class TestMaintenanceExceptions(unittest.TestCase):
     def test_invalid_recurrence_type(self):
         """Testing exception thrown for invalid recurrence type"""
         with self.assertRaises(ValueError) as context:
             maintenance.generate_schedule(
-                    "HOURLY",
-                    "23:00",
-                    60,
-                    TEST_RANGE_START,
-                    TEST_RANGE_END,
+                "HOURLY",
+                "23:00",
+                60,
+                TEST_RANGE_START,
+                TEST_RANGE_END,
             )
+
         self.assertTrue("Invalid Recurrence Type!" in str(context.exception))
+
     def test_invalid_day_of_week(self):
         """Testing exception thrown for invalid dayOfWeek"""
         with self.assertRaises(ValueError) as context:
             maintenance.generate_schedule(
-                    maintenance.RecurrenceType.WEEKLY,
-                    "23:00",
-                    60,
-                    TEST_RANGE_START,
-                    TEST_RANGE_END,
-                    day=1
+                maintenance.RecurrenceType.WEEKLY,
+                "23:00",
+                60,
+                TEST_RANGE_START,
+                TEST_RANGE_END,
+                day=1
             )
         self.assertTrue("Invalid Weekly Day!" in str(context.exception))
-    
+
     def test_invalid_day_of_month_value(self):
         """Testing exception thrown for invalid dayOfMonth for incorrect int"""
         with self.assertRaises(ValueError) as context:
             maintenance.generate_schedule(
-                    maintenance.RecurrenceType.MONTHLY,
-                    "23:00",
-                    60,
-                    TEST_RANGE_START,
-                    TEST_RANGE_END,
-                    day=32
+                maintenance.RecurrenceType.MONTHLY,
+                "23:00",
+                60,
+                TEST_RANGE_START,
+                TEST_RANGE_END,
+                day=32
             )
         self.assertTrue("Invalid Monthly Day!" in str(context.exception))
 
@@ -303,24 +306,25 @@ class TestMaintenanceExceptions(unittest.TestCase):
         """Testing exception thrown for invalid dayOfMonth for a non-int"""
         with self.assertRaises(TypeError) as context:
             maintenance.generate_schedule(
-                    maintenance.RecurrenceType.MONTHLY,
-                    "23:00",
-                    60,
-                    TEST_RANGE_START,
-                    TEST_RANGE_END,
-                    day="Eleven"
+                maintenance.RecurrenceType.MONTHLY,
+                "23:00",
+                60,
+                TEST_RANGE_START,
+                TEST_RANGE_END,
+                day="Eleven"
             )
-        self.assertTrue("Invalid type for Day of Month! Int between 1-31 required" in str(context.exception))
+        self.assertTrue(
+            "Invalid type for Day of Month! Int between 1-31 required" in str(context.exception))
 
     def test_no_day_of_week_supplied(self):
         """Weekly Maintenance Window with no dayOfWeek supplied"""
         with self.assertRaises(Exception) as context:
             maintenance.generate_schedule(
-                    maintenance.RecurrenceType.WEEKLY,
-                    "23:00",
-                    60,
-                    TEST_RANGE_START,
-                    TEST_RANGE_END,
+                maintenance.RecurrenceType.WEEKLY,
+                "23:00",
+                60,
+                TEST_RANGE_START,
+                TEST_RANGE_END,
             )
         self.assertTrue("Invalid Weekly Day!" in str(context.exception))
 
@@ -328,44 +332,52 @@ class TestMaintenanceExceptions(unittest.TestCase):
         """Monthly Maintenance Window with no dayOfMonth supplied"""
         with self.assertRaises(Exception) as context:
             maintenance.generate_schedule(
-                    maintenance.RecurrenceType.MONTHLY,
-                    "23:00",
-                    60,
-                    TEST_RANGE_START,
-                    TEST_RANGE_END,
+                maintenance.RecurrenceType.MONTHLY,
+                "23:00",
+                60,
+                TEST_RANGE_START,
+                TEST_RANGE_END,
             )
-        self.assertTrue("Invalid type for Day of Month!" in str(context.exception))
+        self.assertTrue(
+            "Invalid type for Day of Month!" in str(context.exception))
 
     def test_invalid_datetime_format(self):
         """Test invalid datetime supplied to trigger ValueError"""
-        #TODO Fix Exceoption to have a message as first arg
+        # TODO Fix Exceoption to have a message as first arg
         with self.assertRaises(InvalidDateFormatException) as context:
             maintenance.generate_schedule(
-                    maintenance.RecurrenceType.DAILY,
-                    "23:00",
-                    60,
-                    TEST_RANGE_START,
-                    "2020-01-02"
+                maintenance.RecurrenceType.DAILY,
+                "23:00",
+                60,
+                TEST_RANGE_START,
+                "2020-01-02"
             )
-        self.assertTrue("Incorrect Date " in context.exception.message, context.exception.message)
+        self.assertTrue(
+            "Incorrect Date " in context.exception.message, context.exception.message)
+
     def test_invalid_filter_type(self):
         """Invalid Filter_Type"""
         with self.assertRaises(ValueError) as context:
             maintenance.generate_scope(
-                    tags=[{'context': "CONTEXTLESS", 'key': "testing"}],
-                    filter_type="INVALID_TYPE"
+                tags=[{'context': "CONTEXTLESS", 'key': "testing"}],
+                filter_type="INVALID_TYPE"
             )
-        self.assertTrue("Invalid Filter Type" in (msg := str(context.exception)), msg)
+        self.assertTrue("Invalid Filter Type" in (
+            msg := str(context.exception)), msg)
 
 
 class TestMaintenanceEnumTypes(unittest.TestCase):
     def test_suppression_enum_str(self):
-        suppression = maintenance.Suppression(maintenance.Suppression.DETECT_PROBLEMS_AND_ALERT)
-        self.assertIsInstance(maintenance.Suppression.__str__(suppression), str)
+        suppression = maintenance.Suppression(
+            maintenance.Suppression.DETECT_PROBLEMS_AND_ALERT)
+        self.assertIsInstance(
+            maintenance.Suppression.__str__(suppression), str)
 
     def test_suppression_enum_repr(self):
-        suppression = maintenance.Suppression(maintenance.Suppression.DETECT_PROBLEMS_AND_ALERT)
-        self.assertIsInstance(maintenance.Suppression.__repr__(suppression), str)
+        suppression = maintenance.Suppression(
+            maintenance.Suppression.DETECT_PROBLEMS_AND_ALERT)
+        self.assertIsInstance(
+            maintenance.Suppression.__repr__(suppression), str)
 
     def test_day_of_week_enum_str(self):
         day_of_week = maintenance.DayOfWeek(maintenance.DayOfWeek.MONDAY)
@@ -384,20 +396,27 @@ class TestMaintenanceEnumTypes(unittest.TestCase):
         self.assertIsInstance(maintenance.Context.__repr__(context), str)
 
     def test_recurrence_type_enum_str(self):
-        recurrence_type = maintenance.RecurrenceType(maintenance.RecurrenceType.DAILY)
-        self.assertIsInstance(maintenance.RecurrenceType.__str__(recurrence_type), str)
+        recurrence_type = maintenance.RecurrenceType(
+            maintenance.RecurrenceType.DAILY)
+        self.assertIsInstance(
+            maintenance.RecurrenceType.__str__(recurrence_type), str)
 
     def test_recurrence_type_enum_repr(self):
-        recurrence_type = maintenance.RecurrenceType(maintenance.RecurrenceType.DAILY)
-        self.assertIsInstance(maintenance.RecurrenceType.__repr__(recurrence_type), str)
+        recurrence_type = maintenance.RecurrenceType(
+            maintenance.RecurrenceType.DAILY)
+        self.assertIsInstance(
+            maintenance.RecurrenceType.__repr__(recurrence_type), str)
 
     def test_filter_type_enum_str(self):
-        suppression = maintenance.FilterType(maintenance.FilterType.APM_SECURITY_GATEWAY)
+        suppression = maintenance.FilterType(
+            maintenance.FilterType.APM_SECURITY_GATEWAY)
         self.assertIsInstance(maintenance.FilterType.__str__(suppression), str)
 
     def test_filter_type_enum_repr(self):
-        suppression = maintenance.FilterType(maintenance.FilterType.APM_SECURITY_GATEWAY)
-        self.assertIsInstance(maintenance.FilterType.__repr__(suppression), str)
+        suppression = maintenance.FilterType(
+            maintenance.FilterType.APM_SECURITY_GATEWAY)
+        self.assertIsInstance(
+            maintenance.FilterType.__repr__(suppression), str)
 
 
 class TestTagParsing(unittest.TestCase):
@@ -413,38 +432,41 @@ class TestTagParsing(unittest.TestCase):
         # Test 8 - Context, Key with square brackets
         # Test 9 - Context, Key with colon and squares
         # Test 10 - Empty Context with squares
-        
+
         test_tag_list = [
-                "Key",                                      
-                "Key:Value",                                
-                "[Context]Key:Value",                       
-                "Key:withColon:Value",                      
-                "Key:withColon:",                           
-                "[Context]Key:withColon:Value",             
-                "[Context]Key",                             
-                "[Context][KeywithSquares]",                
-                "[Context][KeyWithSquares]:AndColons:Value",
-                "[][KeywithSquares]",                      
+            "Key",
+            "Key:Value",
+            "[Context]Key:Value",
+            "Key:withColon:Value",
+            "Key:withColon:",
+            "[Context]Key:withColon:Value",
+            "[Context]Key",
+            "[Context][KeywithSquares]",
+            "[Context][KeyWithSquares]:AndColons:Value",
+            "[][KeywithSquares]",
         ]
 
         test_tag_expected_results = [
-                {'context': 'CONTEXTLESS', 'key': 'Key'},
-                {'context': 'CONTEXTLESS', 'key': 'Key:Value'},
-                {'context': 'Context', 'key': 'Key:Value'},
-                {'context': 'CONTEXTLESS', 'key': 'Key:withColon:Value'},
-                {'context': 'CONTEXTLESS', 'key': 'Key:withColon:'},
-                {'context': 'Context', 'key': 'Key:withColon:Value'},
-                {'context': 'Context', 'key': 'Key'},
-                {'context': 'Context', 'key': '[KeywithSquares]'},
-                {'context': 'Context', 'key': '[KeyWithSquares]:AndColons:Value'},
-                {'context': 'CONTEXTLESS', 'key': '[][KeywithSquares]'},
+            {'context': 'CONTEXTLESS', 'key': 'Key'},
+            {'context': 'CONTEXTLESS', 'key': 'Key:Value'},
+            {'context': 'Context', 'key': 'Key:Value'},
+            {'context': 'CONTEXTLESS', 'key': 'Key:withColon:Value'},
+            {'context': 'CONTEXTLESS', 'key': 'Key:withColon:'},
+            {'context': 'Context', 'key': 'Key:withColon:Value'},
+            {'context': 'Context', 'key': 'Key'},
+            {'context': 'Context', 'key': '[KeywithSquares]'},
+            {'context': 'Context',
+             'key': '[KeyWithSquares]:AndColons:Value'},
+            {'context': 'CONTEXTLESS', 'key': '[][KeywithSquares]'},
         ]
 
         for i in range(0, len(test_tag_list)):
             processed_tag = test_tag_list[i]
             self.assertTrue(
-                    (result := maintenance.parse_tag(processed_tag)) == test_tag_expected_results[i], 
-                    f"Test {i}: {result} did not match {test_tag_expected_results[i]}")
+                (result := maintenance.parse_tag(processed_tag)
+                 ) == test_tag_expected_results[i],
+                f"Test {i}: {result} did not match {test_tag_expected_results[i]}")
+
 
 if __name__ == '__main__':
     unittest.main()
