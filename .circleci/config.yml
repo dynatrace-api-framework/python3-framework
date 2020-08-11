@@ -21,7 +21,7 @@ jobs:
       - run:
           command: |
             COVERAGE_FILE=standard.coverage pipenv run coverage run -m unittest discover
-            COVERAGE_FILE=special1.coverage pipenv run coverage run -m unittest special_test_settings_no_variables.py
+            COVERAGE_FILE=special1.coverage pipenv run coverage run -m unittest tests/special_test_settings_no_variables.py
             pipenv run coverage combine *.coverage
             pipenv run coverage html -d test-results
       - store_test_results:
