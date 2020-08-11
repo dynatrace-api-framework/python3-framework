@@ -20,7 +20,10 @@ jobs:
             pipenv install --dev
       - run:
           command: |
-            pipenv run python -m unittest discover
+            COVERAGE_FILE=standard.coverage pipenv run coverage -m unittest discover
+            COVERAGE_FILE=special1.coverage pipenv run coverage -m unittest special_test_settings_no_variables.py
+            pipenv run coverage combine *.coverage
+            pipenv run coverage html -d test-results
       - store_test_results:
           path: test-results
       - store_artifacts:
