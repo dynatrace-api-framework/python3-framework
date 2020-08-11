@@ -49,5 +49,4 @@ jobs:
           VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: master
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LINTER_RULES_PATH: $GITHUB_WORKSPACE
-          PYTHON_PYLINT_CONFIG_FILE: .pylintrc
+          PYTHON_PYLINT_CONFIG_FILE: /.pylintrc
