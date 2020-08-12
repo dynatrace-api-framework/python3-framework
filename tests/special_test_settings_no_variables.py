@@ -8,7 +8,7 @@ class TestSettingsWithoutVarFile(unittest.TestCase):
     def test_settings_without_var_file(self):
         """Test should return default value when user_variables missing"""
         rename("user_variables.py", "user_variables.py.tmp")
-        from dynatrace import settings # pylint: disable=import-outside-toplevel
+        from dynatrace import settings  # pylint: disable=import-outside-toplevel
         timezone = settings.get_setting("DEFAULT_TIMEZONE")
         self.assertEqual(timezone, "UTC")
         rename("user_variables.py.tmp", "user_variables.py")
