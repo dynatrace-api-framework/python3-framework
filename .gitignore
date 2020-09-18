@@ -11,6 +11,7 @@ templates/*
 **venv**
 # Framework log files
 ***.log**
+***.tap**
 
 user_variables.py
 sandbox_script.py

@@ -97,7 +97,7 @@ def make_api_call(cluster, endpoint, tenant=None, params=None, json=None, method
     '''
     # Set the right URL for the operation
     url = f"{generate_tenant_url(cluster, tenant)}{endpoint}" \
-            if tenant else f"{HTTPS_STR}{cluster['url']}"
+        if tenant else f"{HTTPS_STR}{cluster['url']}"
 
     if not params:
         params = {}
