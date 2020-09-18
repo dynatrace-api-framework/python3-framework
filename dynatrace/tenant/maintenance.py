@@ -1,10 +1,10 @@
 """Maintenance Window Operations"""
 import datetime
 import re
+from enum import Enum, auto
 import dynatrace.requests.request_handler as rh
 import user_variables as uv
 from dynatrace.exceptions import InvalidDateFormatException
-from enum import Enum, auto
 
 
 MZ_ENDPOINT = rh.TenantAPIs.MAINTENANCE_WINDOWS
@@ -16,7 +16,7 @@ class Suppression(Enum):
 
     Args:
         Enum (DETECT_PROBLEMS_AND_ALERT): Full Detection and Alerting during Maintenance Window
-        Enum (DETECT_PROBLEMS_DONT_ALERT): Problems detected but alerting profiles in that scope are not triggered
+        Enum (DETECT_PROBLEMS_DONT_ALERT): Problems detected but alerts in that scope are not triggered
         Enum (DONT_DETECT_PROBLEMS): Problem detection completely off for the scope
     """
     DETECT_PROBLEMS_AND_ALERT = auto()
@@ -24,10 +24,10 @@ class Suppression(Enum):
     DONT_DETECT_PROBLEMS = auto()
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def __repr__(self):
-        return self.name
+        return str(self.name)
 
 
 class DayOfWeek(Enum):
@@ -53,10 +53,10 @@ class DayOfWeek(Enum):
     SUNDAY = auto()
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def __repr__(self):
-        return self.name
+        return str(self.name)
 
 
 class Context(Enum):
@@ -71,10 +71,10 @@ class Context(Enum):
     KUBERNETES = auto()
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def __repr__(self):
-        return self.name
+        return str(self.name)
 
 
 class RecurrenceType(Enum):
@@ -85,10 +85,10 @@ class RecurrenceType(Enum):
     WEEKLY = auto()
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def __repr__(self):
-        return self.name
+        return str(self.name)
 
 
 class FilterType(Enum):
@@ -187,10 +187,10 @@ class FilterType(Enum):
     VMWARE_DATACENTER = auto()
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def __repr__(self):
-        return self.name
+        return str(self.name)
 
 
 def validate_datetime(datetime_text, required_format):

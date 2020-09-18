@@ -1,14 +1,25 @@
 """Mockserver Expectation Setup"""
-import requests
 import json
 import logging
+import requests
 from dynatrace.requests.request_handler import generate_tenant_url
 
 logging.basicConfig(filename="testing_tools.log", level=logging.DEBUG)
 
 
 def create_mockserver_expectation(cluster, tenant, url_path, request_type, **kwargs):
-    requests.packages.urllib3.disable_warnings()
+    """Create Payload For MockServer to expect and respond
+
+    Args:
+        cluster (Dictionary): [description]
+        tenant (str): [description]
+        url_path (str): [description]
+        request_type (HTTP str): [description]
+
+    Raises:
+        ValueError: [description]
+    """
+    requests.packages.urllib3.disable_warnings() # pylint: disable=no-member
     expectation = {
         "httpRequest": {
             "headers": {

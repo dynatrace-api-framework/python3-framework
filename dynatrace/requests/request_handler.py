@@ -1,10 +1,11 @@
 """Make API Request to available Dynatrace API"""
-import requests
-import time
-from dynatrace.exceptions import InvalidAPIResponseException, ManagedClusterOnlyException
 from enum import Enum, auto
+import time
+import requests
+from dynatrace.exceptions import InvalidAPIResponseException, ManagedClusterOnlyException
 
-requests.packages.urllib3.disable_warnings()
+
+requests.packages.urllib3.disable_warnings() # pylint: disable=no-member
 
 HTTPS_STR = "https://"
 
@@ -25,7 +26,7 @@ class ClusterAPIs(Enum):
     USERS = f"{BASE}/users"
 
     def __str__(self):
-        return self.value
+        return str(self.value)
 
 
 class TenantAPIs(Enum):
@@ -60,7 +61,7 @@ class TenantAPIs(Enum):
     REQUEST_NAMING = "/api/config/v1/service/requestNaming"
 
     def __str__(self):
-        return self.value
+        return str(self.value)
 
 
 class HTTP(Enum):
@@ -74,16 +75,17 @@ class HTTP(Enum):
     DELETE = auto()
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def __repr__(self):
-        return self.name
+        return str(self.name)
 
 
 def make_api_call(cluster, endpoint, tenant=None, params=None, json=None, method=HTTP.GET):
     '''
     Function makes an API call in a safe way, taking into account the rate limits.
-    This will ensure the API call will always go through, with the program waiting for the limit to reset if needed.\n
+    This will ensure the API call will always go through.\n
+    The program will wait for the limit to reset if needed.\n
 
     @param cluster - Cluster dictionary from variable_set\n
     @param endpoint - API endpoint to call.\n
@@ -94,7 +96,8 @@ def make_api_call(cluster, endpoint, tenant=None, params=None, json=None, method
     @return - response from request\n
     '''
     # Set the right URL for the operation
-    url = f"{generate_tenant_url(cluster, tenant)}{endpoint}" if tenant else f"{HTTPS_STR}{cluster['url']}"
+    url = f"{generate_tenant_url(cluster, tenant)}{endpoint}" \
+            if tenant else f"{HTTPS_STR}{cluster['url']}"
 
     if not params:
         params = {}
