@@ -1,3 +1,4 @@
+"""Module for retreiving settings safely"""
 try:
     import user_variables
     FILE_IMPORTED = True
@@ -6,6 +7,7 @@ except ImportError:
 
 
 class DefaultSettings():
+    """Default settings if not specified elsewhere"""
     LOG_LEVEL = None
     LOG_DIR = "logs/"
 
@@ -34,6 +36,17 @@ class DefaultSettings():
 
 
 def get_setting(attribute):
+    """Fetch setting from user-defined files or else default values
+
+    Args:
+        attribute (str): attribute/setting to retreive
+
+    Raises:
+        AttributeError: Setting not defaulted nor user-defined
+
+    Returns:
+        [type]: attribute in it's correct variable type if found
+    """
     if FILE_IMPORTED and hasattr(user_variables, attribute):
         return getattr(user_variables, attribute)
     elif hasattr(DefaultSettings, attribute):

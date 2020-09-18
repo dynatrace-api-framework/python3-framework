@@ -1,11 +1,12 @@
 """Test suite for Topology Processes"""
 
 import unittest
-from user_variables import FULL_SET
 from tests import tooling_for_test as testtools
+from dynatrace import settings
 from dynatrace.requests.request_handler import TenantAPIs
 from dynatrace.tenant.topology import process
 
+FULL_SET = settings.get_setting("FULL_SET")
 CLUSTER = FULL_SET.get('mockserver1')
 TENANT = 'tenant1'
 URL_PATH = f"{TenantAPIs.V1_TOPOLOGY}/infrastructure/processes"

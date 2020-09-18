@@ -38,23 +38,23 @@ def create_mockserver_expectation(cluster, tenant, url_path, request_type, **kwa
         "id": "OneOff",
     }
 
-    logging.debug(f"URL PATH: {url_path}")
-    logging.debug(f"KWARGS {kwargs}")
+    logging.debug("URL PATH: %s", url_path)
+    logging.debug("KWARGS %s", kwargs)
     # Paramaters should always at least have Api-Token
     if 'parameters' in kwargs:
         expectation["httpRequest"]["queryStringParameters"] = kwargs['parameters']
 
     if "request_file" in kwargs:
-        with open(kwargs['request_file']) as f:
-            request_payload = json.load(f)
+        with open(kwargs['request_file']) as open_file:
+            request_payload = json.load(open_file)
         expectation["httpRequest"]["body"] = {
             "type": "JSON",
             "json": request_payload,
         }
 
     if "response_file" in kwargs:
-        with open(kwargs['response_file']) as f:
-            response_payload = json.load(f)
+        with open(kwargs['response_file']) as open_file:
+            response_payload = json.load(open_file)
         expectation["httpResponse"]["body"] = {
             "type": "JSON",
             "json": response_payload,
@@ -85,5 +85,13 @@ def create_mockserver_expectation(cluster, tenant, url_path, request_type, **kwa
 
 
 def expected_payload(json_file):
-    with open(json_file) as f:
-        return json.load(f)
+    """The payload that should be tested against
+
+    Args:
+        json_file (str): file name for result json
+
+    Returns:
+        dict: payload of the expected result JSON
+    """
+    with open(json_file) as open_file:
+        return json.load(open_file)
