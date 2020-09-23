@@ -248,12 +248,12 @@ def generate_tag_scope(tag, filter_type=None, management_zone_id=None):
 
 
 def generate_scope(
-        entities=None,
-        tags=None,
-        filter_type=None,
-        management_zone_id=None,
-        match_any_tag=True
-    ):
+    entities=None,
+    tags=None,
+    filter_type=None,
+    management_zone_id=None,
+    match_any_tag=True
+):
     """Generate the total scope for maintenance window payload
 
     Args:
@@ -310,14 +310,14 @@ def generate_window_json(name, description, suppression, schedule, scope=None, i
 
 
 def generate_schedule(
-        recurrence_type,
-        start_time,
-        duration,
-        range_start,
-        range_end,
-        day=None,
-        zone_id=None,
-    ):
+    recurrence_type,
+    start_time,
+    duration,
+    range_start,
+    range_end,
+    day=None,
+    zone_id=None,
+):
     """Create schedule structure for maintenance window"""
     # This structure requires a lot of input validation
     recurrence_type = str(recurrence_type).upper()
@@ -348,7 +348,7 @@ def generate_schedule(
         try:
             int(duration)
         except ValueError:
-            print ("Duration time must be integer! Duration of Maintainence Window in minutes")
+            print("Duration time must be integer! Duration of Maintainence Window in minutes")
 
         schedule['recurrence'] = {
             "startTime": start_time,

@@ -5,7 +5,7 @@ import requests
 from dynatrace.exceptions import InvalidAPIResponseException, ManagedClusterOnlyException
 
 
-requests.packages.urllib3.disable_warnings() # pylint: disable=no-member
+requests.packages.urllib3.disable_warnings()  # pylint: disable=no-member
 
 HTTPS_STR = "https://"
 
@@ -147,7 +147,7 @@ def check_response(response):
             time.sleep(float(time_to_wait))
         return False
     elif not 200 <= response.status_code <= 299:
-        raise InvalidAPIResponseException(\
+        raise InvalidAPIResponseException(
             f"Response Error:\n{response.url}\n{response.status_code}\n{response.text}")
 
     return True

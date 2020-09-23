@@ -364,7 +364,7 @@ class TestMaintenanceExceptions(unittest.TestCase):
                 filter_type="INVALID_TYPE"
             )
         self.assertTrue("Invalid Filter Type" in (
-            msg := str(context.exception)), msg) # pylint: disable=used-before-assignment
+            msg := str(context.exception)), msg)  # pylint: disable=used-before-assignment
 
 
 class TestMaintenanceEnumTypes(unittest.TestCase):
