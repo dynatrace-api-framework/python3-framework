@@ -39,7 +39,8 @@ class TenantAPIs(Enum):
     PROBLEM_STATUS = "/api/v1/problem/status"
     DEPLOY_ONEAGENT = "/api/v1/deployment/installer/agent"
     DEPLOY_ONEAGENT_CONNECTION_INFO = "/api/v1/deployment/installer/agent/connectioninfo"
-    DEPLOY_ONEAGENT_CONNECTION_ENDPOINTS = "/api/v1/deployment/installer/agent/connectioninfo/endpoints"
+    DEPLOY_ONEAGENT_CONNECTION_ENDPOINTS = \
+        "/api/v1/deployment/installer/agent/connectioninfo/endpoints"
     DEPLOY_ACTIVEGATE = "/api/v1/deployment/installer/gateway"
     DEPLOY_BOSH = "/api/v1/deployment/boshrelease"
     EVENTS = "/api/v1/events"
@@ -97,7 +98,7 @@ def make_api_call(cluster, endpoint, tenant=None, params=None, json=None, method
     '''
     # Set the right URL for the operation
     url = f"{generate_tenant_url(cluster, tenant)}{endpoint}" \
-        if tenant else f"{HTTPS_STR}{cluster['url']}"
+        if tenant else f"{HTTPS_STR}{cluster['url']}{endpoint}"
 
     if not params:
         params = {}
@@ -146,7 +147,8 @@ def check_response(response):
             time.sleep(float(time_to_wait))
         return False
     elif not 200 <= response.status_code <= 299:
-        raise InvalidAPIResponseException(f"Response Error:\n{response.url}\n{response.status_code}\n{response.text}")
+        raise InvalidAPIResponseException(\
+            f"Response Error:\n{response.url}\n{response.status_code}\n{response.text}")
 
     return True
 
