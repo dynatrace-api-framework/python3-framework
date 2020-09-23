@@ -1,7 +1,7 @@
 """SSO Operations for Dynatrace"""
 import dynatrace.requests.request_handler as rh
 
-ENDPOINT = "sso/ssoProvider"
+ENDPOINT = "/api/v1.0/onpremise/sso/ssoProvider"
 
 
 def disable_sso(cluster):
