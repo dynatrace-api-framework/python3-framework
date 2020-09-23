@@ -263,6 +263,7 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
 
 
 class TestMaintenanceExceptions(unittest.TestCase):
+    """Series of Tests aimed at triggering exception"""
     def test_invalid_recurrence_type(self):
         """Testing exception thrown for invalid recurrence type"""
         with self.assertRaises(ValueError) as context:
@@ -367,13 +368,16 @@ class TestMaintenanceExceptions(unittest.TestCase):
 
 
 class TestMaintenanceEnumTypes(unittest.TestCase):
+    """Test to validate Maintenance Enum Types are correct"""
     def test_suppression_enum_str(self):
+        """Suppression enum should be string"""
         suppression = maintenance.Suppression(
             maintenance.Suppression.DETECT_PROBLEMS_AND_ALERT)
         self.assertIsInstance(
             maintenance.Suppression.__str__(suppression), str)
 
     def test_suppression_enum_repr(self):
+        """Suppression enum should be string"""
         suppression = maintenance.Suppression(
             maintenance.Suppression.DETECT_PROBLEMS_AND_ALERT)
         self.assertIsInstance(

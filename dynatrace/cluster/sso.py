@@ -45,6 +45,14 @@ def enable_sso(cluster, disable_local=False, groups_enabled=False, is_openid=Fal
 
 
 def get_sso_status(cluster):
+    """Current Settings of SSO
+
+    Args:
+        cluster (cluster dict): Currently selected cluster
+
+    Returns:
+        dict: All SSO settings in their current setting
+    """
     response = rh.make_api_call(cluster=cluster,
                                 endpoint=ENDPOINT)
     return response.json()
