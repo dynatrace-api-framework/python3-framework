@@ -146,7 +146,8 @@ def check_response(response):
             print(f"Waiting {time_to_wait} sec until the limit resets.")
             time.sleep(float(time_to_wait))
         return False
-    elif not 200 <= response.status_code <= 299:
+
+    if not 200 <= response.status_code <= 299:
         raise InvalidAPIResponseException(
             f"Response Error:\n{response.url}\n{response.status_code}\n{response.text}")
 
