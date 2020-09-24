@@ -45,7 +45,7 @@ jobs:
       # Run Linter against code base #
       ################################
       - name: Lint Code Base
-        uses: docker://github/super-linter:v3
+        uses: github/super-linter:v3
         env:
           VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: master
@@ -54,7 +54,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LOG_FILE: super-linter.log
           OUTPUT_FOLDER: super-linter.report
-          OUTPUT_FORMAT: tap
       ############################
       # Retreive log file report #
       ############################
@@ -63,3 +62,11 @@ jobs:
         with:
           name: linter-report
           path: super-linter.log
+      ########################
+      # Retreive tap reports #
+      ########################
+      - name: Archive super-linter tap reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: linter-report
+          path: super-linter.report
