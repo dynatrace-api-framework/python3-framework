@@ -40,6 +40,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
+      - run: mkdir -p super-linter.report
       ################################
       # Run Linter against code base #
       ################################
@@ -52,6 +53,11 @@ jobs:
           PYTHON_PYLINT_CONFIG_FILE: .pylintrc
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LOG_FILE: super-linter.log
+          OUTPUT_FOLDER: super-linter.report
+          OUTPUT_FORMAT: tap
+      ############################
+      # Retreive log file report #
+      ############################
       - name: Archive super-linter log
         uses: actions/upload-artifact@v2
         with:
