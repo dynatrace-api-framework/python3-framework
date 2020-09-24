@@ -54,19 +54,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LOG_FILE: super-linter.log
           OUTPUT_FOLDER: super-linter.report
-      ############################
-      # Retreive log file report #
-      ############################
-      - name: Archive super-linter log
-        uses: actions/upload-artifact@v2
-        with:
-          name: linter-log
-          path: super-linter.log
       ########################
       # Retreive tap reports #
       ########################
       - name: Archive super-linter tap reports
         uses: actions/upload-artifact@v2
+        if: failure()
         with:
           name: linter-report
           path: super-linter.report
