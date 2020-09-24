@@ -1,6 +1,6 @@
 """Test Cases For Maintenance Windows."""
 import unittest
-import user_variables
+import user_variables  # pylint: disable=import-error
 from tests import tooling_for_test
 from dynatrace.tenant import maintenance
 from dynatrace.requests.request_handler import TenantAPIs
@@ -178,7 +178,6 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
         )
         maintenance_schedule = maintenance.generate_schedule(
             maintenance.RecurrenceType.ONCE,
-            # TODO Remove need for these variables. ONCE does not use them
             "23:00",
             60,
             TEST_RANGE_START,
@@ -210,7 +209,6 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
         )
         maintenance_schedule = maintenance.generate_schedule(
             maintenance.RecurrenceType.WEEKLY,
-            # TODO Remove need for these variables. ONCE does not use them
             "23:00",
             60,
             TEST_RANGE_START,
@@ -243,7 +241,6 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
         )
         maintenance_schedule = maintenance.generate_schedule(
             maintenance.RecurrenceType.MONTHLY,
-            # TODO Remove need for these variables. ONCE does not use them
             "23:00",
             60,
             TEST_RANGE_START,
@@ -344,7 +341,6 @@ class TestMaintenanceExceptions(unittest.TestCase):
 
     def test_invalid_datetime_format(self):
         """Test invalid datetime supplied to trigger ValueError"""
-        # TODO Fix Exceoption to have a message as first arg
         with self.assertRaises(InvalidDateFormatException) as context:
             maintenance.generate_schedule(
                 maintenance.RecurrenceType.DAILY,

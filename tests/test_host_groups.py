@@ -1,6 +1,6 @@
 """Testing dynatrace.tenant.host_groups"""
 import unittest
-import user_variables
+import user_variables  # pylint disable=import-error
 from tests import tooling_for_test
 from dynatrace.tenant import host_groups
 
@@ -10,16 +10,24 @@ URL_PATH = "/api/v1/entity/infrastructure/hosts"
 
 
 class TestHostGroupFunctions(unittest.TestCase):
+    """General Tests for Host Group Functions"""
     RESPONSE_DIR = "tests/mockserver_payloads/responses/host_groups/"
 
     def test_get_host_groups_tenantwide(self):
+        """Testing Retreival of all Host Groups within a single tenant"""
         parameters = {
             "relativeTime": ["day"],
             "includeDetails": ["true"],
         }
         mockserver_response_file = f"{self.RESPONSE_DIR}mock_get_general_1.json"
         tooling_for_test.create_mockserver_expectation(
-            CLUSTER, TENANT, URL_PATH, "GET", parameters=parameters, response_file=mockserver_response_file)
+            CLUSTER,
+            TENANT,
+            URL_PATH,
+            "GET",
+            parameters=parameters,
+            response_file=mockserver_response_file
+        )
         command_tested = host_groups.get_host_groups_tenantwide(
             CLUSTER, TENANT)
 
