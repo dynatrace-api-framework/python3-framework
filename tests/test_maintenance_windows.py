@@ -370,53 +370,61 @@ class TestMaintenanceExceptions(unittest.TestCase):
 class TestMaintenanceEnumTypes(unittest.TestCase):
     """Test to validate Maintenance Enum Types are correct"""
     def test_suppression_enum_str(self):
-        """Suppression enum should be string"""
+        """Suppression enum str should be string"""
         suppression = maintenance.Suppression(
             maintenance.Suppression.DETECT_PROBLEMS_AND_ALERT)
         self.assertIsInstance(
             maintenance.Suppression.__str__(suppression), str)
 
     def test_suppression_enum_repr(self):
-        """Suppression enum should be string"""
+        """Suppression enum repr should be string"""
         suppression = maintenance.Suppression(
             maintenance.Suppression.DETECT_PROBLEMS_AND_ALERT)
         self.assertIsInstance(
             maintenance.Suppression.__repr__(suppression), str)
 
     def test_day_of_week_enum_str(self):
+        """Day of Week enum str should be string"""
         day_of_week = maintenance.DayOfWeek(maintenance.DayOfWeek.MONDAY)
         self.assertIsInstance(maintenance.DayOfWeek.__str__(day_of_week), str)
 
     def test_day_of_week_enum_repr(self):
+        """Day of Week enum repr should be string"""
         day_of_week = maintenance.DayOfWeek(maintenance.DayOfWeek.MONDAY)
         self.assertIsInstance(maintenance.DayOfWeek.__repr__(day_of_week), str)
 
     def test_context_enum_str(self):
+        """Context enum str should be string"""
         context = maintenance.Context(maintenance.Context.CONTEXTLESS)
         self.assertIsInstance(maintenance.Context.__str__(context), str)
 
     def test_context_enum_repr(self):
+        """Context enum repr should be string"""
         context = maintenance.Context(maintenance.Context.CONTEXTLESS)
         self.assertIsInstance(maintenance.Context.__repr__(context), str)
 
     def test_recurrence_type_enum_str(self):
+        """Recurrence Type enum str should be string"""
         recurrence_type = maintenance.RecurrenceType(
             maintenance.RecurrenceType.DAILY)
         self.assertIsInstance(
             maintenance.RecurrenceType.__str__(recurrence_type), str)
 
     def test_recurrence_type_enum_repr(self):
+        """Recurrence Type enum repr should be string"""
         recurrence_type = maintenance.RecurrenceType(
             maintenance.RecurrenceType.DAILY)
         self.assertIsInstance(
             maintenance.RecurrenceType.__repr__(recurrence_type), str)
 
     def test_filter_type_enum_str(self):
+        """Filter Type enum str should be string"""
         suppression = maintenance.FilterType(
             maintenance.FilterType.APM_SECURITY_GATEWAY)
         self.assertIsInstance(maintenance.FilterType.__str__(suppression), str)
 
     def test_filter_type_enum_repr(self):
+        """Filter Type enum repr should be string"""
         suppression = maintenance.FilterType(
             maintenance.FilterType.APM_SECURITY_GATEWAY)
         self.assertIsInstance(
@@ -424,6 +432,7 @@ class TestMaintenanceEnumTypes(unittest.TestCase):
 
 
 class TestTagParsing(unittest.TestCase):
+    """Testing Maintenance Window Tag Handling"""
     def test_tag_variations(self):
         """Testing various ways tags need to be parsed"""
         # Test 1 - Key
@@ -464,8 +473,8 @@ class TestTagParsing(unittest.TestCase):
             {'context': 'CONTEXTLESS', 'key': '[][KeywithSquares]'},
         ]
 
-        for i in range(0, len(test_tag_list)):
-            processed_tag = test_tag_list[i]
+        for i, test_tag_input in enumerate(test_tag_list):
+            processed_tag = test_tag_input
             self.assertTrue(
                 (result := maintenance.parse_tag(processed_tag)
                  ) == test_tag_expected_results[i],

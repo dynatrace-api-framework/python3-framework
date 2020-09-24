@@ -52,7 +52,7 @@ jobs:
           PYTHON_PYLINT_CONFIG_FILE: .pylintrc
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LOG_FILE: super-linter.log
-      - name: Archive code coverage results
+      - name: Archive super-linter log
         uses: actions/upload-artifact@v2
         with:
           name: linter-report
