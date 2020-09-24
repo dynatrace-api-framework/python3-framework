@@ -82,8 +82,6 @@ class TestGetHosts(unittest.TestCase):
         result = hosts.get_host_units_tenantwide(CLUSTER, TENANT)
         self.assertEqual(result, 4)
 
-        hosts.set_host_properties
-
 
 class TestHostTagging(unittest.TestCase):
     """Test cases for testing host-level tagging."""
