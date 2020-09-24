@@ -55,6 +55,7 @@ jobs:
           LOG_FILE: super-linter.log
           OUTPUT_FOLDER: super-linter.report
           OUTPUT_FORMAT: tap
+      - run: ls
       ########################
       # Retreive tap reports #
       ########################
