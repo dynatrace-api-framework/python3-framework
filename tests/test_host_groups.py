@@ -1,6 +1,6 @@
 """Testing dynatrace.tenant.host_groups"""
 import unittest
-import user_variables  # pylint disable=import-error
+import user_variables  # pylint: disable=import-error
 from tests import tooling_for_test
 from dynatrace.tenant import host_groups
 

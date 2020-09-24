@@ -1,7 +1,7 @@
 """Test Suite for Topology Services"""
 
 import unittest
-from user_variables import FULL_SET  # pylint disable=import-error
+from user_variables import FULL_SET  # pylint: disable=import-error
 from tests import tooling_for_test as testtools
 from dynatrace.requests.request_handler import TenantAPIs
 from dynatrace.tenant.topology import services
