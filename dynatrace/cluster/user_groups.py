@@ -24,7 +24,7 @@ def generate_group_name(template, user_type, tenant, app_name):
     Returns:
         [type]: [description]
     """
-    #TODO Refactor for more replacements
+    # TODO Refactor for more replacements
     template = template.replace("{USER_TYPE}", user_type)
     template = template.replace("{TENANT}", tenant)
     template = template.replace("{APP_NAME}", app_name)

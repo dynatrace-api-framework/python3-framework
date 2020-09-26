@@ -82,7 +82,7 @@ class HTTP(Enum):
         return str(self.name)
 
 
-def make_api_call(cluster, endpoint, tenant=None, params=None, json=None, method=HTTP.GET):  # pylint: disable=too-many-arguments
+def make_api_call(cluster, endpoint, tenant=None, params=None, json=None, method=HTTP.GET):
     '''
     Function makes an API call in a safe way, taking into account the rate limits.
     This will ensure the API call will always go through.\n

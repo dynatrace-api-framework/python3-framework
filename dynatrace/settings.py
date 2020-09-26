@@ -34,6 +34,7 @@ DefaultSettings = {
     'DEFAULT_TIMEZONE': "UTC",
 }
 
+
 def get_setting(attribute):
     """Fetch setting from user-defined files or else default values
 
