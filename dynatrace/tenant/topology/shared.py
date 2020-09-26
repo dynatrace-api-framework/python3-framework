@@ -127,6 +127,21 @@ def get_set_layer_count(full_set, layer, params=None):
 
 
 def add_env_layer_tags(cluster, tenant, layer, entity, tag_list):
+    """Add tags to entity Layer
+
+    Args:
+        cluster (cluster dict): Currently selected cluster
+        tenant (str): Tenant to operate in
+        layer (str): Topology Layer to pull from
+        entity (str): Entity to add tags to
+        tag_list (list): All tags to add to entity
+
+    Raises:
+        TypeError: [description]
+
+    Returns:
+        [type]: [description]
+    """
     layer_list = ['applications', 'hosts',
                   'custom', 'process-groups', 'services']
     check_valid_layer(layer, layer_list)
