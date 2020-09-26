@@ -13,6 +13,18 @@ MZ_USER_PERMISSONS = {
 
 
 def generate_group_name(template, user_type, tenant, app_name):
+    """Generate User Group according to template
+
+    Args:
+        template (str): template with replacable values for variables
+        user_type (str): user permission type
+        tenant (str): tenant for user_group to match to
+        app_name (str): Application name
+
+    Returns:
+        [type]: [description]
+    """
+    #TODO Refactor for more replacements
     template = template.replace("{USER_TYPE}", user_type)
     template = template.replace("{TENANT}", tenant)
     template = template.replace("{APP_NAME}", app_name)
@@ -59,6 +71,12 @@ def create_app_groups_setwide(app_name):
 
 
 def delete_app_groups(cluster, app_name):
+    """Delete Uesr Groups for Application
+
+    Args:
+        cluster (cluster dict): Currently selected cluster
+        app_name (str): Application to remove all groups
+    """
     role_types = user_variables.USER_GROUPS['role_types']
     role_tenants = user_variables.USER_GROUPS['role_tenants']
 

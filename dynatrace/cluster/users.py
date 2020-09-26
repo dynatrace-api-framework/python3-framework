@@ -51,9 +51,11 @@ def get_user(cluster, user_id, ignore_saas=True):
 def delete_user(cluster, user_id, ignore_saas=True):
     """Delete a Single User"""
     check_is_managed(cluster, ignore_saas)
-    response = rh.cluster_delete(cluster=cluster,
-                                 method=rh.HTTP.DELETE,
-                                 endpoint=f"{rh.ClusterAPIs.USERS}/{user_id}")
+    response = rh.make_api_call (
+        cluster=cluster,
+        endpoint=f"{rh.ClusterAPIs.USERS}/{user_id}",
+        method=rh.HTTP.DELETE,
+    )
     return response.json()
 
 

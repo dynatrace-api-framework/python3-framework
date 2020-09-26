@@ -6,10 +6,9 @@ except ImportError:
     FILE_IMPORTED = False
 
 
-class DefaultSettings():
-    """Default settings if not specified elsewhere"""
-    LOG_LEVEL = None
-    LOG_DIR = "logs/"
+DefaultSettings = {
+    'LOG_LEVEL': None,
+    'LOG_DIR': "logs/",
 
     # ROLE TYPE KEYS
     # access_env
@@ -19,7 +18,7 @@ class DefaultSettings():
     # view_senstive
     # change_sensitive
 
-    USER_GROUPS = {
+    'USER_GROUPS': {
         "role_types": {
             "access_env": "accessenv",
             "change_settings": "changesettings",
@@ -30,10 +29,10 @@ class DefaultSettings():
             "nonprod",
             "prod"
         ]
-    }
-    USER_GROUP_TEMPLATE = "prefix_{USER_TYPE}_{TENANT}_{APP_NAME}_suffix"
-    DEFAULT_TIMEZONE = "UTC"
-
+    },
+    'USER_GROUP_TEMPLATE': "prefix_{USER_TYPE}_{TENANT}_{APP_NAME}_suffix",
+    'DEFAULT_TIMEZONE': "UTC",
+}
 
 def get_setting(attribute):
     """Fetch setting from user-defined files or else default values
@@ -49,8 +48,7 @@ def get_setting(attribute):
     """
     if FILE_IMPORTED and hasattr(user_variables, attribute):
         return getattr(user_variables, attribute)
-    elif hasattr(DefaultSettings, attribute):
-        return getattr(DefaultSettings, attribute)
-    else:
-        raise AttributeError(
-            f"{attribute} is not a valid user variable attribute!")
+    if attribute in DefaultSettings:
+        return DefaultSettings[attribute]
+    raise AttributeError(
+        f"{attribute} is not a valid user variable attribute!")
