@@ -1,10 +1,10 @@
 """Maintenance Window Operations"""
 import datetime
 import re
-import dynatrace.requests.request_handler as rh
-import user_variables as uv
-from dynatrace.exceptions import InvalidDateFormatException
 from enum import Enum, auto
+import dynatrace.requests.request_handler as rh
+import user_variables
+from dynatrace.exceptions import InvalidDateFormatException
 
 
 MZ_ENDPOINT = rh.TenantAPIs.MAINTENANCE_WINDOWS
@@ -15,8 +15,8 @@ class Suppression(Enum):
     Types of suppression for create Maintenance Window JSON. Suppression is required
 
     Args:
-        Enum (DETECT_PROBLEMS_AND_ALERT): Full Alerting. Entites in scope will have notes that a Maintenance Window was active
-        Enum (DETECT_PROBLEMS_DONT_ALERT): Problems detected but alerting profiles in that scope are not triggered
+        Enum (DETECT_PROBLEMS_AND_ALERT): Full Detection and Alerting during Maintenance Window
+        Enum (DETECT_PROBLEMS_DONT_ALERT): Problems detected but alerts in scope are not triggered
         Enum (DONT_DETECT_PROBLEMS): Problem detection completely off for the scope
     """
     DETECT_PROBLEMS_AND_ALERT = auto()
@@ -24,10 +24,10 @@ class Suppression(Enum):
     DONT_DETECT_PROBLEMS = auto()
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def __repr__(self):
-        return self.name
+        return str(self.name)
 
 
 class DayOfWeek(Enum):
@@ -53,10 +53,10 @@ class DayOfWeek(Enum):
     SUNDAY = auto()
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def __repr__(self):
-        return self.name
+        return str(self.name)
 
 
 class Context(Enum):
@@ -71,10 +71,10 @@ class Context(Enum):
     KUBERNETES = auto()
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def __repr__(self):
-        return self.name
+        return str(self.name)
 
 
 class RecurrenceType(Enum):
@@ -85,10 +85,10 @@ class RecurrenceType(Enum):
     WEEKLY = auto()
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def __repr__(self):
-        return self.name
+        return str(self.name)
 
 
 class FilterType(Enum):
@@ -187,27 +187,49 @@ class FilterType(Enum):
     VMWARE_DATACENTER = auto()
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def __repr__(self):
-        return self.name
+        return str(self.name)
 
 
 def validate_datetime(datetime_text, required_format):
+    """Validate input against expected DateTime format
+
+    Args:
+        datetime_text (str): Time inputted
+        required_format (str): Expected format to validate against
+
+    Raises:
+        InvalidDateFormatException: Used for incorrect format provided
+    """
     try:
         datetime.datetime.strptime(datetime_text, required_format)
     except ValueError:
-        raise InvalidDateFormatException(required_format)
+        raise InvalidDateFormatException(required_format) from ValueError
 
 
 def generate_tag_scope(tag, filter_type=None, management_zone_id=None):
+    """Generating Tag portion of scope
+
+    Args:
+        tag (list, dict, str): single or collection of tags
+        filter_type (str, optional): Type of entity to match against. Defaults to None.
+        management_zone_id (str, optional): Management Zone to match against. Defaults to None.
+
+    Raises:
+        ValueError: Filter Type is not in acceptable values
+
+    Returns:
+        dict: tag payload to be used as part of the main scope payload
+    """
     tag_payload = {}
 
     if management_zone_id:
         tag_payload['mzId'] = str(management_zone_id)
 
     if filter_type:
-        if filter_type in FilterType._member_names_:
+        if filter_type in FilterType._member_names_:  # pylint: disable=no-member,protected-access
             tag_payload['type'] = filter_type
         else:
             raise ValueError(
@@ -225,7 +247,25 @@ def generate_tag_scope(tag, filter_type=None, management_zone_id=None):
     return tag_payload
 
 
-def generate_scope(entities=None, tags=None, filter_type=None, management_zone_id=None, match_any_tag=True):
+def generate_scope(
+    entities=None,
+    tags=None,
+    filter_type=None,
+    management_zone_id=None,
+    match_any_tag=True
+):
+    """Generate the total scope for maintenance window payload
+
+    Args:
+        entities (list, optional): List of specific entities. Defaults to None.
+        tags (List,Dict,str, optional): List/Set/Individual Tags. Defaults to None.
+        filter_type (str, optional): Specific Entity Type for tag. Defaults to None.
+        management_zone_id ([type], optional): Specific MZ for tag. Defaults to None.
+        match_any_tag (bool, optional): Any vs All. Defaults to True.
+
+    Returns:
+        dict: sub payload for maintenance window payload containing scope
+    """
     if entities is None:
         entities = []
     matches = []
@@ -269,13 +309,21 @@ def generate_window_json(name, description, suppression, schedule, scope=None, i
     return window_json
 
 
-def generate_schedule(recurrence_type, start_time, duration, range_start, range_end, day=None, zoneId=None,):
+def generate_schedule(
+    recurrence_type,
+    start_time,
+    duration,
+    range_start,
+    range_end,
+    day=None,
+    zone_id=None,
+):
     """Create schedule structure for maintenance window"""
     # This structure requires a lot of input validation
     recurrence_type = str(recurrence_type).upper()
 
     # Check Recurrence
-    if recurrence_type not in RecurrenceType._member_names_:
+    if recurrence_type not in RecurrenceType._member_names_:  # pylint: disable=no-member,protected-access
         raise ValueError(
             "Invalid Recurrence Type! Allowed values are: ONCE, DAILY, WEEKLY, MONTHLY")
 
@@ -289,8 +337,8 @@ def generate_schedule(recurrence_type, start_time, duration, range_start, range_
         "end": range_end
     }
 
-    if zoneId is None:
-        schedule['zoneId'] = uv.DEFAULT_TIMEZONE
+    if zone_id is None:
+        schedule['zoneId'] = user_variables.DEFAULT_TIMEZONE
 
     if recurrence_type != "ONCE":
         # Check Start Time
@@ -300,7 +348,7 @@ def generate_schedule(recurrence_type, start_time, duration, range_start, range_
         try:
             int(duration)
         except ValueError:
-            ("Duration time must be an integer! Duration is length of Maintainence Window in minutes")
+            print("Duration time must be integer! Duration of Maintainence Window in minutes")
 
         schedule['recurrence'] = {
             "startTime": start_time,
@@ -310,7 +358,7 @@ def generate_schedule(recurrence_type, start_time, duration, range_start, range_
     # Check Weekly Day
     if recurrence_type == "WEEKLY":
         day = str(day).upper()
-        if day in DayOfWeek._member_names_:
+        if day in DayOfWeek._member_names_:  # pylint: disable=no-member,protected-access
             schedule['recurrence']['dayOfWeek'] = day
         else:
             raise ValueError("Invalid Weekly Day! Allowed values are "
@@ -320,7 +368,7 @@ def generate_schedule(recurrence_type, start_time, duration, range_start, range_
     if recurrence_type == "MONTHLY":
         if not isinstance(day, int):
             raise TypeError("Invalid type for Day of Month! Int between 1-31 required")
-        if (1 <= int(day) <= 31):
+        if 1 <= int(day) <= 31:
             schedule['recurrence']['dayOfMonth'] = day
         else:
             raise ValueError("Invalid Monthly Day! Allowed values are 1-31")
@@ -376,19 +424,19 @@ def get_window(cluster, tenant, window_id):
 def parse_tag(tag_string):
     # Need a way to process literal colon inside a key
     "Parsing Tag to to Context, Key and Value"
-    m = re.match(
+    tag_match = re.match(
         r"(?:\[(\w+)\])?([\w\-\/`\+\.\!\@\#\$\%\^\&\*\(\)\?\[\]\{\}\,\<\>\ \:\;]+)(?:\:(\w*))?",
         tag_string
     )
     tag_dictionary = {}
-    if m.group(1):
-        tag_dictionary['context'] = m.group(1)
+    if tag_match.group(1):
+        tag_dictionary['context'] = tag_match.group(1)
     else:
         tag_dictionary['context'] = "CONTEXTLESS"
 
-    tag_dictionary['key'] = m.group(2)  # Key is always required
+    tag_dictionary['key'] = tag_match.group(2)  # Key is always required
 
-    if m.group(3):
-        tag_dictionary['value'] = m.group(3)
+    if tag_match.group(3):
+        tag_dictionary['value'] = tag_match.group(3)
 
     return tag_dictionary

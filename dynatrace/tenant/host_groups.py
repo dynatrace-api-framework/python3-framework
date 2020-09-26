@@ -12,6 +12,15 @@ from dynatrace.tenant.topology import hosts as topology_hosts
 
 
 def get_host_groups_tenantwide(cluster, tenant):
+    """Get all Host Groups in the Tenant
+
+    Args:
+        cluster (Cluster Dict): Dictionary containing all Cluster info
+        tenant (str): String with the tenant name that is being selected
+
+    Returns:
+        Dict: List of Host Groups in the tenant
+    """
     params = {
         'relativeTime': 'day',
         'includeDetails': 'true'
@@ -27,6 +36,14 @@ def get_host_groups_tenantwide(cluster, tenant):
 
 
 def get_host_groups_clusterwide(cluster):
+    """Get all Host Groups used in the Cluster
+
+    Args:
+        cluster (cluster dict): Current cluster to operate on
+
+    Returns:
+        dict: Dictionary of all Host Groups used in the Cluster
+    """
     # TODO add split_by_tenant optional variable
     host_groups_custerwide = {}
     for tenant in cluster['tenant']:
@@ -38,6 +55,14 @@ def get_host_groups_clusterwide(cluster):
 
 def get_host_groups_setwide(full_set):
     # TODO add split_by_tenant optional variable
+    """Get all Host Groups used in the Cluster Set
+
+    Args:
+        full_set (dict of cluster dict): Current cluster to operate on
+
+    Returns:
+        dict: Dictionary of all Host Groups used in the Cluster Set
+    """
     host_groups_setwide = {}
     for cluster in full_set.values():
         host_groups_setwide.update(get_host_groups_clusterwide(cluster))

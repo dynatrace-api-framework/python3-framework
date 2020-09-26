@@ -14,7 +14,7 @@ FULL_SET = {
     }
 }
 
-LOG_LEVEL="INFO"
+LOG_LEVEL = "INFO"
 
 # ROLE TYPE KEYS
 # access_env

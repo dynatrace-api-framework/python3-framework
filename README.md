@@ -1,10 +1,10 @@
 # Dynatrace Python3 API Framework
 
-Testing the "Test" Branch
+![Lint Code Base](https://github.com/dynatrace-api-framework/python3-framework/workflows/Lint%20Code%20Base/badge.svg)
 
 **Python Requirements**:
 Requests
-Python >= 3.4 (Built and tested with Python 3.8)
+Python >= 3.8
 
 
 **How To Use**

@@ -2,7 +2,7 @@
 Test Suite for Topology Hosts
 """
 import unittest
-from user_variables import FULL_SET
+from user_variables import FULL_SET  # pylint: disable=import-error
 from tests import tooling_for_test as testtools
 from dynatrace.requests.request_handler import TenantAPIs
 from dynatrace.tenant.topology import hosts
@@ -81,8 +81,6 @@ class TestGetHosts(unittest.TestCase):
 
         result = hosts.get_host_units_tenantwide(CLUSTER, TENANT)
         self.assertEqual(result, 4)
-
-        hosts.set_host_properties
 
 
 class TestHostTagging(unittest.TestCase):
