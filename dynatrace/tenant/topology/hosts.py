@@ -59,7 +59,7 @@ def get_host_units_tenantwide(cluster, tenant, params=None):
         params (dict, optional): Available parameters to filter by. Defaults to None.
 
     Returns:
-        float: total consumed units used in tenant  
+        float: total consumed units used in tenant
     """
     consumed_host_units = 0
     host_list = get_hosts_tenantwide(cluster, tenant, params=params)
