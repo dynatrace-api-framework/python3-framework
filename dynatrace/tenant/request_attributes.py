@@ -9,7 +9,7 @@ ENDPOINT = rh.TenantAPIs.REQUEST_ATTRIBUTES
 def pull_to_files(cluster, tenant, ignore_disabled=True):
     """Pull files from an environment to local"""
     # API Calls needed: Pull RA, take the ID and pull the details of each RA
-    all_ra_call = rh.make_api_call(cluster=cluster, 
+    all_ra_call = rh.make_api_call(cluster=cluster,
                                    tenant=tenant,
                                    endpoint=ENDPOINT)
     all_ra_json = all_ra_call.json()

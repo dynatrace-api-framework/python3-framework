@@ -57,6 +57,7 @@ def get_application_count_clusterwide(cluster):
 
 
 def get_application_count_setwide(full_set):
+    """Get total count of applications in cluster set"""
     full_set_app_count = 0
     for cluster_items in full_set.values():
         full_set_app_count = full_set_app_count \

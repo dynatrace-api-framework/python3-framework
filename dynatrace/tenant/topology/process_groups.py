@@ -14,7 +14,13 @@ def get_process_group(cluster, tenant, entity):
 
 def set_process_group_properties(cluster, tenant, entity, prop_json):
     """Update properties of process-group entity"""
-    return topology_shared.set_env_layer_properties(cluster, tenant, 'process-groups', entity, prop_json)
+    return topology_shared.set_env_layer_properties(
+        cluster,
+        tenant,
+        'process-groups',
+        entity,
+        prop_json
+    )
 
 
 def get_process_group_count_tenantwide(cluster, tenant, params=None):

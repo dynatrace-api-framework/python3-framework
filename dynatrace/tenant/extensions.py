@@ -1,3 +1,4 @@
+"""Operations Interacting with Dynatrace Extensions"""
 from dynatrace.requests import request_handler as rh
 
 ENDPOINT = rh.TenantAPIs.EXTENSIONS

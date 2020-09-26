@@ -4,14 +4,14 @@ import argparse
 import os
 
 
-def replace_set(set_file):
+def replace_set(new_set_file):
     """Replace Variable File"""
     # Options are Darwin, Linux, Java and Windows. Java not supported
     if "Windows" in system():
         os.system("copy variable_sets\\" +
-                  str(set_file) + ".py user_variables.py")
+                  str(new_set_file) + ".py user_variables.py")
     else:
-        os.system("cp variable_sets/" + str(set_file) +
+        os.system("cp variable_sets/" + str(new_set_file) +
                   ".py user_variables.py")
 
 
