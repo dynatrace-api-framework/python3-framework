@@ -42,13 +42,25 @@ def delete_host_tag(cluster, tenant, entity, tag):
     """Remove single tag from host"""
     if tag is None:
         raise TypeError("Tag cannot be None!")
-    return rh.make_api_call(cluster=cluster,
-                            tenant=tenant,
-                            method=rh.HTTP.DELETE,
-                            endpoint=f"{rh.TenantAPIs.V1_TOPOLOGY}/infrastructure/hosts/{entity}/tags/{tag}")
+    return rh.make_api_call(
+        cluster=cluster,
+        tenant=tenant,
+        method=rh.HTTP.DELETE,
+        endpoint=f"{rh.TenantAPIs.V1_TOPOLOGY}/infrastructure/hosts/{entity}/tags/{tag}"
+    )
 
 
 def get_host_units_tenantwide(cluster, tenant, params=None):
+    """Get Host Units used by tenant
+
+    Args:
+        cluster (cluster dict): Currently selected cluster
+        tenant (str): Tenant to operate in
+        params (dict, optional): Available parameters to filter by. Defaults to None.
+
+    Returns:
+        float: total consumed units used in tenant  
+    """
     consumed_host_units = 0
     host_list = get_hosts_tenantwide(cluster, tenant, params=params)
     for host in host_list:

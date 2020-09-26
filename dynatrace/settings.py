@@ -1,6 +1,6 @@
 """Module for retreiving settings safely"""
 try:
-    import user_variables
+    import user_variables  # pylint: disable=import-error
     FILE_IMPORTED = True
 except ImportError:
     FILE_IMPORTED = False

@@ -27,8 +27,8 @@ def generate_mz_payload(application, env_zone=None):
         application)
 
     for rule_num in range(2, 10):
-        mz_payload['rules'][rule_num]['conditions'][0]['comparisonInfo']['value']['key'] = "APP: " + \
-            str(application)
+        mz_payload['rules'][rule_num]['conditions'][0]['comparisonInfo']['value']['key'] = \
+            "APP: " + str(application)
 
     if env_zone:
         # If environment exists, rename MZ and add environment conditions
@@ -72,8 +72,7 @@ def add_management_zone(cluster, tenant, application, env_zone=None):
                                 json=mz_payload)
     if "id" in response.json():
         return (response.json())['id']
-    else:
-        return (response.text)
+    return response.text
 
 
 def change_management_zone(cluster, tenant, mz_id, application, env_zone=None):
