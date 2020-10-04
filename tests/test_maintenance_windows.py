@@ -258,6 +258,10 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
         self.assertEqual(result, tooling_for_test.expected_payload(
             mockserver_response_file))
 
+    def test_create_single_entity(self):
+        """Create Maintenance Window with a single entity"""
+        mockserver_request_file = f"{self.REQUEST_DIR}mock_create_single_entity.json"
+        mockserver_response_file = f"{self.RESPONSE_DIR}mock_create_1.json"
 
 class TestMaintenanceExceptions(unittest.TestCase):
     """Series of Tests aimed at triggering exception"""
