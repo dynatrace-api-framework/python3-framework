@@ -9,6 +9,7 @@ templates/*
 # Workspace settings and virtual environments
 **.vscode**
 **venv**
+pythonenv**
 # Framework log files
 ***.log**
 ***.tap**
