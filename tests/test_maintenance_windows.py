@@ -262,6 +262,7 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
         """Create Maintenance Window with a single entity"""
         mockserver_request_file = f"{self.REQUEST_DIR}mock_create_single_entity.json"
         mockserver_response_file = f"{self.RESPONSE_DIR}mock_create_1.json"
+
         tooling_for_test.create_mockserver_expectation(
             CLUSTER,
             TENANT,
@@ -273,12 +274,11 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
 
         maintenance_scope = maintenance.generate_scope(["PROCESS_GROUP_INSTANCE-ABCDEFD123456"])
         maintenance_schedule = maintenance.generate_schedule(
-            maintenance.RecurrenceType.MONTHLY,
+            maintenance.RecurrenceType.DAILY,
             "23:00",
             60,
             TEST_RANGE_START,
-            TEST_RANGE_END,
-            day=1
+            TEST_RANGE_END
         )
         maintenance_json = maintenance.generate_window_json(
             TEST_PAYLOAD_TITLE,
@@ -288,7 +288,9 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
             scope=maintenance_scope,
             is_planned=True
         )
-
+        result = maintenance.create_window(CLUSTER, TENANT, maintenance_json)
+        self.assertEqual(result, tooling_for_test.expected_payload(
+            mockserver_response_file))
 class TestMaintenanceExceptions(unittest.TestCase):
     """Series of Tests aimed at triggering exception"""
     def test_invalid_recurrence_type(self):
@@ -511,7 +513,6 @@ if __name__ == '__main__':
     unittest.main()
 
 # CREATE TESTS LEFT:
-# Single Entity
 # Multi Entity
 # Single Tag with Filter Type
 # Mutli Tags with Filter Type
