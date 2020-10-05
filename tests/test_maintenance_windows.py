@@ -291,6 +291,45 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
         result = maintenance.create_window(CLUSTER, TENANT, maintenance_json)
         self.assertEqual(result, tooling_for_test.expected_payload(
             mockserver_response_file))
+
+    def test_create_multi_entity(self):
+        """Create Maintenance Window with multiple entities"""
+        mockserver_request_file = f"{self.REQUEST_DIR}mock_create_multi_entity.json"
+        mockserver_response_file = f"{self.RESPONSE_DIR}mock_create_1.json"
+
+        tooling_for_test.create_mockserver_expectation(
+            CLUSTER,
+            TENANT,
+            URL_PATH,
+            "POST",
+            request_file=mockserver_request_file,
+            response_file=mockserver_response_file
+        )
+
+        maintenance_scope = maintenance.generate_scope([
+            "PROCESS_GROUP_INSTANCE-ABCDEFD123456",
+            "HOST-ABCDEFG123456"
+        ])
+        maintenance_schedule = maintenance.generate_schedule(
+            maintenance.RecurrenceType.DAILY,
+            "23:00",
+            60,
+            TEST_RANGE_START,
+            TEST_RANGE_END
+        )
+        maintenance_json = maintenance.generate_window_json(
+            TEST_PAYLOAD_TITLE,
+            TEST_PAYLOAD_DESC,
+            maintenance.Suppression.DETECT_PROBLEMS_AND_ALERT,
+            maintenance_schedule,
+            scope=maintenance_scope,
+            is_planned=True
+        )
+        result = maintenance.create_window(CLUSTER, TENANT, maintenance_json)
+        self.assertEqual(result, tooling_for_test.expected_payload(
+            mockserver_response_file))
+
+
 class TestMaintenanceExceptions(unittest.TestCase):
     """Series of Tests aimed at triggering exception"""
     def test_invalid_recurrence_type(self):
