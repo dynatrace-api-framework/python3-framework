@@ -1,3 +1,5 @@
+"""Module for process type entity operations"""
+
 import dynatrace.tenant.topology.shared as entity_api
 
 

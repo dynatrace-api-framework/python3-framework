@@ -1,3 +1,5 @@
+"""Module for core entity operations"""
+
 from enum import Enum, auto
 from dynatrace.requests import request_handler as rh
 
@@ -151,8 +153,8 @@ def get_entity(cluster, tenant, entity_id, params=None):
 
     if len(response.json().get('entities')) == 1:
         return response.json().get('entities')[0]
-    else:
-        return response.json().get('entities')
+
+    return response.json().get('entities')
 
 
 def get_env_entity_count(cluster, tenant, entity_type, params=None):
@@ -236,9 +238,9 @@ def add_tags(cluster, tenant, tag_list, entity_type=None, entity_id=None, params
     # Sanity checking, error handling
     if not tag_list:
         raise TypeError("No tags provided")
-    elif not isinstance(tag_list, list):
+    if not isinstance(tag_list, list):
         raise TypeError("tags_list is not a list")
-    elif not any([entity_type, entity_id]):
+    if not any([entity_type, entity_id]):
         raise ValueError("Must specifiy at least either entity_type or entity_id")
 
     # Params may already contain an entitySelector, we mustn't overwrite
@@ -288,7 +290,7 @@ def delete_tag(cluster, tenant, tag_key, entity_type=None, entity_id=None,
     # Sanity checking, error handling
     if not tag_key:
         raise TypeError("No tag key provided")
-    elif not any([entity_type, entity_id]):
+    if not any([entity_type, entity_id]):
         raise ValueError("Must specifiy at least either entity_type or entity_id")
 
     # Params may already contain an entitySelector, we mustn't overwrite

@@ -1,3 +1,5 @@
+"""Module for host type entity operations"""
+
 import dynatrace.tenant.topology.shared as entity_api
 import dynatrace.requests.request_handler as rh
 
