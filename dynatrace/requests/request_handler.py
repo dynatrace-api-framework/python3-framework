@@ -245,31 +245,25 @@ def v2_get_results_by_page(cluster, endpoint, item, tenant=None, params=None):
     Gets a multi-paged result set one page at a time. To be used with V2 API
     pagination where the nextPageKey is returned in the body of the response.
     \n
-    @param item - item being retrieved (e.g. entities, metrics, etc.)\n
     @param cluster - Cluster dictionary from variable_set\n
     @param endpoint - API endpoint to call.\n
     @param tenant - String of tenant name used in cluster dictionary\n
     @param params - dictionary of query string parameters
     """
-    # Make the first API call; retrieve summary info and first page of results
-    response = make_api_call(
-        cluster=cluster,
-        endpoint=endpoint,
-        tenant=tenant,
-        params=params
-    ).json()
-    cursor = response.get('nextPageKey')
-    # Pause here and return 1st page
-    yield response
-
-    # On subsequent calls, yield page by page the remaining result set
+    # We'll always make at least 1 call
+    cursor = 1
     while cursor:
+        # On subsequent calls, must omit all other params
+        if cursor != 1:
+            params = dict(nextPageKey=cursor)
+
         response = make_api_call(
             cluster=cluster,
             endpoint=endpoint,
             tenant=tenant,
-            params=dict(nextPageKey=cursor)
+            params=params
         ).json()
+
         yield response
         cursor = response.get('nextPageKey')
 
