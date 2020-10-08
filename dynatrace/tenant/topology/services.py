@@ -1,37 +1,74 @@
-"""Service operations from the Dynatrace API"""
-import dynatrace.tenant.topology.shared as topology_shared
+import dynatrace.tenant.topology.shared as entity_api
+import dynatrace.requests.request_handler as rh
 
 
 def get_services_tenantwide(cluster, tenant):
     """Get Information for all services in a tenant"""
-    return topology_shared.get_env_layer_entities(cluster, tenant, 'services')
+    return entity_api.get_entities(
+        cluster=cluster,
+        tenant=tenant,
+        entity_type=entity_api.EntityTypes.SERVICE
+    )
 
 
 def get_service(cluster, tenant, entity):
-    """Get Information on one service for in a tenant"""
-    return topology_shared.get_env_layer_entity(cluster, tenant, 'services', entity)
+    """Get Information for one service in a tenant"""
+    return entity_api.get_entity(
+        cluster=cluster,
+        tenant=tenant,
+        entity_id=entity
+    )
 
 
 def set_service_properties(cluster, tenant, entity, prop_json):
     """Update properties of service entity"""
-    return topology_shared.set_env_layer_properties(cluster, tenant, 'services', entity, prop_json)
+    response = rh.make_api_call(
+        cluster=cluster,
+        tenant=tenant,
+        endpoint=rh.TenantAPIs.TAGS,
+        params={
+            'entitySelector': f'entityId("{entity}")'
+        },
+        method=rh.HTTP.POST,
+        json=prop_json
+    )
+
+    return response.json()
 
 
 def get_service_count_tenantwide(cluster, tenant, params=None):
     """Get total count for all services in a tenant"""
-    return topology_shared.get_env_layer_count(cluster, tenant, 'services', params=params)
+    return entity_api.get_env_entity_count(
+        cluster=cluster,
+        tenant=tenant,
+        entity_type=entity_api.EntityTypes.SERVICE,
+        params=params
+    )
 
 
 def get_service_count_clusterwide(cluster, params=None):
     """Get total count for all services in cluster"""
-    return topology_shared.get_cluster_layer_count(cluster, 'services', params=params)
+    return entity_api.get_cluster_entity_count(
+        cluster=cluster,
+        entity_type=entity_api.EntityTypes.SERVICE,
+        params=params
+    )
 
 
 def get_service_count_setwide(full_set, params=None):
-    """Get total count of services for all clusters definied in variable file"""
-    return topology_shared.get_set_layer_count(full_set, 'services', params=params)
+    """Get total count of services in cluster set"""
+    return entity_api.get_set_entity_count(
+        full_set=full_set,
+        entity_type=entity_api.EntityTypes.SERVICE,
+        params=params
+    )
 
 
 def add_service_tags(cluster, tenant, entity, tag_list):
     """Add tags to a service"""
-    return topology_shared.add_env_layer_tags(cluster, tenant, 'services', entity, tag_list)
+    return entity_api.add_tags(
+        cluster=cluster,
+        tenant=tenant,
+        tag_list=tag_list,
+        entity_id=entity
+    )
