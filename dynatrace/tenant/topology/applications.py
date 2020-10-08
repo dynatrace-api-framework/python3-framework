@@ -1,19 +1,19 @@
-import dynatrace.tenant.topology.shared as entity
+import dynatrace.tenant.topology.shared as entity_api
 import dynatrace.requests.request_handler as rh
 
 
 def get_applications_tenantwide(cluster, tenant):
     """Get Information for all applications in a tenant"""
-    return entity.get_entities(
+    return entity_api.get_entities(
         cluster=cluster,
         tenant=tenant,
-        entity_type=entity.EntityTypes.APPLICATION
+        entity_type=entity_api.EntityTypes.APPLICATION
     )
 
 
 def get_application(cluster, tenant, entity):
     """Get Information for one application in a tenant"""
-    return entity.get_entity(
+    return entity_api.get_entity(
         cluster=cluster,
         tenant=tenant,
         entity_id=entity
@@ -42,27 +42,27 @@ def get_application_count_tenantwide(cluster, tenant):
         "from": "now-24h"
     }
 
-    return entity.get_env_entity_count(
+    return entity_api.get_env_entity_count(
         cluster=cluster,
         tenant=tenant,
-        entity_type=entity.EntityTypes.APPLICATION,
+        entity_type=entity_api.EntityTypes.APPLICATION,
         params=params
     )
 
 
 def get_application_count_clusterwide(cluster):
     """Get total count for all applications in cluster"""
-    return entity.get_cluster_entity_count(
+    return entity_api.get_cluster_entity_count(
         cluster=cluster,
-        entity_type=entity.EntityTypes.APPLICATION
+        entity_type=entity_api.EntityTypes.APPLICATION
     )
 
 
 def get_application_count_setwide(full_set):
     """Get total count of applications in cluster set"""
-    return entity.get_set_entity_count(
+    return entity_api.get_set_entity_count(
         full_set=full_set,
-        entity_type=entity.EntityTypes.APPLICATION
+        entity_type=entity_api.EntityTypes.APPLICATION
     )
 
 
