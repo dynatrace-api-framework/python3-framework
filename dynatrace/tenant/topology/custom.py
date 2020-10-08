@@ -1,7 +1,15 @@
-"""Module for interacting with Custom Topology Actions"""
-import dynatrace.tenant.topology.shared as topology_shared
+import dynatrace.requests.request_handler as rh
 
 
 def set_custom_properties(cluster, tenant, entity, prop_json):
-    """Update properties of process_group entity"""
-    return topology_shared.set_env_layer_properties(cluster, tenant, 'custom', entity, prop_json)
+    """Creates or updates properties of custom device entity"""
+    if not prop_json.get('customDeviceId'):
+        prop_json['customDeviceId'] = entity
+        
+    return rh.make_api_call(
+        cluster=cluster,
+        tenant=tenant,
+        endpoint=f'{rh.TenantAPIs.ENTITIES}/custom',
+        method=rh.HTTP.POST,
+        json=prop_json
+    )
