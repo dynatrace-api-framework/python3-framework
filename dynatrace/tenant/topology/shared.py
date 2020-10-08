@@ -125,7 +125,7 @@ def get_entities(cluster, tenant, entity_type, params=None):
         endpoint=rh.TenantAPIs.ENTITIES,
         params=params
     )
-    return response.json()
+    return response.json().get('entities')
 
 
 def get_entity(cluster, tenant, entity_id, params=None):
@@ -148,7 +148,11 @@ def get_entity(cluster, tenant, entity_id, params=None):
         endpoint=rh.TenantAPIs.ENTITIES,
         params=params
     )
-    return response.json()
+
+    if len(response.json().get('entities')) == 1:
+        return response.json().get('entities')[0]
+    else:
+        return response.json().get('entities')
 
 
 def get_env_entity_count(cluster, tenant, entity_type, params=None):
@@ -172,7 +176,7 @@ def get_env_entity_count(cluster, tenant, entity_type, params=None):
                                 tenant=tenant,
                                 endpoint=rh.TenantAPIs.ENTITIES,
                                 params=params)
-    env_layer_count = len(response.json())
+    env_layer_count = response.json().get('totalCount')
     return env_layer_count
 
 
@@ -226,6 +230,9 @@ def add_tags(cluster, tenant, tag_list, entity_type=None, entity_id=None, params
     @throws TypeError - if tag_list is empty or not a list\n
     @throws ValueError - if neither entity_type nor entity_id are specified
     """
+    if not params:
+        params = {}
+
     # Sanity checking, error handling
     if not tag_list:
         raise TypeError("No tags provided")
@@ -236,22 +243,23 @@ def add_tags(cluster, tenant, tag_list, entity_type=None, entity_id=None, params
 
     # Params may already contain an entitySelector, we mustn't overwrite
     if entity_type:
-        if params['entitySelector']:
+        if params.get('entitySelector'):
             params['entitySelector'] += f'type("{entity_type}")'
         else:
             params['entitySelector'] = f'type("{entity_type}")'
     if entity_id:
-        if params['entitySelector']:
+        if params.get('entitySelector'):
             params['entitySelector'] += f'entityId({entity_id})'
         else:
-            params['entitySelector'] = f'type({entity_id})'
+            params['entitySelector'] = f'entityId({entity_id})'
 
     response = rh.make_api_call(
         cluster=cluster,
         tenant=tenant,
         method=rh.HTTP.POST,
         endpoint=rh.TenantAPIs.TAGS,
-        params=params
+        params=params,
+        json=dict(tags=tag_list)
     )
 
     return response
@@ -265,7 +273,7 @@ def delete_tag(cluster, tenant, tag_key, entity_type=None, entity_id=None,
     @param cluster - Dynatrace Cluster\n
     @param tenant - Dynatrace Tenant\n
     @param tag_key - the key of the tag(s) to be deleted\n
-    @param tag_value - the values for the tag key to be deleted.
+    @param tag_value - the value for the tag key to be deleted.
                        Use "all" to delete all values for the key.\n
     @param entity_type - use EntityTypes enum for this\n
     @param entity_id - ID of entity. You can specify several IDs, quoted and
@@ -274,6 +282,9 @@ def delete_tag(cluster, tenant, tag_key, entity_type=None, entity_id=None,
     @throws TypeError - if tag_key is empty or missing\n
     @throws ValueError - if neither entity_type nor entity_id are specified
     """
+    if not params:
+        params = {}
+
     # Sanity checking, error handling
     if not tag_key:
         raise TypeError("No tag key provided")
@@ -290,7 +301,7 @@ def delete_tag(cluster, tenant, tag_key, entity_type=None, entity_id=None,
         if params.get('entitySelector'):
             params['entitySelector'] += f'entityId({entity_id})'
         else:
-            params['entitySelector'] = f'type({entity_id})'
+            params['entitySelector'] = f'entityId({entity_id})'
 
     # Set params for tag key & value
     params['key'] = tag_key
