@@ -7,7 +7,8 @@ def get_hosts_tenantwide(cluster, tenant, params=None):
     return entity_api.get_entities(
         cluster=cluster,
         tenant=tenant,
-        entity_type=entity_api.EntityTypes.HOST
+        entity_type=entity_api.EntityTypes.HOST,
+        params=params
     )
 
 
@@ -16,7 +17,8 @@ def get_host(cluster, tenant, entity, params=None):
     return entity_api.get_entity(
         cluster=cluster,
         tenant=tenant,
-        entity_id=entity
+        entity_id=entity,
+        params=params
     )
 
 
