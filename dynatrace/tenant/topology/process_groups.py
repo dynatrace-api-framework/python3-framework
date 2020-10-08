@@ -3,7 +3,7 @@ import dynatrace.requests.request_handler as rh
 
 
 def get_process_groups_tenantwide(cluster, tenant):
-    """Get Information for all process_groups in a tenant"""
+    """Get Information for all process groups in a tenant"""
     return entity_api.get_entities(
         cluster=cluster,
         tenant=tenant,
@@ -12,7 +12,7 @@ def get_process_groups_tenantwide(cluster, tenant):
 
 
 def get_process_group(cluster, tenant, entity):
-    """Get Information for one process_group in a tenant"""
+    """Get Information for one process group in a tenant"""
     return entity_api.get_entity(
         cluster=cluster,
         tenant=tenant,
@@ -21,7 +21,7 @@ def get_process_group(cluster, tenant, entity):
 
 
 def set_process_group_properties(cluster, tenant, entity, prop_json):
-    """Update properties of process_group entity"""
+    """Update properties of process group entity"""
     response = rh.make_api_call(
         cluster=cluster,
         tenant=tenant,
@@ -37,7 +37,7 @@ def set_process_group_properties(cluster, tenant, entity, prop_json):
 
 
 def get_process_group_count_tenantwide(cluster, tenant, params=None):
-    """Get total count for all process_groups in a tenant"""
+    """Get total count for all process groups in a tenant"""
     return entity_api.get_env_entity_count(
         cluster=cluster,
         tenant=tenant,
@@ -47,7 +47,7 @@ def get_process_group_count_tenantwide(cluster, tenant, params=None):
 
 
 def get_process_group_count_clusterwide(cluster, params=None):
-    """Get total count for all process_groups in cluster"""
+    """Get total count for all process groups in cluster"""
     return entity_api.get_cluster_entity_count(
         cluster=cluster,
         entity_type=entity_api.EntityTypes.PROCESS_GROUP,
@@ -56,7 +56,7 @@ def get_process_group_count_clusterwide(cluster, params=None):
 
 
 def get_process_group_count_setwide(full_set, params=None):
-    """Get total count of process_groups in cluster set"""
+    """Get total count of process groups in cluster set"""
     return entity_api.get_set_entity_count(
         full_set=full_set,
         entity_type=entity_api.EntityTypes.PROCESS_GROUP,
