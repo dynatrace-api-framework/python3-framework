@@ -92,13 +92,20 @@ def slow_down(func):
     def wrapper(*args, **kwargs):
         response = func(*args, **kwargs)
 
-        # Standard Dynatrace response headers
-        req_remaining = int(response.headers.get('x-ratelimit-remaining'))
-        req_limit = int(response.headers.get('x-ratelimit-limit'))
-        # If 75% requests already made, slow down
-        print(f"{req_remaining} = {(req_remaining/req_limit)*100}%")
-        if req_remaining/req_limit <= 0.25:
-            time.sleep(1)
+        # Get the cluster from wrapped function
+        if 'cluster' in kwargs:
+            cluster = kwargs.get('cluster')
+        else:
+            cluster = args[0]
+
+        # Only slow-down SaaS
+        if not cluster.get('is_managed'):
+            # Standard Dynatrace response headers
+            req_remaining = int(response.headers.get('x-ratelimit-remaining'))
+            req_limit = int(response.headers.get('x-ratelimit-limit'))
+            # If 75% requests already made, slow down
+            if req_remaining/req_limit <= 0.25:
+                time.sleep(1)
 
         return response
     return wrapper
