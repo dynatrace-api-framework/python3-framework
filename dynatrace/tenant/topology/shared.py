@@ -121,13 +121,39 @@ def get_entities(cluster, tenant, entity_type, params=None):
     else:
         params['entitySelector'] = f'type("{entity_type}")'
 
-    response = rh.make_api_call(
+    response = rh.v2_get_results_whole(
         cluster=cluster,
         tenant=tenant,
+        item='entities',
         endpoint=rh.TenantAPIs.ENTITIES,
         params=params
     )
     return response.json().get('entities')
+
+
+def get_entities_by_page(cluster, tenant, entity_type, params=None):
+    """Get all Entities of a given type, page by page. 
+    Returns a generator, page by page.
+    """
+    if not params:
+        params = {}
+
+    # If params already contains entitySelector, don't overwrite
+    if params.get('entitySelector'):
+        params['entitySelector'] += f'type("{entity_type}")'
+    else:
+        params['entitySelector'] = f'type("{entity_type}")'
+
+    response = rh.v2_get_results_by_page(
+        cluster=cluster,
+        tenant=tenant,
+        endpoint=rh.TenantAPIs.ENTITIES,
+        item='entities',
+        params=params
+    )
+
+    for entity in response:
+        yield entity
 
 
 def get_entity(cluster, tenant, entity_id, params=None):
@@ -144,14 +170,15 @@ def get_entity(cluster, tenant, entity_id, params=None):
     else:
         params['entitySelector'] = f'entityId({entity_id})'
 
-    response = rh.make_api_call(
+    response = rh.v2_get_results_whole(
         cluster=cluster,
         tenant=tenant,
         endpoint=rh.TenantAPIs.ENTITIES,
+        item='entities',
         params=params
     )
 
-    if len(response.json().get('entities')) == 1:
+    if response.get('totalCount') == 1:
         return response.json().get('entities')[0]
 
     return response.json().get('entities')
