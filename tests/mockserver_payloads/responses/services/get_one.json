@@ -1,3 +1,9 @@
 {
-    "entityId": "SERVICE-ABC123DEF456GHI7"
+    "totalCount": 1,
+    "pageSize": 50,
+    "entities": [
+        {
+            "entityId": "SERVICE-ABC123DEF456GHI7"
+        }
+    ]
 }

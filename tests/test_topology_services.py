@@ -3,12 +3,15 @@
 import unittest
 from user_variables import FULL_SET  # pylint: disable=import-error
 from tests import tooling_for_test as testtools
+from dynatrace.tenant.topology.shared import EntityTypes
 from dynatrace.requests.request_handler import TenantAPIs
 from dynatrace.tenant.topology import services
 
 CLUSTER = FULL_SET.get('mockserver1')
 TENANT = 'tenant1'
-URL_PATH = f"{TenantAPIs.V1_TOPOLOGY}/infrastructure/services"
+URL_PATH = f"{TenantAPIs.ENTITIES}"
+TAG_URL_PATH = f"{TenantAPIs.TAGS}"
+TYPE = f"{EntityTypes.SERVICE}"
 REQUEST_DIR = "tests/mockserver_payloads/requests/services"
 RESPONSE_DIR = "tests/mockserver_payloads/responses/services"
 
@@ -25,11 +28,15 @@ class TestGetServices(unittest.TestCase):
             tenant=TENANT,
             url_path=URL_PATH,
             request_type="GET",
+            parameters={
+                'entitySelector': f'type("{TYPE}")'
+            },
             response_file=response_file
         )
 
         result = services.get_services_tenantwide(CLUSTER, TENANT)
-        self.assertEqual(result, testtools.expected_payload(response_file))
+        expected_result = testtools.expected_payload(response_file).get('entities')
+        self.assertEqual(result, expected_result)
 
     def test_get_single_svc(self):
         """Test fetching single service"""
@@ -39,13 +46,17 @@ class TestGetServices(unittest.TestCase):
         testtools.create_mockserver_expectation(
             cluster=CLUSTER,
             tenant=TENANT,
-            url_path=f"{URL_PATH}/{svc_id}",
+            url_path=URL_PATH,
             request_type="GET",
+            parameters={
+                'entitySelector': f'entityId({svc_id})'
+            },
             response_file=response_file
         )
 
         result = services.get_service(CLUSTER, TENANT, svc_id)
-        self.assertEqual(result, testtools.expected_payload(response_file))
+        expected_result = testtools.expected_payload(response_file).get('entities')[0]
+        self.assertEqual(result, expected_result)
 
     def test_get_svc_count(self):
         """Test getting the service count tenantwide."""
@@ -56,6 +67,10 @@ class TestGetServices(unittest.TestCase):
             tenant=TENANT,
             url_path=URL_PATH,
             request_type="GET",
+            parameters={
+                'from': 'now-24h',
+                'entitySelector': f'type("{TYPE}")'
+            },
             response_file=response_file
         )
 
@@ -76,13 +91,16 @@ class TestServiceTags(unittest.TestCase):
             cluster=CLUSTER,
             tenant=TENANT,
             request_type="POST",
-            url_path=f"{URL_PATH}/{svc_id}",
+            url_path=TAG_URL_PATH,
             request_file=request_file,
+            parameters={
+                'entitySelector': f'entityId({svc_id})'
+            },
             response_code=201
         )
 
         result = services.add_service_tags(CLUSTER, TENANT, svc_id, tags)
-        self.assertEqual(result, 201)
+        self.assertEqual(result.status_code, 201)
 
 
 if __name__ == '__main__':

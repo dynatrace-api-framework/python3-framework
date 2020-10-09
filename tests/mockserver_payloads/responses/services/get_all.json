@@ -1,11 +1,15 @@
-[
-    {
-        "entityId": "SERVICE-ABC123DEF456GHI7"
-    },
-    {
-        "entityId": "SERVICE-C096CE0BA471AEFD"
-    },
-    {
-        "entityId": "SERVICE-B71ADA892013D156"
-    }
-]
+{
+    "totalCount": 3,
+    "pageSize": 50,
+    "entities": [
+        {
+            "entityId": "SERVICE-ABC123DEF456GHI7"
+        },
+        {
+            "entityId": "SERVICE-C096CE0BA471AEFD"
+        },
+        {
+            "entityId": "SERVICE-B71ADA892013D156"
+        }
+    ]
+}

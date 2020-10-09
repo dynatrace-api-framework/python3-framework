@@ -1,43 +1,76 @@
-"""Process Group operations from the Dynatrace API"""
-import dynatrace.tenant.topology.shared as topology_shared
+"""Module for process group type entity operations"""
+
+import dynatrace.tenant.topology.shared as entity_api
+import dynatrace.requests.request_handler as rh
 
 
 def get_process_groups_tenantwide(cluster, tenant):
-    """Get Information for all process-groups in a tenant"""
-    return topology_shared.get_env_layer_entities(cluster, tenant, 'process-groups')
-
-
-def get_process_group(cluster, tenant, entity):
-    """Get Information on one process-group for in a tenant"""
-    return topology_shared.get_env_layer_entity(cluster, tenant, 'process-groups', entity)
-
-
-def set_process_group_properties(cluster, tenant, entity, prop_json):
-    """Update properties of process-group entity"""
-    return topology_shared.set_env_layer_properties(
-        cluster,
-        tenant,
-        'process-groups',
-        entity,
-        prop_json
+    """Get Information for all process groups in a tenant"""
+    return entity_api.get_entities(
+        cluster=cluster,
+        tenant=tenant,
+        entity_type=entity_api.EntityTypes.PROCESS_GROUP
     )
 
 
+def get_process_group(cluster, tenant, entity):
+    """Get Information for one process group in a tenant"""
+    return entity_api.get_entity(
+        cluster=cluster,
+        tenant=tenant,
+        entity_id=entity
+    )
+
+
+def set_process_group_properties(cluster, tenant, entity, prop_json):
+    """Update properties of process group entity"""
+    response = rh.make_api_call(
+        cluster=cluster,
+        tenant=tenant,
+        endpoint=rh.TenantAPIs.TAGS,
+        params={
+            'entitySelector': f'entityId("{entity}")'
+        },
+        method=rh.HTTP.POST,
+        json=prop_json
+    )
+
+    return response.json()
+
+
 def get_process_group_count_tenantwide(cluster, tenant, params=None):
-    """Get total count for all process-groups in a tenant"""
-    return topology_shared.get_env_layer_count(cluster, tenant, 'process-groups', params=params)
+    """Get total count for all process groups in a tenant"""
+    return entity_api.get_env_entity_count(
+        cluster=cluster,
+        tenant=tenant,
+        entity_type=entity_api.EntityTypes.PROCESS_GROUP,
+        params=params
+    )
 
 
 def get_process_group_count_clusterwide(cluster, params=None):
-    """Get total count for all process-groups in cluster"""
-    return topology_shared.get_cluster_layer_count(cluster, 'process-groups', params=params)
+    """Get total count for all process groups in cluster"""
+    return entity_api.get_cluster_entity_count(
+        cluster=cluster,
+        entity_type=entity_api.EntityTypes.PROCESS_GROUP,
+        params=params
+    )
 
 
 def get_process_group_count_setwide(full_set, params=None):
-    """Get total count of process-groups for all clusters defined in variable file"""
-    return topology_shared.get_set_layer_count(full_set, 'process-groups', params=params)
+    """Get total count of process groups in cluster set"""
+    return entity_api.get_set_entity_count(
+        full_set=full_set,
+        entity_type=entity_api.EntityTypes.PROCESS_GROUP,
+        params=params
+    )
 
 
 def add_process_group_tags(cluster, tenant, entity, tag_list):
     """Add tags to a process group"""
-    return topology_shared.add_env_layer_tags(cluster, tenant, 'process-groups', entity, tag_list)
+    return entity_api.add_tags(
+        cluster=cluster,
+        tenant=tenant,
+        tag_list=tag_list,
+        entity_id=entity
+    )

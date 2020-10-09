@@ -1,3 +1,9 @@
 {
-  "entityId": "PROCESS_GROUP_INSTANCE-ABC123DEF456GHI7"
+    "totalCount": 1,
+    "pageSize": 50,
+    "entities": [
+        {
+            "entityId": "PROCESS_GROUP_INSTANCE-ABC123DEF456GHI7"
+        }
+    ]
 }
