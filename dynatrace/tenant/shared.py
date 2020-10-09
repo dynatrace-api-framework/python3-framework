@@ -132,7 +132,7 @@ def get_entities(cluster, tenant, entity_type, params=None):
 
 
 def get_entities_by_page(cluster, tenant, entity_type, params=None):
-    """Get all Entities of a given type, page by page. 
+    """Get all Entities of a given type, page by page.
     Returns a generator, page by page.
     """
     if not params:

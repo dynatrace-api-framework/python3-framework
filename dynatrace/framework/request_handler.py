@@ -2,7 +2,7 @@
 from enum import Enum, auto
 import time
 import requests
-from dynatrace.exceptions import InvalidAPIResponseException, ManagedClusterOnlyException
+from dynatrace.framework.exceptions import InvalidAPIResponseException, ManagedClusterOnlyException
 
 
 requests.packages.urllib3.disable_warnings()  # pylint: disable=no-member
