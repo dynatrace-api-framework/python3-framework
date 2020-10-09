@@ -104,10 +104,10 @@ class EntityTypes(Enum):
     CUSTOM_DEVICE_GROUP = auto()
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def __repr__(self):
-        return self.name
+        return str(self.name)
 
 
 def get_entities(cluster, tenant, entity_type, params=None):
@@ -140,9 +140,9 @@ def get_entity(cluster, tenant, entity_id, params=None):
 
     # If params already contains entitySelector, don't overwrite
     if params.get('entitySelector'):
-        params['entitySelector'] += f'entityId("{entity_id}")'
+        params['entitySelector'] += f'entityId({entity_id})'
     else:
-        params['entitySelector'] = f'entityId("{entity_id}")'
+        params['entitySelector'] = f'entityId({entity_id})'
 
     response = rh.make_api_call(
         cluster=cluster,

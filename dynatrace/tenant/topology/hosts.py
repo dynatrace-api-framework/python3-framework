@@ -101,10 +101,11 @@ def get_host_units_tenantwide(cluster, tenant, params=None):
     """
     consumed_host_units = 0
     host_list = rh.make_api_call(
-        cluster,
-        tenant,
+        cluster=cluster,
+        tenant=tenant,
         endpoint=f'{rh.TenantAPIs.V1_TOPOLOGY}/infrastructure/hosts',
-        params=params)
+        params=params
+    ).json()
     for host in host_list:
         consumed_host_units += host['consumedHostUnits']
     return consumed_host_units
