@@ -2,9 +2,9 @@
 import datetime
 import re
 from enum import Enum, auto
-import dynatrace.requests.request_handler as rh
+import dynatrace.framework.request_handler as rh
 import user_variables
-from dynatrace.exceptions import InvalidDateFormatException
+from dynatrace.framework.exceptions import InvalidDateFormatException
 
 
 MZ_ENDPOINT = rh.TenantAPIs.MAINTENANCE_WINDOWS

@@ -2,8 +2,8 @@
 import unittest
 import user_variables  # pylint: disable=import-error
 from tests import tooling_for_test as testtools
-from dynatrace.requests.request_handler import TenantAPIs
-from dynatrace.tenant.topology.shared import EntityTypes
+from dynatrace.framework.request_handler import TenantAPIs
+from dynatrace.tenant.shared import EntityTypes
 from dynatrace.tenant import host_groups
 
 CLUSTER = user_variables.FULL_SET["mockserver1"]

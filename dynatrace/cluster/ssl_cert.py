@@ -1,6 +1,6 @@
 #!/bin/python3
 """Cluster SSL Certificate Operations"""
-import dynatrace.requests.request_handler as rh
+import dynatrace.framework.request_handler as rh
 
 
 def get_cert_details(cluster, entity_type, entity_id):

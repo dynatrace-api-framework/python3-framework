@@ -1,6 +1,6 @@
 """Module or custom device type entity operations"""
 
-import dynatrace.requests.request_handler as rh
+import dynatrace.framework.request_handler as rh
 
 
 def set_custom_properties(cluster, tenant, entity, prop_json):

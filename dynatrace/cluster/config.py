@@ -1,5 +1,5 @@
 """Cluster Config Operations for Dynatrace Managed"""
-import dynatrace.requests.request_handler as rh
+import dynatrace.framework.request_handler as rh
 
 
 def get_node_info(cluster):

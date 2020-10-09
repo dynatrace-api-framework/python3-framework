@@ -1,6 +1,6 @@
 """Test Cases for dynatrace.settings"""
 import unittest
-from dynatrace import settings
+from dynatrace.framework import settings
 
 
 class TestSettings(unittest.TestCase):

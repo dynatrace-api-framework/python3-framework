@@ -1,5 +1,5 @@
 """Module for interacting with the Metrics API"""
-from dynatrace.requests import request_handler as rh
+from dynatrace.framework import request_handler as rh
 
 ENDPOINT = rh.TenantAPIs.METRICS
 

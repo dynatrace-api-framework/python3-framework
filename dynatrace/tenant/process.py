@@ -1,6 +1,6 @@
 """Module for process type entity operations"""
 
-import dynatrace.tenant.topology.shared as entity_api
+import dynatrace.tenant.shared as entity_api
 
 
 def get_processes_tenantwide(cluster, tenant, params=None):

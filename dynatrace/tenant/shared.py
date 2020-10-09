@@ -1,7 +1,7 @@
 """Module for core entity operations"""
 
 from enum import Enum, auto
-from dynatrace.requests import request_handler as rh
+from dynatrace.framework import request_handler as rh
 
 
 class EntityTypes(Enum):

@@ -2,7 +2,7 @@
 import json
 import logging
 import requests
-from dynatrace.requests.request_handler import generate_tenant_url
+from dynatrace.framework.request_handler import generate_tenant_url
 
 logging.basicConfig(filename="testing_tools.log", level=logging.DEBUG)
 

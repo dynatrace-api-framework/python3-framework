@@ -2,10 +2,10 @@
 
 import unittest
 from tests import tooling_for_test as testtools
-from dynatrace import settings
-from dynatrace.requests.request_handler import TenantAPIs
-from dynatrace.tenant.topology.shared import EntityTypes
-from dynatrace.tenant.topology import process
+from dynatrace.framework import settings
+from dynatrace.framework.request_handler import TenantAPIs
+from dynatrace.tenant.shared import EntityTypes
+from dynatrace.tenant import process
 
 FULL_SET = settings.get_setting("FULL_SET")
 CLUSTER = FULL_SET.get('mockserver1')

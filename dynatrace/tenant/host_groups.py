@@ -1,5 +1,5 @@
 """Module for host group type entity operations"""
-import dynatrace.tenant.topology.shared as entity_api
+import dynatrace.tenant.shared as entity_api
 
 # TODO redo export function (break out to export function?)
 # def export_host_groups_setwide(full_set):
