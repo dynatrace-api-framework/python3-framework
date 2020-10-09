@@ -1,7 +1,7 @@
 """Module for application type entity operations"""
 
-import dynatrace.tenant.topology.shared as entity_api
-import dynatrace.requests.request_handler as rh
+import dynatrace.tenant.shared as entity_api
+import dynatrace.framework.request_handler as rh
 
 
 def get_applications_tenantwide(cluster, tenant):

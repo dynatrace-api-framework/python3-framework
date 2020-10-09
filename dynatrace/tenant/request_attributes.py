@@ -1,7 +1,7 @@
 #!/bin/python3
 """Request Attributes Operations"""
 import json
-from dynatrace.requests import request_handler as rh
+from dynatrace.framework import request_handler as rh
 
 ENDPOINT = rh.TenantAPIs.REQUEST_ATTRIBUTES
 
