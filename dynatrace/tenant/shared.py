@@ -128,7 +128,7 @@ def get_entities(cluster, tenant, entity_type, params=None):
         endpoint=rh.TenantAPIs.ENTITIES,
         params=params
     )
-    return response.json().get('entities')
+    return response.get('entities')
 
 
 def get_entities_by_page(cluster, tenant, entity_type, params=None):
@@ -179,9 +179,9 @@ def get_entity(cluster, tenant, entity_id, params=None):
     )
 
     if response.get('totalCount') == 1:
-        return response.json().get('entities')[0]
+        return response.get('entities')[0]
 
-    return response.json().get('entities')
+    return response.get('entities')
 
 
 def get_env_entity_count(cluster, tenant, entity_type, params=None):
