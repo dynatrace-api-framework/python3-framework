@@ -16,8 +16,8 @@ class TestHostGroupFunctions(unittest.TestCase):
     def test_get_host_groups_tenantwide(self):
         """Testing Retreival of all Host Groups within a single tenant"""
         parameters = {
-            "relativeTime": ["day"],
-            "includeDetails": ["true"],
+            "relativeTime": "day",
+            "includeDetails": "true",
         }
         mockserver_response_file = f"{self.RESPONSE_DIR}mock_get_general_1.json"
         tooling_for_test.create_mockserver_expectation(
