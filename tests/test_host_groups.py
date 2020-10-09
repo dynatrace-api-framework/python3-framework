@@ -1,12 +1,15 @@
 """Testing dynatrace.tenant.host_groups"""
 import unittest
 import user_variables  # pylint: disable=import-error
-from tests import tooling_for_test
+from tests import tooling_for_test as testtools
+from dynatrace.requests.request_handler import TenantAPIs
+from dynatrace.tenant.topology.shared import EntityTypes
 from dynatrace.tenant import host_groups
 
 CLUSTER = user_variables.FULL_SET["mockserver1"]
 TENANT = "tenant1"
-URL_PATH = "/api/v1/entity/infrastructure/hosts"
+URL_PATH = f"{TenantAPIs.ENTITIES}"
+TYPE = f"{EntityTypes.HOST_GROUP}"
 
 
 class TestHostGroupFunctions(unittest.TestCase):
@@ -16,23 +19,24 @@ class TestHostGroupFunctions(unittest.TestCase):
     def test_get_host_groups_tenantwide(self):
         """Testing Retreival of all Host Groups within a single tenant"""
         parameters = {
-            "relativeTime": "day",
-            "includeDetails": "true",
+            "from": "now-24h",
+            "entitySelector": f'type("{TYPE}")',
         }
-        mockserver_response_file = f"{self.RESPONSE_DIR}mock_get_general_1.json"
-        tooling_for_test.create_mockserver_expectation(
+        response_file = f"{self.RESPONSE_DIR}mock_get_general_1.json"
+        testtools.create_mockserver_expectation(
             CLUSTER,
             TENANT,
             URL_PATH,
             "GET",
             parameters=parameters,
-            response_file=mockserver_response_file
+            response_file=response_file
         )
         command_tested = host_groups.get_host_groups_tenantwide(
             CLUSTER, TENANT)
 
         expected_result = {
-            'HOST_GROUP-ABCDEFGH12345678': 'HOST_GROUP_1'
+            hg.get('entityId'): hg.get('displayName')
+            for hg in testtools.expected_payload(response_file).get('entities')
         }
         self.assertEqual(command_tested, expected_result)
 
