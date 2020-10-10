@@ -55,6 +55,11 @@ jobs:
           LOG_FILE: super-linter.log
           OUTPUT_FOLDER: super-linter.report
           OUTPUT_FORMAT: tap
+          VALIDATE_YAML: true
+          VALIDATE_JSON: true
+          VALIDATE_EDITORCONFIG: true
+          VALIDATE_MARKDOWN: true
+          VALIDATE_PYTHON_PYLINT: true
       - run: ls
       ########################
       # Retreive tap reports #
