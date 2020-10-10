@@ -223,8 +223,8 @@ def get_entities_by_page(cluster, tenant, entity_type, **kwargs):
         **kwargs
     )
 
-    for entity in response:
-        yield entity
+    for page in response:
+        yield page.get('entities')
 
 
 def get_entity(cluster, tenant, entity_id, **kwargs):
