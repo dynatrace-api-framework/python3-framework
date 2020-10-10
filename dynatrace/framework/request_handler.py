@@ -188,7 +188,7 @@ def v2_get_results_whole(cluster, tenant, endpoint, item, **kwargs):
             cursor=cursor,
             item=item,
             # OneAgents API requires query params stay the same
-            kwargs=kwargs if endpoint == TenantAPIs.ONEAGENTS else None
+            **kwargs if endpoint == TenantAPIs.ONEAGENTS else None
         ))
     return response
 

@@ -19,7 +19,7 @@ def get_host_units_tenantwide(cluster, tenant, **kwargs):
         tenant=tenant,
         item='hosts',
         endpoint=rh.TenantAPIs.ONEAGENTS,
-        params=kwargs
+        **kwargs
     ).get('hosts')
 
     for host in host_list:
@@ -44,7 +44,7 @@ def get_host_units_clusterwide(cluster, aggregated=True, **kwargs):
         tenant_host_units = get_host_units_tenantwide(
             cluster=cluster,
             tenant=tenant,
-            kwargs=kwargs
+            **kwargs
         )
         total_host_units += tenant_host_units
         host_units[tenant] = tenant_host_units
@@ -67,7 +67,7 @@ def get_host_units_setwide(full_set, aggregated=True, **kwargs):
     for cluster in full_set.values():
         cluster_host_units = get_host_units_clusterwide(
             cluster=cluster,
-            kwargs=kwargs
+            **kwargs
         )
         total_host_units += cluster_host_units
         host_units[cluster] = cluster_host_units
@@ -89,5 +89,5 @@ def get_oneagents_tenantwide(cluster, tenant, **kwargs):
         tenant=tenant,
         endpoint=rh.TenantAPIs.ONEAGENTS,
         item='hosts',
-        params=kwargs
+        **kwargs
     ).get('hosts')
