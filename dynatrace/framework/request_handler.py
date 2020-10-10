@@ -193,7 +193,7 @@ def v2_get_results_whole(cluster, tenant, endpoint, item, **kwargs):
     return response
 
 
-def v1_get_results_whole(cluster, endpoint, tenant=None, params=None):
+def v1_get_results_whole(cluster, endpoint, tenant, **kwargs):
     """
     Gets a multi-paged result set and returns it whole. To be used with V1 API
     pagination where the next-page-key is returned in the response headers.
@@ -201,19 +201,19 @@ def v1_get_results_whole(cluster, endpoint, tenant=None, params=None):
     @param cluster - Cluster dictionary from variable_set\n
     @param endpoint - API endpoint to call.\n
     @param tenant - String of tenant name used in cluster dictionary\n
-    @param params - dictionary of query string parameters
+    @kwargs - dictionary of query string parameters
     """
     results = []
     # We'll always make at least 1 call
     cursor = 1
     while cursor:
         if cursor != 1:
-            params['nextPageKey'] = cursor
+            kwargs['nextPageKey'] = cursor
         response = make_api_call(
             cluster=cluster,
             tenant=tenant,
             endpoint=endpoint,
-            params=params
+            params=kwargs
         )
         results.extend(response.json())
         cursor = response.headers.get('next-page-key')
@@ -221,7 +221,7 @@ def v1_get_results_whole(cluster, endpoint, tenant=None, params=None):
     return results
 
 
-def v1_get_results_by_page(cluster, endpoint, tenant=None, params=None):
+def v1_get_results_by_page(cluster, endpoint, tenant, **kwargs):
     """
     Gets a multi-paged result set one page at a time. To be used with V1 API
     pagination where the next-page-key is returned in the response headers.
@@ -234,12 +234,12 @@ def v1_get_results_by_page(cluster, endpoint, tenant=None, params=None):
     cursor = 1
     while cursor:
         if cursor != 1:
-            params['nextPageKey'] = cursor
+            kwargs['nextPageKey'] = cursor
         response = make_api_call(
             cluster=cluster,
             tenant=tenant,
             endpoint=endpoint,
-            params=params
+            params=kwargs
         )
         # Pause here and return this page of results
         yield response.json()
