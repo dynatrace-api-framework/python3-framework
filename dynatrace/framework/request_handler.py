@@ -273,7 +273,7 @@ def v2_get_results_by_page(cluster, tenant, endpoint, item, **kwargs):
             params=kwargs
         ).json()
 
-        yield response
+        yield response.get(item)
         cursor = response.get('nextPageKey')
 
 
