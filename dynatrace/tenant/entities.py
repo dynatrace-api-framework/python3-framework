@@ -110,7 +110,7 @@ class EntityTypes(Enum):
         return str(self.name)
 
 
-def get_entities(cluster, tenant, entity_type, **kwargs):
+def get_entities_tenantwide(cluster, tenant, entity_type, **kwargs):
     """Get all Entities of specified type in the tenant.\n
 
     @param cluster - Dynatrace Cluster (from variable set)\n
@@ -155,7 +155,7 @@ def get_entities_clusterwide(cluster, entity_type, aggregated=True, **kwargs):
     all_entities = []
 
     for tenant in cluster['tenant']:
-        tenant_entities = get_entities(
+        tenant_entities = get_entities_tenantwide(
             cluster=cluster,
             tenant=tenant,
             entity_type=entity_type,
