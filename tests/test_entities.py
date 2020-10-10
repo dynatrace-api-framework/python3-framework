@@ -3,7 +3,7 @@ Test Suite for Entities API
 """
 import unittest
 from dynatrace.tenant.entities import EntityTypes
-from user_variables import FULL_SET  # pylint: disable=import-error
+from variable_sets.radu_vars import FULL_SET  # pylint: disable=import-error
 from tests import tooling_for_test as testtools
 from dynatrace.framework.request_handler import TenantAPIs
 from dynatrace.tenant import entities
@@ -20,7 +20,7 @@ class TestGetEntities(unittest.TestCase):
     """Tests cases for fetching entities."""
 
     def test_get_entities(self):
-        """Test fetching all hosts"""
+        """Test fetching all entities of given type tenant-wide"""
 
         response_file = f"{RESPONSE_DIR}/get_all.json"
 
@@ -35,7 +35,47 @@ class TestGetEntities(unittest.TestCase):
             response_file=response_file
         )
 
-        result = entities.get_entities(CLUSTER, TENANT, EntityTypes.HOST)
+        result = entities.get_entities_tenantwide(CLUSTER, TENANT, EntityTypes.HOST)
+        expected_result = testtools.expected_payload(response_file).get('entities')
+        self.assertEqual(result, expected_result)
+
+    def test_get_entities_clusterwide(self):
+        """Test fetching all entities of given type cluster-wide"""
+
+        response_file = f"{RESPONSE_DIR}/get_all.json"
+
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=URL_PATH,
+            request_type="GET",
+            parameters={
+                'entitySelector': 'type(HOST)'
+            },
+            response_file=response_file
+        )
+
+        result = entities.get_entities_clusterwide(CLUSTER, EntityTypes.HOST)
+        expected_result = testtools.expected_payload(response_file).get('entities')
+        self.assertEqual(result, expected_result)
+
+    def test_get_entities_setwide(self):
+        """Test fetching all entities of given type set-wide"""
+
+        response_file = f"{RESPONSE_DIR}/get_all.json"
+
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=URL_PATH,
+            request_type="GET",
+            parameters={
+                'entitySelector': 'type(HOST)'
+            },
+            response_file=response_file
+        )
+
+        result = entities.get_entities_setwide(FULL_SET, EntityTypes.HOST)
         expected_result = testtools.expected_payload(response_file).get('entities')
         self.assertEqual(result, expected_result)
 
@@ -60,6 +100,26 @@ class TestGetEntities(unittest.TestCase):
         expected_result = testtools.expected_payload(response_file).get('entities')[0]
         self.assertEqual(result, expected_result)
 
+    def test_get_entities_by_page(self):
+        """Test fetching tenantwide entities by page"""
+
+        response_file = f"{RESPONSE_DIR}/get_all.json"
+
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=URL_PATH,
+            request_type="GET",
+            parameters={
+                'entitySelector': 'type(HOST)'
+            },
+            response_file=response_file
+        )
+
+        result = entities.get_entities_by_page(CLUSTER, TENANT, EntityTypes.HOST)
+        expected_result = testtools.expected_payload(response_file).get('entities')
+        self.assertEqual(next(result), expected_result)
+
     def test_get_entity_count_tenantwide(self):
         """Test getting the count of entities within a tenant."""
 
@@ -78,6 +138,46 @@ class TestGetEntities(unittest.TestCase):
         )
 
         result = entities.get_entity_count_tenantwide(CLUSTER, TENANT, EntityTypes.HOST)
+        self.assertEqual(result, 3)
+
+    def test_get_entity_count_clusterwide(self):
+        """Test getting the count of entities within a cluster."""
+
+        response_file = f"{RESPONSE_DIR}/get_all.json"
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=URL_PATH,
+            request_type="GET",
+            response_file=response_file,
+            parameters={
+                'from': 'now-24h',
+                'pageSize': '1',
+                'entitySelector': 'type(HOST)'
+            }
+        )
+
+        result = entities.get_entity_count_clusterwide(CLUSTER, EntityTypes.HOST)
+        self.assertEqual(result, 3)
+
+    def test_get_entity_count_setwide(self):
+        """Test getting the count of entities within a full set."""
+
+        response_file = f"{RESPONSE_DIR}/get_all.json"
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=URL_PATH,
+            request_type="GET",
+            response_file=response_file,
+            parameters={
+                'from': 'now-24h',
+                'pageSize': '1',
+                'entitySelector': 'type(HOST)'
+            }
+        )
+
+        result = entities.get_entity_count_setwide(FULL_SET, EntityTypes.HOST)
         self.assertEqual(result, 3)
 
 
