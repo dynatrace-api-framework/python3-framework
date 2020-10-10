@@ -14,18 +14,17 @@ def get_host_units_tenantwide(cluster, tenant, **kwargs):
     """
     host_units = 0
 
-    host_list = rh.v2_get_results_whole(
+    host_list = rh.v1_get_results_whole(
         cluster=cluster,
         tenant=tenant,
-        item='hosts',
-        endpoint=rh.TenantAPIs.ONEAGENTS,
+        endpoint=f'{rh.TenantAPIs.V1_TOPOLOGY}/infrastructure/hosts',
         **kwargs
-    ).get('hosts')
+    )
 
     for host in host_list:
-        host_units += host['hostInfo']['consumedHostUnits']
+        host_units += round(host['consumedHostUnits'], ndigits=3)
 
-    return host_units
+    return round(host_units, ndigits=3)
 
 
 def get_host_units_clusterwide(cluster, aggregated=True, **kwargs):
