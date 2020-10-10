@@ -2,9 +2,9 @@
 Test Suite for Entities API
 """
 import unittest
-from dynatrace.tenant.entities import EntityTypes
 from user_variables import FULL_SET  # pylint: disable=import-error
 from tests import tooling_for_test as testtools
+from dynatrace.tenant.entities import EntityTypes
 from dynatrace.framework.request_handler import TenantAPIs
 from dynatrace.tenant import entities
 
