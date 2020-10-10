@@ -1,7 +1,6 @@
 """Module for OneAgent operations."""
 
 import dynatrace.framework.request_handler as rh
-from dynatrace.framework.request_handler import v2_get_results_whole
 
 
 def get_host_units_tenantwide(cluster, tenant, **kwargs):
@@ -83,7 +82,7 @@ def get_oneagents_tenantwide(cluster, tenant, **kwargs):
 
     @returns - list of OneAgents
     """
-    return v2_get_results_whole(
+    return rh.v2_get_results_whole(
         cluster=cluster,
         tenant=tenant,
         endpoint=rh.TenantAPIs.ONEAGENTS,
