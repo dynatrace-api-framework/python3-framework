@@ -111,7 +111,7 @@ class EntityTypes(Enum):
 
 
 def get_entities(cluster, tenant, entity_type, **kwargs):
-    """Get all Entities of specified type.\n
+    """Get all Entities of specified type in the tenant.\n
 
     @param cluster - Dynatrace Cluster (from variable set)\n
     @param tenant - Dynatrace Tenant (from variable set)\n
@@ -133,9 +133,67 @@ def get_entities(cluster, tenant, entity_type, **kwargs):
         tenant=tenant,
         item='entities',
         endpoint=rh.TenantAPIs.ENTITIES,
-        params=kwargs
+        **kwargs
     )
     return response.get('entities')
+
+
+def get_entities_clusterwide(cluster, entity_type, aggregated=True, **kwargs):
+    """Get all Entities of specified type in the cluster.
+    \n
+    @param cluster - Dynatrace Cluster (from variable set)\n
+    @param entity_type - use EntityTypes enum\n
+    @param aggregated - whether results should be split by tenant\n
+    @kwargs entitySelector - used to filter entities\n
+    @kwargs from - timeframe start\n
+    @kwargs to - timeframe end\n
+    @kwargs fields - entity detail fields\n\n
+    @return - List of all entities matching the selection if not aggregated.
+              Dictionary with tenants as keys if aggregated.
+    """
+    split_entities = {}
+    all_entities = []
+
+    for tenant in cluster['tenant']:
+        tenant_entities = get_entities(
+            cluster=cluster,
+            tenant=tenant,
+            entity_type=entity_type,
+            **kwargs
+        )
+        all_entities.extend(tenant_entities)
+        split_entities[tenant] = tenant_entities
+
+    return all_entities if aggregated else split_entities
+
+
+def get_entities_setwide(full_set, entity_type, aggregated=True, **kwargs):
+    """Get all Entities of specified type in the full cluster set.
+    \n
+    @param full_set - Variable set (from user variables)\n
+    @param entity_type - use EntityTypes enum\n
+    @param aggregated - whether results should be split by cluster\n
+    @kwargs entitySelector - used to filter entities\n
+    @kwargs from - timeframe start\n
+    @kwargs to - timeframe end\n
+    @kwargs fields - entity detail fields\n\n
+    @return - List of all entities matching the selection if not aggregated.
+              Dictionary with clusters as keys if aggregated.
+    """
+    split_entities = {}
+    all_entities = []
+
+    for cluster in full_set.values():
+        cluster_entities = get_entities_clusterwide(
+            cluster=cluster,
+            entity_type=entity_type,
+            **kwargs
+        )
+
+        all_entities.extend(cluster_entities)
+        split_entities[cluster] = cluster_entities
+
+    return all_entities if aggregated else split_entities
 
 
 def get_entities_by_page(cluster, tenant, entity_type, **kwargs):
@@ -162,7 +220,7 @@ def get_entities_by_page(cluster, tenant, entity_type, **kwargs):
         tenant=tenant,
         endpoint=rh.TenantAPIs.ENTITIES,
         item='entities',
-        params=kwargs
+        **kwargs
     )
 
     for entity in response:
@@ -193,7 +251,7 @@ def get_entity(cluster, tenant, entity_id, **kwargs):
         tenant=tenant,
         endpoint=rh.TenantAPIs.ENTITIES,
         item='entities',
-        params=kwargs
+        **kwargs
     )
 
     if response.get('totalCount') == 1:
@@ -253,7 +311,7 @@ def get_entity_count_clusterwide(cluster, entity_type, **kwargs):
             cluster=cluster,
             tenant=tenant,
             entity_type=entity_type,
-            params=kwargs
+            **kwargs
         )
     return count
 
@@ -274,7 +332,7 @@ def get_entity_count_setwide(full_set, entity_type, **kwargs):
         count += get_entity_count_clusterwide(
             cluster=cluster,
             entity_type=entity_type,
-            params=kwargs
+            **kwargs
         )
     return count
 
