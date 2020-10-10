@@ -3,7 +3,7 @@
 """Management Zone Operations for Environment"""
 import copy
 import json
-from dynatrace.requests import request_handler as rh
+from dynatrace.framework import request_handler as rh
 
 ENDPOINT = rh.TenantAPIs.MANAGEMENT_ZONES
 

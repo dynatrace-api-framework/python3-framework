@@ -1,5 +1,5 @@
 """Timerseries Operations from Environment V1 API"""
-from dynatrace.requests import request_handler as rh
+from dynatrace.framework import request_handler as rh
 
 ENDPOINT = "timeseries/"
 

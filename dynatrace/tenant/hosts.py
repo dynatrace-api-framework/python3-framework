@@ -1,52 +1,90 @@
-"""Host operations from the Dynatrace API"""
-import dynatrace.tenant.topology.shared as topology_shared
-from dynatrace.requests import request_handler as rh
+"""Module for host type entity operations"""
+
+import dynatrace.tenant.shared as entity_api
+import dynatrace.framework.request_handler as rh
 
 
 def get_hosts_tenantwide(cluster, tenant, params=None):
     """Get Information for all hosts in a tenant"""
-    return topology_shared.get_env_layer_entities(cluster, tenant, 'hosts', params=params)
+    return entity_api.get_entities(
+        cluster=cluster,
+        tenant=tenant,
+        entity_type=entity_api.EntityTypes.HOST,
+        params=params
+    )
 
 
 def get_host(cluster, tenant, entity, params=None):
-    """Get Information on one host for in a tenant"""
-    return topology_shared.get_env_layer_entity(cluster, tenant, 'hosts', entity, params=params)
+    """Get Information for one host in a tenant"""
+    return entity_api.get_entity(
+        cluster=cluster,
+        tenant=tenant,
+        entity_id=entity,
+        params=params
+    )
 
 
 def set_host_properties(cluster, tenant, entity, prop_json):
     """Update properties of host entity"""
-    return topology_shared.set_env_layer_properties(cluster, tenant, 'hosts', entity, prop_json)
+    response = rh.make_api_call(
+        cluster=cluster,
+        tenant=tenant,
+        endpoint=rh.TenantAPIs.TAGS,
+        params={
+            'entitySelector': f'entityId("{entity}")'
+        },
+        method=rh.HTTP.POST,
+        json=prop_json
+    )
+
+    return response.json()
 
 
 def get_host_count_tenantwide(cluster, tenant, params=None):
     """Get total count for all hosts in a tenant"""
-    return topology_shared.get_env_layer_count(cluster, tenant, 'hosts', params=params)
+    return entity_api.get_env_entity_count(
+        cluster=cluster,
+        tenant=tenant,
+        entity_type=entity_api.EntityTypes.HOST,
+        params=params
+    )
 
 
 def get_host_count_clusterwide(cluster, params=None):
     """Get total count for all hosts in cluster"""
-    return topology_shared.get_cluster_layer_count(cluster, 'hosts', params=params)
+    return entity_api.get_cluster_entity_count(
+        cluster=cluster,
+        entity_type=entity_api.EntityTypes.HOST,
+        params=params
+    )
 
 
 def get_host_count_setwide(full_set, params=None):
-    """Get total count of hosts for all clusters definied in variable file"""
-    return topology_shared.get_set_layer_count(full_set, 'hosts', params=params)
+    """Get total count of hosts in cluster set"""
+    return entity_api.get_set_entity_count(
+        full_set=full_set,
+        entity_type=entity_api.EntityTypes.HOST,
+        params=params
+    )
 
 
 def add_host_tags(cluster, tenant, entity, tag_list):
     """Add tags to host"""
-    return topology_shared.add_env_layer_tags(cluster, tenant, 'hosts', entity, tag_list)
+    return entity_api.add_tags(
+        cluster=cluster,
+        tenant=tenant,
+        tag_list=tag_list,
+        entity_id=entity
+    )
 
 
 def delete_host_tag(cluster, tenant, entity, tag):
     """Remove single tag from host"""
-    if tag is None:
-        raise TypeError("Tag cannot be None!")
-    return rh.make_api_call(
+    return entity_api.delete_tag(
         cluster=cluster,
         tenant=tenant,
-        method=rh.HTTP.DELETE,
-        endpoint=f"{rh.TenantAPIs.V1_TOPOLOGY}/infrastructure/hosts/{entity}/tags/{tag}"
+        tag_key=tag,
+        entity_id=entity
     )
 
 
@@ -62,9 +100,14 @@ def get_host_units_tenantwide(cluster, tenant, params=None):
         float: total consumed units used in tenant
     """
     consumed_host_units = 0
-    host_list = get_hosts_tenantwide(cluster, tenant, params=params)
+    host_list = rh.make_api_call(
+        cluster=cluster,
+        tenant=tenant,
+        endpoint=f'{rh.TenantAPIs.V1_TOPOLOGY}/infrastructure/hosts',
+        params=params
+    ).json()
     for host in host_list:
-        consumed_host_units = consumed_host_units + host['consumedHostUnits']
+        consumed_host_units += host['consumedHostUnits']
     return consumed_host_units
 
 

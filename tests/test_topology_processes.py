@@ -2,14 +2,16 @@
 
 import unittest
 from tests import tooling_for_test as testtools
-from dynatrace import settings
-from dynatrace.requests.request_handler import TenantAPIs
-from dynatrace.tenant.topology import process
+from dynatrace.framework import settings
+from dynatrace.framework.request_handler import TenantAPIs
+from dynatrace.tenant.shared import EntityTypes
+from dynatrace.tenant import process
 
 FULL_SET = settings.get_setting("FULL_SET")
 CLUSTER = FULL_SET.get('mockserver1')
 TENANT = 'tenant1'
-URL_PATH = f"{TenantAPIs.V1_TOPOLOGY}/infrastructure/processes"
+URL_PATH = f"{TenantAPIs.ENTITIES}"
+TYPE = f"{EntityTypes.PROCESS_GROUP_INSTANCE}"
 RESPONSE_DIR = "tests/mockserver_payloads/responses/processes"
 
 
@@ -25,11 +27,15 @@ class TestGetProcesses(unittest.TestCase):
             tenant=TENANT,
             url_path=URL_PATH,
             request_type="GET",
+            parameters={
+                'entitySelector': f'type("{TYPE}")'
+            },
             response_file=response_file
         )
 
         result = process.get_processes_tenantwide(CLUSTER, TENANT)
-        self.assertEqual(result, testtools.expected_payload(response_file))
+        expected_result = testtools.expected_payload(response_file).get('entities')
+        self.assertEqual(result, expected_result)
 
     def test_get_single_process(self):
         """Tests getting one specific process."""
@@ -39,13 +45,17 @@ class TestGetProcesses(unittest.TestCase):
         testtools.create_mockserver_expectation(
             cluster=CLUSTER,
             tenant=TENANT,
-            url_path=f"{URL_PATH}/{process_id}",
+            url_path=URL_PATH,
             request_type="GET",
+            parameters={
+                'entitySelector': f'entityId({process_id})'
+            },
             response_file=response_file
         )
 
         result = process.get_process(CLUSTER, TENANT, process_id)
-        self.assertEqual(result, testtools.expected_payload(response_file))
+        expected_result = testtools.expected_payload(response_file).get('entities')[0]
+        self.assertEqual(result, expected_result)
 
 
 if __name__ == '__main__':

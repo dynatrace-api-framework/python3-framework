@@ -2,7 +2,7 @@
 import json
 import logging
 import requests
-from dynatrace.requests.request_handler import generate_tenant_url
+from dynatrace.framework.request_handler import generate_tenant_url
 
 logging.basicConfig(filename="testing_tools.log", level=logging.DEBUG)
 
@@ -40,9 +40,16 @@ def create_mockserver_expectation(cluster, tenant, url_path, request_type, **kwa
 
     logging.debug("URL PATH: %s", url_path)
     logging.debug("KWARGS %s", kwargs)
-    # Paramaters should always at least have Api-Token
+
+    # Mockserver expectation syntax expects each parameter's matching values
+    # to be given as a list (even if just 1 value)
     if 'parameters' in kwargs:
-        expectation["httpRequest"]["queryStringParameters"] = kwargs['parameters']
+        expectation["httpRequest"]["queryStringParameters"] = {
+            param: [
+                kwargs['parameters'][param]
+            ]
+            for param in kwargs['parameters']
+        }
 
     if "request_file" in kwargs:
         with open(kwargs['request_file']) as open_file:
