@@ -101,7 +101,7 @@ def slow_down(func):
             cluster = args[0]
 
         # Only slow-down SaaS
-        if not cluster.get('is_managed'):
+        if not cluster.get('is_managed') and 'x-ratelimit-remaining' in response.headers:
             # Standard Dynatrace response headers
             req_remaining = int(response.headers.get('x-ratelimit-remaining'))
             req_limit = int(response.headers.get('x-ratelimit-limit'))

@@ -23,7 +23,7 @@ def create_mockserver_expectation(cluster, tenant, url_path, request_type, **kwa
     expectation = {
         "httpRequest": {
             "headers": {
-                "Authorization": [f"Api-Token {cluster.get('api_token').get(tenant)}"],
+                "Authorization": [f"Api-Token {cluster.get('api_token').get(tenant)}"]
             },
             "path": url_path,
             "method": request_type
@@ -67,7 +67,9 @@ def create_mockserver_expectation(cluster, tenant, url_path, request_type, **kwa
             "json": response_payload,
         }
         expectation["httpResponse"]["headers"] = {
-            "content-type": ["application/json"]
+            "content-type": ["application/json"],
+            "x-ratelimit-remaining": ['100000000'],
+            "x-ratelimit-limit": ['100000000']
         }
 
     if "response_code" in kwargs:
