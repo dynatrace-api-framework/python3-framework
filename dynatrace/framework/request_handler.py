@@ -246,7 +246,7 @@ def v1_get_results_by_page(cluster, endpoint, tenant=None, params=None):
         cursor = response.headers.get('next-page-key')
 
 
-def v2_get_results_by_page(cluster, endpoint, item, tenant=None, params=None):
+def v2_get_results_by_page(cluster, tenant, endpoint, item, **kwargs):
     """
     Gets a multi-paged result set one page at a time. To be used with V2 API
     pagination where the nextPageKey is returned in the body of the response.
@@ -259,15 +259,18 @@ def v2_get_results_by_page(cluster, endpoint, item, tenant=None, params=None):
     # We'll always make at least 1 call
     cursor = 1
     while cursor:
-        # On subsequent calls, must omit all other params
+        # On subsequent calls, must omit all other params (except OneAgents API)
         if cursor != 1:
-            params = dict(nextPageKey=cursor)
+            if endpoint == TenantAPIs.ONEAGENTS:
+                kwargs['nextPageKey'] = cursor
+            else:
+                kwargs = dict(nextPageKey=cursor)
 
         response = make_api_call(
             cluster=cluster,
             endpoint=endpoint,
             tenant=tenant,
-            params=params
+            params=kwargs
         ).json()
 
         yield response
