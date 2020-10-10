@@ -1,25 +1,26 @@
 """
-Test Suite for Topology Hosts
+Test Suite for Entities API
 """
 import unittest
-from user_variables import FULL_SET  # pylint: disable=import-error
+from dynatrace.tenant.entities import EntityTypes
+# from user_variables import FULL_SET  # pylint: disable=import-error
 from tests import tooling_for_test as testtools
 from dynatrace.framework.request_handler import TenantAPIs
-from dynatrace.tenant import hosts
+from dynatrace.tenant import entities
 
+from variable_sets.radu_vars import FULL_SET  # TODO: Delete line after testing
 CLUSTER = FULL_SET["mockserver1"]
 TENANT = "tenant1"
 URL_PATH = str(TenantAPIs.ENTITIES)
-V1_URL_PATH = f'{TenantAPIs.V1_TOPOLOGY}/infrastructure/hosts'
 TAG_URL_PATH = str(TenantAPIs.TAGS)
-REQUEST_DIR = "tests/mockserver_payloads/requests/hosts"
-RESPONSE_DIR = "tests/mockserver_payloads/responses/hosts"
+REQUEST_DIR = "tests/mockserver_payloads/requests/entities"
+RESPONSE_DIR = "tests/mockserver_payloads/responses/entities"
 
 
-class TestGetHosts(unittest.TestCase):
-    """Tests cases for fetching topology hosts."""
+class TestGetEntities(unittest.TestCase):
+    """Tests cases for fetching entities."""
 
-    def test_get_all_hosts(self):
+    def test_get_entities(self):
         """Test fetching all hosts"""
 
         response_file = f"{RESPONSE_DIR}/get_all.json"
@@ -30,17 +31,17 @@ class TestGetHosts(unittest.TestCase):
             url_path=URL_PATH,
             request_type="GET",
             parameters={
-                'entitySelector': 'type("HOST")'
+                'entitySelector': 'type(HOST)'
             },
             response_file=response_file
         )
 
-        result = hosts.get_hosts_tenantwide(CLUSTER, TENANT)
+        result = entities.get_entities(CLUSTER, TENANT, EntityTypes.HOST)
         expected_result = testtools.expected_payload(response_file).get('entities')
         self.assertEqual(result, expected_result)
 
-    def test_get_single_host(self):
-        """Test fetching a specific host"""
+    def test_get_entity(self):
+        """Test fetching a single entity."""
 
         host_id = "HOST-ABC123DEF456GHIJ"
         response_file = f"{RESPONSE_DIR}/get_single.json"
@@ -56,12 +57,12 @@ class TestGetHosts(unittest.TestCase):
             response_file=response_file
         )
 
-        result = hosts.get_host(CLUSTER, TENANT, host_id)
+        result = entities.get_entity(CLUSTER, TENANT, host_id)
         expected_result = testtools.expected_payload(response_file).get('entities')[0]
         self.assertEqual(result, expected_result)
 
-    def test_get_host_count(self):
-        """Test getting the count of hosts in a tenant."""
+    def test_get_entity_count_tenantwide(self):
+        """Test getting the count of entities within a tenant."""
 
         response_file = f"{RESPONSE_DIR}/get_all.json"
         testtools.create_mockserver_expectation(
@@ -72,34 +73,20 @@ class TestGetHosts(unittest.TestCase):
             response_file=response_file,
             parameters={
                 'from': 'now-24h',
-                'entitySelector': 'type("HOST")'
+                'pageSize': '1',
+                'entitySelector': 'type(HOST)'
             }
         )
 
-        result = hosts.get_host_count_tenantwide(CLUSTER, TENANT)
+        result = entities.get_entity_count_tenantwide(CLUSTER, TENANT, EntityTypes.HOST)
         self.assertEqual(result, 3)
-
-    def test_get_host_units(self):
-        """Tests getting the consumed host units in a tenant."""
-
-        response_file = f"{RESPONSE_DIR}/v1_get_all.json"
-        testtools.create_mockserver_expectation(
-            cluster=CLUSTER,
-            tenant=TENANT,
-            url_path=V1_URL_PATH,
-            request_type="GET",
-            response_file=response_file
-        )
-
-        result = hosts.get_host_units_tenantwide(CLUSTER, TENANT)
-        self.assertEqual(result, 4)
 
 
 class TestHostTagging(unittest.TestCase):
-    """Test cases for testing host-level tagging."""
+    """Test cases for testing entity tagging."""
 
     def test_add_tags(self):
-        """Test adding two tags to a specific host."""
+        """Test adding two tags to a specific entity."""
 
         host_id = "HOST-ABC123DEF456GHIJ"
         request_file = f"{REQUEST_DIR}/tags.json"
@@ -117,7 +104,12 @@ class TestHostTagging(unittest.TestCase):
             response_code=201
         )
 
-        result = hosts.add_host_tags(CLUSTER, TENANT, host_id, tags)
+        result = entities.add_tags(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            tag_list=tags,
+            entitySelector=f'entityId({host_id})'
+        )
         self.assertEqual(result.status_code, 201)
 
     def test_delete_tags(self):
@@ -134,7 +126,12 @@ class TestHostTagging(unittest.TestCase):
             response_code=204
         )
 
-        result = hosts.delete_host_tag(CLUSTER, TENANT, host_id, tag)
+        result = entities.delete_tag(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            tag_key=tag,
+            entitySelector=f'entityId({host_id})'
+        )
         self.assertEqual(204, result.status_code)
 
 
