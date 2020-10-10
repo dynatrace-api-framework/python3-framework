@@ -1,0 +1,9 @@
+[run]
+omit =
+    # omit anything in a .local directory anywhere
+    */lib/python*/*
+    # omit everything in /usr
+    /usr/*
+    # omit in the test tools
+    tests/*
+    user_variables.py

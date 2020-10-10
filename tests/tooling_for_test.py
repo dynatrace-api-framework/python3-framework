@@ -1,19 +1,32 @@
 """Mockserver Expectation Setup"""
-import requests
 import json
 import logging
+import requests
 from dynatrace.requests.request_handler import generate_tenant_url
 
 logging.basicConfig(filename="testing_tools.log", level=logging.DEBUG)
 
 
 def create_mockserver_expectation(cluster, tenant, url_path, request_type, **kwargs):
-    requests.packages.urllib3.disable_warnings()
+    """Create Payload For MockServer to expect and respond
+
+    Args:
+        cluster (Dictionary): [description]
+        tenant (str): [description]
+        url_path (str): [description]
+        request_type (HTTP str): [description]
+
+    Raises:
+        ValueError: [description]
+    """
+    requests.packages.urllib3.disable_warnings()  # pylint: disable=no-member
     expectation = {
         "httpRequest": {
-            "queryStringParameters": {
-                "Api-Token": [cluster.get('api_token').get(tenant)]
+            "headers": {
+                "Authorization": [f"Api-Token {cluster.get('api_token').get(tenant)}"],
             },
+            "path": url_path,
+            "method": request_type
         },
         "httpResponse": {
             "statusCode": 200
@@ -25,22 +38,23 @@ def create_mockserver_expectation(cluster, tenant, url_path, request_type, **kwa
         "id": "OneOff",
     }
 
-    logging.debug(f"KWARGS {kwargs}")
+    logging.debug("URL PATH: %s", url_path)
+    logging.debug("KWARGS %s", kwargs)
     # Paramaters should always at least have Api-Token
     if 'parameters' in kwargs:
         expectation["httpRequest"]["queryStringParameters"] = kwargs['parameters']
 
     if "request_file" in kwargs:
-        with open(kwargs['request_file']) as f:
-            request_payload = json.load(f)
+        with open(kwargs['request_file']) as open_file:
+            request_payload = json.load(open_file)
         expectation["httpRequest"]["body"] = {
             "type": "JSON",
             "json": request_payload,
         }
 
     if "response_file" in kwargs:
-        with open(kwargs['response_file']) as f:
-            response_payload = json.load(f)
+        with open(kwargs['response_file']) as open_file:
+            response_payload = json.load(open_file)
         expectation["httpResponse"]["body"] = {
             "type": "JSON",
             "json": response_payload,
@@ -50,7 +64,7 @@ def create_mockserver_expectation(cluster, tenant, url_path, request_type, **kwa
         }
 
     if "response_code" in kwargs:
-        expectation['httpResponse']['statusCode'] = kwargs['response_code']
+        expectation["httpResponse"]["statusCode"] = kwargs["response_code"]
 
     if "mock_id" in kwargs:
         expectation["id"] = kwargs["mock_id"]
@@ -71,5 +85,13 @@ def create_mockserver_expectation(cluster, tenant, url_path, request_type, **kwa
 
 
 def expected_payload(json_file):
-    with open(json_file) as f:
-        return json.load(f)
+    """The payload that should be tested against
+
+    Args:
+        json_file (str): file name for result json
+
+    Returns:
+        dict: payload of the expected result JSON
+    """
+    with open(json_file) as open_file:
+        return json.load(open_file)

@@ -38,15 +38,9 @@ def pull_to_files(cluster, tenant, ignore_disabled=True):
     return rules_file_list
 
 
-def push_from_files(file_list, cluster, tenant):
-    """Push Service Naming Rules from Files"""
-    # TODO add safeties
-    for file_name in file_list:
-        print(file_name)
-
-
 def generate_file_list():
+    """Generate File List from files in JSON directory"""
     file_list = os.listdir("./jsons/request_naming/")
-    for f in file_list:
-        print(str.isdigit(f))
+    for file_name in file_list:
+        print(str.isdigit(file_name))
     # print(file_list.sort(key=lambda f: filter(str.isdigit, f)))
