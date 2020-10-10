@@ -183,9 +183,9 @@ def get_entities_setwide(full_set, entity_type, aggregated=True, **kwargs):
     split_entities = {}
     all_entities = []
 
-    for cluster in full_set.values():
+    for cluster in full_set:
         cluster_entities = get_entities_clusterwide(
-            cluster=cluster,
+            cluster=full_set[cluster],
             entity_type=entity_type,
             **kwargs
         )
@@ -328,9 +328,9 @@ def get_entity_count_setwide(full_set, entity_type, **kwargs):
     @return - number of entities
     """
     count = 0
-    for cluster in full_set.values():
+    for cluster in full_set:
         count += get_entity_count_clusterwide(
-            cluster=cluster,
+            cluster=full_set[cluster],
             entity_type=entity_type,
             **kwargs
         )
