@@ -62,9 +62,9 @@ def get_host_units_setwide(full_set, aggregated=True, **kwargs):
     total_host_units = 0
     host_units = {}
 
-    for cluster in full_set.values():
+    for cluster in full_set:
         cluster_host_units = get_host_units_clusterwide(
-            cluster=cluster,
+            cluster=full_set[cluster],
             **kwargs
         )
         total_host_units += cluster_host_units
