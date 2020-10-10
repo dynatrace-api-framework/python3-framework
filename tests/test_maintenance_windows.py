@@ -14,6 +14,8 @@ TEST_RANGE_END = "2020-01-02 00:00"
 TEST_PAYLOAD_TITLE = "Test Payload"
 TEST_PAYLOAD_DESC = "Generating Payload for Test"
 
+REQUEST_DIR = "tests/mockserver_payloads/requests/maintenance/"
+RESPONSE_DIR = "tests/mockserver_payloads/responses/maintenance/"
 
 class TestMaintenanceWindowCreate(unittest.TestCase):
     """Test Cases for Creating a Maintenance Window"""
@@ -24,8 +26,8 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
         """
         Testing create daily Maintenance Window with no scope
         """
-        mockserver_request_file = f"{self.REQUEST_DIR}mock_create_daily_1.json"
-        mockserver_response_file = f"{self.RESPONSE_DIR}mock_create_1.json"
+        mockserver_request_file = f"{REQUEST_DIR}mock_create_daily_1.json"
+        mockserver_response_file = f"{RESPONSE_DIR}mock_create_1.json"
         tooling_for_test.create_mockserver_expectation(
             CLUSTER,
             TENANT,
@@ -54,8 +56,8 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
 
     def test_create_daily_single_tag(self):
         """Testing create daily Maintenance Window with a single tag scope"""
-        mockserver_request_file = f"{self.REQUEST_DIR}mock_create_daily_single_tag_1.json"
-        mockserver_response_file = f"{self.RESPONSE_DIR}mock_create_1.json"
+        mockserver_request_file = f"{REQUEST_DIR}mock_create_daily_single_tag_1.json"
+        mockserver_response_file = f"{RESPONSE_DIR}mock_create_1.json"
         tooling_for_test.create_mockserver_expectation(
             CLUSTER,
             TENANT,
@@ -87,8 +89,8 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
 
     def test_create_daily_tags_and(self):
         """Testing Payloads with multiple tags in an \"AND\" configuration"""
-        mockserver_request_file = f"{self.REQUEST_DIR}mock_create_daily_multi_tags_and_1.json"
-        mockserver_response_file = f"{self.RESPONSE_DIR}mock_create_1.json"
+        mockserver_request_file = f"{REQUEST_DIR}mock_create_daily_multi_tags_and_1.json"
+        mockserver_response_file = f"{RESPONSE_DIR}mock_create_1.json"
 
         tooling_for_test.create_mockserver_expectation(
             CLUSTER,
@@ -126,8 +128,8 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
 
     def test_create_daily_tags_or(self):
         """Testing Payloads with multiple tags in an \"AND\" configuration"""
-        mockserver_request_file = f"{self.REQUEST_DIR}mock_create_daily_multi_tags_or_1.json"
-        mockserver_response_file = f"{self.RESPONSE_DIR}mock_create_1.json"
+        mockserver_request_file = f"{REQUEST_DIR}mock_create_daily_multi_tags_or_1.json"
+        mockserver_response_file = f"{RESPONSE_DIR}mock_create_1.json"
 
         tooling_for_test.create_mockserver_expectation(
             CLUSTER,
@@ -165,8 +167,8 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
 
     def test_create_once_no_scope(self):
         """Testing Payloads with ONCE recurrance type"""
-        mockserver_request_file = f"{self.REQUEST_DIR}mock_create_once_1.json"
-        mockserver_response_file = f"{self.RESPONSE_DIR}mock_create_1.json"
+        mockserver_request_file = f"{REQUEST_DIR}mock_create_once_1.json"
+        mockserver_response_file = f"{RESPONSE_DIR}mock_create_1.json"
 
         tooling_for_test.create_mockserver_expectation(
             CLUSTER,
@@ -196,8 +198,8 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
 
     def test_create_weekly_no_scope(self):
         """Testing Payloads with WEEKLY recurrance type"""
-        mockserver_request_file = f"{self.REQUEST_DIR}mock_create_weekly_1.json"
-        mockserver_response_file = f"{self.RESPONSE_DIR}mock_create_1.json"
+        mockserver_request_file = f"{REQUEST_DIR}mock_create_weekly_1.json"
+        mockserver_response_file = f"{RESPONSE_DIR}mock_create_1.json"
 
         tooling_for_test.create_mockserver_expectation(
             CLUSTER,
@@ -228,8 +230,8 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
 
     def test_create_monthly_no_scope(self):
         """Testing Payloads with MONTHLY recurrance type"""
-        mockserver_request_file = f"{self.REQUEST_DIR}mock_create_monthly_1.json"
-        mockserver_response_file = f"{self.RESPONSE_DIR}mock_create_1.json"
+        mockserver_request_file = f"{REQUEST_DIR}mock_create_monthly_1.json"
+        mockserver_response_file = f"{RESPONSE_DIR}mock_create_1.json"
 
         tooling_for_test.create_mockserver_expectation(
             CLUSTER,
@@ -260,8 +262,8 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
 
     def test_create_single_entity(self):
         """Create Maintenance Window with a single entity"""
-        mockserver_request_file = f"{self.REQUEST_DIR}mock_create_single_entity.json"
-        mockserver_response_file = f"{self.RESPONSE_DIR}mock_create_1.json"
+        mockserver_request_file = f"{REQUEST_DIR}mock_create_single_entity.json"
+        mockserver_response_file = f"{RESPONSE_DIR}mock_create_1.json"
 
         tooling_for_test.create_mockserver_expectation(
             CLUSTER,
@@ -294,8 +296,8 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
 
     def test_create_multi_entity(self):
         """Create Maintenance Window with multiple entities"""
-        mockserver_request_file = f"{self.REQUEST_DIR}mock_create_multi_entity.json"
-        mockserver_response_file = f"{self.RESPONSE_DIR}mock_create_1.json"
+        mockserver_request_file = f"{REQUEST_DIR}mock_create_multi_entity.json"
+        mockserver_response_file = f"{RESPONSE_DIR}mock_create_1.json"
 
         tooling_for_test.create_mockserver_expectation(
             CLUSTER,
@@ -547,12 +549,23 @@ class TestTagParsing(unittest.TestCase):
                  ) == test_tag_expected_results[i],
                 f"Test {i}: {result} did not match {test_tag_expected_results[i]}")
 
+class TestMaintenanceWindowInfo(unittest.TestCase):
+    """Testing the ability to pull Maintenance Window info"""
+    def test_get_all_maintenance_windows(self):
+        mockserver_response_file = f"{RESPONSE_DIR}mock_get_all_1.json"
+        tooling_for_test.create_mockserver_expectation(
+            CLUSTER,
+            TENANT,
+            URL_PATH,
+            "GET",
+            response_file=mockserver_response_file
+        )
+        self.assertTrue()
 
 if __name__ == '__main__':
     unittest.main()
 
 # CREATE TESTS LEFT:
-# Multi Entity
 # Single Tag with Filter Type
 # Mutli Tags with Filter Type
 # Single Tag with Management Zone
