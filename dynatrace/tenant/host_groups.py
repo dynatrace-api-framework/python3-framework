@@ -1,5 +1,5 @@
 """Module for host group type entity operations"""
-import dynatrace.tenant.shared as entity_api
+from dynatrace.tenant import entities
 
 # TODO redo export function (break out to export function?)
 # def export_host_groups_setwide(full_set):
@@ -21,10 +21,10 @@ def get_host_groups_tenantwide(cluster, tenant):
     Returns:
         Dict: List of Host Groups in the tenant
     """
-    response = entity_api.get_entities(
+    response = entities.get_entities(
         cluster=cluster,
         tenant=tenant,
-        entity_type=entity_api.EntityTypes.HOST_GROUP,
+        entity_type=entities.EntityTypes.HOST_GROUP,
         params={
             'from': 'now-24h'
         }
