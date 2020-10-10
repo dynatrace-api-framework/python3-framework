@@ -24,6 +24,8 @@ def create_mockserver_expectation(cluster, tenant, url_path, request_type, **kwa
         "httpRequest": {
             "headers": {
                 "Authorization": [f"Api-Token {cluster.get('api_token').get(tenant)}"],
+                "x-ratelimit-remaining": 100000000,
+                "x-ratelimit-limit": 100000000
             },
             "path": url_path,
             "method": request_type
