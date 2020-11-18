@@ -133,7 +133,7 @@ def get_metric_estimated_ddus(cluster, tenant, metric_selector):
     return get_metric_dimension_count(
         cluster=cluster,
         tenant=tenant,
-        metricSelector=metric_selector
+        metric_selector=metric_selector
     ) * 525.6
 
 

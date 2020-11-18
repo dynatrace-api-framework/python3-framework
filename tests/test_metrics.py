@@ -100,9 +100,7 @@ class TestGetMetrics(unittest.TestCase):
             response_file=response_file
         )
 
-        result = metrics.get_metric_dimension_count(
-            CLUSTER, TENANT, **{'metricSelector': METRIC_SELECTOR}
-        )
+        result = metrics.get_metric_dimension_count(CLUSTER, TENANT, METRIC_SELECTOR)
         expected_result = 3
         self.assertEqual(result, expected_result)
 
@@ -121,9 +119,7 @@ class TestGetMetrics(unittest.TestCase):
             response_file=response_file
         )
 
-        result = metrics.get_metric_estimated_ddus(
-            CLUSTER, TENANT, **{'metricSelector': METRIC_SELECTOR}
-        )
+        result = metrics.get_metric_estimated_ddus(CLUSTER, TENANT, METRIC_SELECTOR)
         expected_result = 3 * 525.6
         self.assertEqual(result, expected_result)
 
