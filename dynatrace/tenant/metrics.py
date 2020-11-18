@@ -77,15 +77,15 @@ def get_metric_data(cluster, tenant, **kwargs):
                 break
             else:
                 raise Exception(err)
-        else:
-            for result in response.json().get('result'):
-                metric = result.get('metricId')
-                if results.get(metric):
-                    results[metric].extend(result.get('data'))
-                else:
-                    results[metric] = result.get('data')
+        
+        for result in response.json().get('result'):
+            metric = result.get('metricId')
+            if results.get(metric):
+                results[metric].extend(result.get('data'))
+            else:
+                results[metric] = result.get('data')
 
-            nextPageKey = response.json().get('nextPageKey')
+        nextPageKey = response.json().get('nextPageKey')
 
     return results
 
