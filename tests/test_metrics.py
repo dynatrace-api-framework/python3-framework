@@ -11,6 +11,7 @@ from dynatrace.tenant import metrics
 CLUSTER = FULL_SET["mockserver1"]
 TENANT = "tenant1"
 URL_PATH = str(TenantAPIs.METRICS)
+METRIC_SELECTOR = 'builtin:host.mem.avail.*'
 REQUEST_DIR = "tests/mockserver_payloads/requests/metrics"
 RESPONSE_DIR = "tests/mockserver_payloads/responses/metrics"
 
@@ -28,13 +29,13 @@ class TestGetMetrics(unittest.TestCase):
             url_path=URL_PATH,
             request_type="GET",
             parameters={
-                "metricSelector": "builtin:host.mem.avail.*"
+                "metricSelector": METRIC_SELECTOR
             },
             response_file=response_file
         )
 
         result = metrics.get_metric_descriptor(
-            CLUSTER, TENANT, **{'metricSelector': 'builtin:host.mem.avail.*'}
+            CLUSTER, TENANT, **{'metricSelector': METRIC_SELECTOR}
         )
         expected_result = testtools.expected_payload(response_file).get('metrics')
         self.assertEqual(result, expected_result)
@@ -49,13 +50,13 @@ class TestGetMetrics(unittest.TestCase):
             url_path=URL_PATH,
             request_type="GET",
             parameters={
-                "metricSelector": "builtin:host.mem.avail.*"
+                "metricSelector": METRIC_SELECTOR
             },
             response_file=response_file
         )
 
         result = metrics.get_metric_count(
-            CLUSTER, TENANT, **{'metricSelector': 'builtin:host.mem.avail.*'}
+            CLUSTER, TENANT, **{'metricSelector': METRIC_SELECTOR}
         )
         expected_result = testtools.expected_payload(response_file).get('totalCount')
         self.assertEqual(result, expected_result)
@@ -94,13 +95,13 @@ class TestGetMetrics(unittest.TestCase):
             url_path=URL_PATH,
             request_type="GET",
             parameters={
-                "metricSelector": "builtin:host.mem.avail.*"
+                "metricSelector": METRIC_SELECTOR
             },
             response_file=response_file
         )
 
         result = metrics.get_metric_dimension_count(
-            CLUSTER, TENANT, **{'metricSelector': 'builtin:host.mem.avail.*'}
+            CLUSTER, TENANT, **{'metricSelector': METRIC_SELECTOR}
         )
         expected_result = 3
         self.assertEqual(result, expected_result)
@@ -115,13 +116,13 @@ class TestGetMetrics(unittest.TestCase):
             url_path=URL_PATH,
             request_type="GET",
             parameters={
-                "metricSelector": "builtin:host.mem.avail.*"
+                "metricSelector": METRIC_SELECTOR
             },
             response_file=response_file
         )
 
         result = metrics.get_metric_estimated_ddus(
-            CLUSTER, TENANT, **{'metricSelector': 'builtin:host.mem.avail.*'}
+            CLUSTER, TENANT, **{'metricSelector': METRIC_SELECTOR}
         )
         expected_result = 3 * 525.6
         self.assertEqual(result, expected_result)
