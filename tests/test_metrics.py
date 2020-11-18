@@ -1,0 +1,131 @@
+"""
+Test Suite for Metrics API
+"""
+import unittest
+# from user_variables import FULL_SET  # pylint: disable=import-error
+from user_variables import FULL_SET
+from tests import tooling_for_test as testtools
+from dynatrace.framework.request_handler import TenantAPIs
+from dynatrace.tenant import metrics
+
+CLUSTER = FULL_SET["mockserver1"]
+TENANT = "tenant1"
+URL_PATH = str(TenantAPIs.METRICS)
+REQUEST_DIR = "tests/mockserver_payloads/requests/metrics"
+RESPONSE_DIR = "tests/mockserver_payloads/responses/metrics"
+
+
+class TestGetMetrics(unittest.TestCase):
+    """Tests cases for fetching metrics and their details."""
+
+    def test_get_metric_descriptor(self):
+        """Test fetching descriptors for metrics matching selector."""
+        response_file = f"{RESPONSE_DIR}/descriptors.json"
+
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=URL_PATH,
+            request_type="GET",
+            parameters={
+                "metricSelector": "builtin:host.mem.avail.*"
+            },
+            response_file=response_file
+        )
+
+        result = metrics.get_metric_descriptor(
+            CLUSTER, TENANT, **{'metricSelector': 'builtin:host.mem.avail.*'}
+        )
+        expected_result = testtools.expected_payload(response_file).get('metrics')
+        self.assertEqual(result, expected_result)
+
+    def test_get_metric_count(self):
+        """Test fetching the count of metrics matching selector."""
+        response_file = f"{RESPONSE_DIR}/descriptors.json"
+
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=URL_PATH,
+            request_type="GET",
+            parameters={
+                "metricSelector": "builtin:host.mem.avail.*"
+            },
+            response_file=response_file
+        )
+
+        result = metrics.get_metric_count(
+            CLUSTER, TENANT, **{'metricSelector': 'builtin:host.mem.avail.*'}
+        )
+        expected_result = testtools.expected_payload(response_file).get('totalCount')
+        self.assertEqual(result, expected_result)
+
+    def test_get_metric_data(self):
+        """Test fetching datapoints for metrics matching selector."""
+        response_file = f"{RESPONSE_DIR}/datapoints.json"
+
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=f"{URL_PATH}/query",
+            request_type="GET",
+            parameters={
+                "metricSelector": "builtin:host.mem.avail.pct",
+                "resolution": "Inf"
+            },
+            response_file=response_file
+        )
+
+        result = metrics.get_metric_data(
+            CLUSTER, TENANT, **{'metricSelector': 'builtin:host.mem.avail.pct',
+                                'resolution': 'Inf'}
+        )
+        data = testtools.expected_payload(response_file).get('result')[0].get('data')
+        expected_result = {'builtin:host.mem.avail.pct': data}
+        self.assertEqual(result, expected_result)
+
+    def test_get_metric_dimension_count(self):
+        """Test fetching dimension count for metrics matching selector."""
+        response_file = f"{RESPONSE_DIR}/descriptors.json"
+
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=URL_PATH,
+            request_type="GET",
+            parameters={
+                "metricSelector": "builtin:host.mem.avail.*"
+            },
+            response_file=response_file
+        )
+
+        result = metrics.get_metric_dimension_count(
+            CLUSTER, TENANT, **{'metricSelector': 'builtin:host.mem.avail.*'}
+        )
+        expected_result = 3
+        self.assertEqual(result, expected_result)
+
+    def test_get_metric_ddus(self):
+        """Test fetching the estimated DDUs consumed by a metric."""
+        response_file = f"{RESPONSE_DIR}/descriptors.json"
+
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=URL_PATH,
+            request_type="GET",
+            parameters={
+                "metricSelector": "builtin:host.mem.avail.*"
+            },
+            response_file=response_file
+        )
+
+        result = metrics.get_metric_estimated_ddus(
+            CLUSTER, TENANT, **{'metricSelector': 'builtin:host.mem.avail.*'}
+        )
+        expected_result = 3 * 525.6
+        self.assertEqual(result, expected_result)
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -1,0 +1,42 @@
+{
+    "totalCount": 3,
+    "nextPageKey": null,
+    "metrics": [
+        {
+            "metricId": "builtin:host.mem.avail.bytes",
+            "dimensionDefinitions": [
+                {
+                    "key": "dt.entity.host",
+                    "name": "Host",
+                    "displayName": "Host",
+                    "index": 0,
+                    "type": "ENTITY"
+                }
+            ]
+        },
+        {
+            "metricId": "builtin:host.mem.avail.pct",
+            "dimensionDefinitions": [
+                {
+                    "key": "dt.entity.host",
+                    "name": "Host",
+                    "displayName": "Host",
+                    "index": 0,
+                    "type": "ENTITY"
+                }
+            ]
+        },
+        {
+            "metricId": "builtin:host.mem.avail.pfps",
+            "dimensionDefinitions": [
+                {
+                    "key": "dt.entity.host",
+                    "name": "Host",
+                    "displayName": "Host",
+                    "index": 0,
+                    "type": "ENTITY"
+                }
+            ]
+        }
+    ]
+}
