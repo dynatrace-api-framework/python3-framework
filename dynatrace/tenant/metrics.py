@@ -60,13 +60,13 @@ def get_metric_data(cluster, tenant, **kwargs):
     \n
     @throws Exception - exception as thrown from downstream
     """
-    nextPageKey = 1
+    next_page_key = 1
     results = {}
 
-    while nextPageKey:
+    while next_page_key:
         # Upon subsequent calls, clear all other params
-        if nextPageKey != 1:
-            kwargs = dict(nextPageKey=nextPageKey)
+        if next_page_key != 1:
+            kwargs = dict(nextPageKey=next_page_key)
 
         try:
             response = rh.make_api_call(cluster=cluster,
@@ -86,7 +86,7 @@ def get_metric_data(cluster, tenant, **kwargs):
             else:
                 results[metric] = result.get('data')
 
-        nextPageKey = response.json().get('nextPageKey')
+        next_page_key = response.json().get('nextPageKey')
 
     return results
 
