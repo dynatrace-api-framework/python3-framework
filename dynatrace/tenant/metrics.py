@@ -91,7 +91,7 @@ def get_metric_data(cluster, tenant, **kwargs):
     return results
 
 
-def get_metric_dimension_count(cluster, tenant, metricSelector):
+def get_metric_dimension_count(cluster, tenant, metric_selector):
     """Function returns the sum total of dimensions defined for one or more metrics.
     Useful in DDU calculations for estimating the max number of DDUs that will be
     consumed.
@@ -99,14 +99,14 @@ def get_metric_dimension_count(cluster, tenant, metricSelector):
     \n
     @param cluster (dict) - Dynatrace cluster (as taken from variable set)
     @param tenant (str) - name of Dynatrace tenant (as taken from variable set)
-    @param metricSelector (str) - mandatory. used to pass in ID of queried metric(s)
+    @param metric_selector (str) - mandatory. used to pass in ID of queried metric(s)
     \n
     @returns int - the sum total of dimensions across all matched metrics
     """
     details = get_metric_descriptor(
         cluster=cluster,
         tenant=tenant,
-        metricSelector=metricSelector,
+        metricSelector=metric_selector,
         fields='dimensionDefinitions',
         pageSize=5000
     )
@@ -119,7 +119,7 @@ def get_metric_dimension_count(cluster, tenant, metricSelector):
     return dimensions
 
 
-def get_metric_estimated_ddus(cluster, tenant, metricSelector):
+def get_metric_estimated_ddus(cluster, tenant, metric_selector):
     """Function returns the total maximum yearly DDUs that the metrics are allowed
     to consume. This is calculated by multiplying the total number of dimensions
     by 525.6 (yearly DDUs for 1 metric). This assumes the metric is collected every
@@ -127,14 +127,14 @@ def get_metric_estimated_ddus(cluster, tenant, metricSelector):
     \n
     @param cluster (dict) - Dynatrace cluster (as taken from variable set)
     @param tenant (str) - name of Dynatrace tenant (as taken from variable set)
-    @param metricSelector (str) - mandatory. used to pass in ID of queried metric(s)
+    @param metric_selector (str) - mandatory. used to pass in ID of queried metric(s)
     \n
     @returns (float) - total number of yearly DDUs
     """
     return get_metric_dimension_count(
         cluster=cluster,
         tenant=tenant,
-        metricSelector=metricSelector
+        metricSelector=metric_selector
     ) * 525.6
 
 
