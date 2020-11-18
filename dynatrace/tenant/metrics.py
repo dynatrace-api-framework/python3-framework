@@ -76,8 +76,7 @@ def get_metric_data(cluster, tenant, **kwargs):
         except InvalidAPIResponseException as err:
             if 'metric key that could not be resolved in the metric registry' in str(err):
                 break
-            else:
-                raise err
+            raise
 
         for result in response.json().get('result'):
             metric = result.get('metricId')
