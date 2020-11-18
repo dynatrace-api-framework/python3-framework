@@ -1,5 +1,6 @@
 """Module for interacting with the Metrics API"""
 from dynatrace.framework import request_handler as rh
+from dynatrace.framework.exceptions import InvalidAPIResponseException
 
 ENDPOINT = str(rh.TenantAPIs.METRICS)
 
@@ -72,12 +73,12 @@ def get_metric_data(cluster, tenant, **kwargs):
                                         tenant=tenant,
                                         endpoint=f"{ENDPOINT}/query",
                                         params=kwargs)
-        except Exception as err:
+        except InvalidAPIResponseException as err:
             if 'metric key that could not be resolved in the metric registry' in str(err):
                 break
             else:
-                raise Exception(err)
-        
+                raise err
+
         for result in response.json().get('result'):
             metric = result.get('metricId')
             if results.get(metric):
