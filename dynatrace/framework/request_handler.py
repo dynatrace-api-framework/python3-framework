@@ -172,19 +172,19 @@ def get_results_whole(cluster, tenant, endpoint, **kwargs):
     # Ensure it always makes at least 1 call
     cursor = 1
     # For V2 and OneAgents APIs must specify the item collected
-    if '/api/v2/' in str(endpoint) or endpoint == TenantAPIs.ONEAGENTS:
-        v2 = True
+    if '/api/is_v2/' in str(endpoint) or endpoint == TenantAPIs.ONEAGENTS:
+        is_v2 = True
         if 'item' not in kwargs:
             raise ValueError("For V2 APIs you must provide collected item.")
         item = kwargs['item']
         results = {}
     else:
-        v2 = False
+        is_v2 = False
         results = []
 
     while cursor:
         if cursor != 1:
-            if not v2 or endpoint == TenantAPIs.ONEAGENTS:
+            if not is_v2 or endpoint == TenantAPIs.ONEAGENTS:
                 # V1 and OneAgents require all other query params are preserved
                 kwargs['nextPageKey'] = cursor
             else:
@@ -199,7 +199,7 @@ def get_results_whole(cluster, tenant, endpoint, **kwargs):
         )
 
         # V2 returns additional data in response that should be preserved
-        if v2:
+        if is_v2:
             if cursor == 1:
                 results = response.json()
             else:
@@ -227,18 +227,18 @@ def get_results_by_page(cluster, tenant, endpoint, **kwargs):
     # Ensure it always makes at least 1 call
     cursor = 1
     # Check whether pagination behaviour is for V1 or V2 APIs
-    if '/api/v2/' in str(endpoint):
-        v2 = True
+    if '/api/is_v2/' in str(endpoint):
+        is_v2 = True
         if 'item' not in kwargs:
-            raise ValueError("For v2 APIs you must provide collected item.")
+            raise ValueError("For is_v2 APIs you must provide collected item.")
         item = kwargs['item']
     else:
-        v2 = False
+        is_v2 = False
 
     while cursor:
         if cursor != 1:
             # V2 requires all other query params are removed
-            if v2:
+            if is_v2:
                 kwargs = dict(nextPageKey=cursor)
             # V1 requires all other query params are preserved
             else:
@@ -252,7 +252,7 @@ def get_results_by_page(cluster, tenant, endpoint, **kwargs):
         )
 
         # OneAgents API pagination behaves like V1 but results returned are like V2
-        if v2 or endpoint == TenantAPIs.ONEAGENTS:
+        if is_v2 or endpoint == TenantAPIs.ONEAGENTS:
             yield response.json().get(item)
             cursor = response.json().get('nextPageKey')
         else:
