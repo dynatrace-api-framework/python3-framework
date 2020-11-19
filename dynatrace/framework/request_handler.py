@@ -114,26 +114,26 @@ def slow_down(func):
 
 
 @slow_down
-def make_api_call(cluster, endpoint, tenant=None, params=None, json=None, method=HTTP.GET):
-    '''
-    Function makes an API call in a safe way, taking into account the rate limits.
-    This will ensure the API call will always go through.\n
-    The program will wait for the limit to reset if needed.\n
-
-    @param cluster - Cluster dictionary from variable_set\n
-    @param endpoint - API endpoint to call.\n
-    @param tenant - String of tenant name used in cluster dictionary\n
-    @param json - dictionary to be converted to JSON request\n
-    @param method - HTTP method to use in call. Use HTTP enum.\n
+def make_api_call(cluster, endpoint, tenant=None, method=HTTP.GET, **kwargs):
+    """Function makes an API call in a safe way.
+    It takes into account any API rate limits. This will ensure the API call
+    will always go through. The program will wait for the limit to reset if
+    needed.
     \n
-    @return - response from request\n
-    '''
+    @param cluster (dict) - Cluster dictionary from variable_set\n
+    @param endpoint (str) - API endpoint to call.\n
+    @param tenant (str) - String of tenant name used in cluster dictionary\n
+    @param method (str) - HTTP method to use in call. Use HTTP enum.
+    \n
+    @kwargs params (dict) - query string parameters\n
+    @kwargs json (dict) - request body to be sent as JSON\n
+    @kwargs body (str) - request body to be sent as plain text
+    \n
+    @returns - response from request\n
+    """
     # Set the right URL for the operation
     url = f"{generate_tenant_url(cluster, tenant)}{endpoint}" \
         if tenant else f"{HTTPS_STR}{cluster['url']}{endpoint}"
-
-    if not params:
-        params = {}
 
     # Get correct token for the operation
     if 'onpremise' in str(endpoint) or 'cluster' in str(endpoint):
@@ -147,10 +147,9 @@ def make_api_call(cluster, endpoint, tenant=None, params=None, json=None, method
         response = requests.request(
             method=str(method),
             url=url,
-            params=params,
             headers=headers,
-            json=json,
-            verify=cluster.get('verify_ssl')
+            verify=cluster.get('verify_ssl'),
+            **kwargs
         )
         if check_response(response):
             break
