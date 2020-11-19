@@ -172,7 +172,7 @@ def get_results_whole(cluster, tenant, endpoint, **kwargs):
     # Ensure it always makes at least 1 call
     cursor = 1
     # For V2 and OneAgents APIs must specify the item collected
-    if '/api/is_v2/' in str(endpoint) or endpoint == TenantAPIs.ONEAGENTS:
+    if '/api/v2/' in str(endpoint) or endpoint == TenantAPIs.ONEAGENTS:
         is_v2 = True
         if 'item' not in kwargs:
             raise ValueError("For V2 APIs you must provide collected item.")
@@ -227,7 +227,7 @@ def get_results_by_page(cluster, tenant, endpoint, **kwargs):
     # Ensure it always makes at least 1 call
     cursor = 1
     # Check whether pagination behaviour is for V1 or V2 APIs
-    if '/api/is_v2/' in str(endpoint):
+    if '/api/v2/' in str(endpoint):
         is_v2 = True
         if 'item' not in kwargs:
             raise ValueError("For is_v2 APIs you must provide collected item.")
