@@ -158,155 +158,106 @@ def make_api_call(cluster, endpoint, tenant=None, params=None, json=None, method
     return response
 
 
-def __get_v2_multipage_results(cluster, tenant, endpoint, item, cursor, **kwargs):
-    """
-    Private function: not intended for calling from outside of this module.
-    Retrieves subsequent pages of multi-page API call and gathers just the
-    items requested through the endpoint (e.g. entities, metrics, etc.)
+def get_results_whole(cluster, tenant, endpoint, **kwargs):
+    """Gets a multi-paged result set and returns it whole.
     \n
-    @param cluster - Cluster dictionary from variable_set\n
-    @param endpoint - API endpoint to call.\n
-    @param tenant - String of tenant name used in cluster dictionary\n
-    @param cursor - cursor that was returned with the first page of results\n
-    @param item - item being retrieved (e.g. entities, metrics, etc.)
-    """
-    results_full = []
-    while cursor:
-        kwargs['nextPageKey'] = cursor
-        results_page = make_api_call(
-            cluster=cluster,
-            tenant=tenant,
-            endpoint=endpoint,
-            params=kwargs
-        ).json()
-
-        # Collect just the items being queried
-        results_full.extend(results_page.get(item))
-
-        # Renew cursor
-        cursor = results_page.get('nextPageKey')
-
-    return results_full
-
-
-def v2_get_results_whole(cluster, tenant, endpoint, item, **kwargs):
-    """
-    Gets a multi-paged result set and returns it whole. To be used with V2 API
-    pagination where the nextPageKey is returned in the body of the response.
-    Also this type of query requires the queried item so we can extract it from
-    the subsequent pages and omit the summary data.
+    @param cluster (dict) - Dynatrace cluster (as taken from variable set)\n
+    @param tenant (str) - name of Dynatrace tenant (as taken from variable set)\n
+    @param endpoint (str) - API endpoint to call. Use the TenantAPIs Enum.\n
     \n
-    @param item - item being retrieved (e.g. entities, metrics, etc.)\n
-    @param cluster - Cluster dictionary from variable_set\n
-    @param endpoint - API endpoint to call.\n
-    @param tenant - String of tenant name used in cluster dictionary\n
-    @param params - dictionary of query string parameters
-    """
-    # Get the first results set (including cursor)
-    response = make_api_call(
-        cluster=cluster,
-        tenant=tenant,
-        endpoint=endpoint,
-        params=kwargs
-    ).json()
-
-    # In the case of multi-page, get the rest
-    cursor = response.get('nextPageKey')
-    if cursor:
-        response[item].extend(__get_v2_multipage_results(
-            cluster=cluster,
-            endpoint=endpoint,
-            tenant=tenant,
-            cursor=cursor,
-            item=item,
-            # OneAgents API requires query params stay the same
-            **kwargs if endpoint == TenantAPIs.ONEAGENTS else dict(kwargs=None)
-        ))
-    return response
-
-
-def v1_get_results_whole(cluster, endpoint, tenant, **kwargs):
-    """
-    Gets a multi-paged result set and returns it whole. To be used with V1 API
-    pagination where the next-page-key is returned in the response headers.
+    @kwargs item (str) - the item to be retrieved from results response (e.g. entities)\n
     \n
-    @param cluster - Cluster dictionary from variable_set\n
-    @param endpoint - API endpoint to call.\n
-    @param tenant - String of tenant name used in cluster dictionary\n
-    @kwargs - dictionary of query string parameters
+    @throws ValueError - when V2 API is used but no item is given
     """
-    results = []
-    # We'll always make at least 1 call
+    # Ensure it always makes at least 1 call
     cursor = 1
+    # For V2 and OneAgents APIs must specify the item collected
+    if '/api/v2/' in str(endpoint) or endpoint == TenantAPIs.ONEAGENTS:
+        v2 = True
+        if 'item' not in kwargs:
+            raise ValueError("For V2 APIs you must provide collected item.")
+        item = kwargs['item']
+        results = {}
+    else:
+        v2 = False
+        results = []
+
     while cursor:
         if cursor != 1:
-            kwargs['nextPageKey'] = cursor
-        response = make_api_call(
-            cluster=cluster,
-            tenant=tenant,
-            endpoint=endpoint,
-            params=kwargs
-        )
-        results.extend(response.json())
-        cursor = response.headers.get('next-page-key')
-
-    return results
-
-
-def v1_get_results_by_page(cluster, endpoint, tenant, **kwargs):
-    """
-    Gets a multi-paged result set one page at a time. To be used with V1 API
-    pagination where the next-page-key is returned in the response headers.
-    \n
-    @param cluster - Cluster dictionary from variable_set\n
-    @param endpoint - API endpoint to call.\n
-    @param tenant - String of tenant name used in cluster dictionary\n
-    @param params - dictionary of query string parameters
-    """
-    cursor = 1
-    while cursor:
-        if cursor != 1:
-            kwargs['nextPageKey'] = cursor
-        response = make_api_call(
-            cluster=cluster,
-            tenant=tenant,
-            endpoint=endpoint,
-            params=kwargs
-        )
-        # Pause here and return this page of results
-        yield response.json()
-        cursor = response.headers.get('next-page-key')
-
-
-def v2_get_results_by_page(cluster, tenant, endpoint, item, **kwargs):
-    """
-    Gets a multi-paged result set one page at a time. To be used with V2 API
-    pagination where the nextPageKey is returned in the body of the response.
-    \n
-    @param cluster - Cluster dictionary from variable_set\n
-    @param endpoint - API endpoint to call.\n
-    @param tenant - String of tenant name used in cluster dictionary\n
-    @param params - dictionary of query string parameters
-    """
-    # We'll always make at least 1 call
-    cursor = 1
-    while cursor:
-        # On subsequent calls, must omit all other params (except OneAgents API)
-        if cursor != 1:
-            if endpoint == TenantAPIs.ONEAGENTS:
+            if not v2 or endpoint == TenantAPIs.ONEAGENTS:
+                # V1 and OneAgents require all other query params are preserved
                 kwargs['nextPageKey'] = cursor
             else:
+                # V2 requires all other query params are removed
                 kwargs = dict(nextPageKey=cursor)
 
         response = make_api_call(
             cluster=cluster,
+            tenant=tenant,
+            endpoint=endpoint,
+            params=kwargs
+        )
+
+        # V2 returns additional data in response that should be preserved
+        if v2:
+            if cursor == 1:
+                results = response.json()
+            else:
+                results[item].extend(response.json().get(item))
+            cursor = response.json().get('nextPageKey')
+        else:
+            results.extend(response.json())
+            cursor = response.headers.get('next-page-key')
+
+    return results
+
+
+def get_results_by_page(cluster, tenant, endpoint, **kwargs):
+    """Gets a multi-paged result set one page at at time.
+    Useful for parsing very large result sets (e.g. entities) in optimal manner.
+    \n
+    @param cluster (dict) - Dynatrace cluster (as taken from variable set)\n
+    @param tenant (str) - name of Dynatrace tenant (as taken from variable set)\n
+    @param endpoint (str) - API endpoint to call. Use the TenantAPIs Enum.\n
+    \n
+    @kwargs item (str) - the item to be retrieved from results response (e.g. entities)\n
+    \n
+    @throws ValueError - when V2 API is used but no item is given
+    """
+    # Ensure it always makes at least 1 call
+    cursor = 1
+    # Check whether pagination behaviour is for V1 or V2 APIs
+    if '/api/v2/' in str(endpoint):
+        v2 = True
+        if 'item' not in kwargs:
+            raise ValueError("For v2 APIs you must provide collected item.")
+        item = kwargs['item']
+    else:
+        v2 = False
+
+    while cursor:
+        if cursor != 1:
+            # V2 requires all other query params are removed
+            if v2:
+                kwargs = dict(nextPageKey=cursor)
+            # V1 requires all other query params are preserved
+            else:
+                kwargs['nextPageKey'] = cursor
+
+        response = make_api_call(
+            cluster=cluster,
             endpoint=endpoint,
             tenant=tenant,
             params=kwargs
-        ).json()
+        )
 
-        yield response.get(item)
-        cursor = response.get('nextPageKey')
+        # OneAgents API pagination behaves like V1 but results returned are like V2
+        if v2 or endpoint == TenantAPIs.ONEAGENTS:
+            yield response.json().get(item)
+            cursor = response.json().get('nextPageKey')
+        else:
+            yield response.json()
+            cursor = response.headers.get('next-page-key')
 
 
 def check_response(response):

@@ -13,7 +13,7 @@ def get_host_units_tenantwide(cluster, tenant, **kwargs):
     """
     host_units = 0
 
-    host_list = rh.v1_get_results_whole(
+    host_list = rh.get_results_whole(
         cluster=cluster,
         tenant=tenant,
         endpoint=f'{rh.TenantAPIs.V1_TOPOLOGY}/infrastructure/hosts',
@@ -82,7 +82,7 @@ def get_oneagents_tenantwide(cluster, tenant, **kwargs):
 
     @returns - list of OneAgents
     """
-    return rh.v2_get_results_whole(
+    return rh.get_results_whole(
         cluster=cluster,
         tenant=tenant,
         endpoint=rh.TenantAPIs.ONEAGENTS,
