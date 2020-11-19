@@ -15,7 +15,7 @@ def get_metric_descriptor(cluster, tenant, **kwargs):
     \n
     @returns list - list of metric descriptors mathing the metricSelector
     """
-    descriptors = rh.v2_get_results_whole(
+    descriptors = rh.get_results_whole(
         cluster=cluster,
         tenant=tenant,
         endpoint=ENDPOINT,

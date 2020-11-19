@@ -128,7 +128,7 @@ def get_entities_tenantwide(cluster, tenant, entity_type, **kwargs):
     else:
         kwargs['entitySelector'] = f'type({entity_type})'
 
-    response = rh.v2_get_results_whole(
+    response = rh.get_results_whole(
         cluster=cluster,
         tenant=tenant,
         item='entities',
@@ -215,7 +215,7 @@ def get_entities_by_page(cluster, tenant, entity_type, **kwargs):
     else:
         kwargs['entitySelector'] = f'type({entity_type})'
 
-    response = rh.v2_get_results_by_page(
+    response = rh.get_results_by_page(
         cluster=cluster,
         tenant=tenant,
         endpoint=rh.TenantAPIs.ENTITIES,
@@ -246,7 +246,7 @@ def get_entity(cluster, tenant, entity_id, **kwargs):
     else:
         kwargs['entitySelector'] = f'entityId({entity_id})'
 
-    response = rh.v2_get_results_whole(
+    response = rh.get_results_whole(
         cluster=cluster,
         tenant=tenant,
         endpoint=rh.TenantAPIs.ENTITIES,
