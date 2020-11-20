@@ -130,8 +130,8 @@ class TestPushMetrics(unittest.TestCase):
     def test_metrics_ingest(self):
         """Tests simple metric ingestion"""
         request_file = f"{REQUEST_DIR}/payload.txt"
-        with open(file=request_file, mode='r') as f:
-            payload = f.read()
+        with open(file=request_file, mode='r') as text:
+            payload = text.read()
 
         testtools.create_mockserver_expectation(
             cluster=CLUSTER,
