@@ -124,5 +124,27 @@ class TestGetMetrics(unittest.TestCase):
         self.assertEqual(result, expected_result)
 
 
+class TestPushMetrics(unittest.TestCase):
+    """Tests for metrics ingestion capability"""
+
+    def test_metrics_ingest(self):
+        """Tests simple metric ingestion"""
+        request_file = f"{REQUEST_DIR}/payload.txt"
+        with open(file=request_file, mode='r') as f:
+            payload = f.read()
+
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=f"{URL_PATH}/ingest",
+            request_type="POST",
+            request_data=request_file,
+            response_code=202
+        )
+
+        result = metrics.ingest_metrics(CLUSTER, TENANT, payload)
+        self.assertEqual(result.status_code, 202)
+
+
 if __name__ == '__main__':
     unittest.main()
