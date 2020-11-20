@@ -152,6 +152,6 @@ def ingest_metrics(cluster, tenant, payload):
         cluster=cluster,
         tenant=tenant,
         endpoint=f"{ENDPOINT}/ingest",
-        body=payload,
+        data=payload,
         method=rh.HTTP.POST
     )
