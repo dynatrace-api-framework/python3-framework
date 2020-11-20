@@ -137,18 +137,21 @@ def get_metric_estimated_ddus(cluster, tenant, metric_selector):
     ) * 525.6
 
 
-# TODO: Refactor make_api_call (PAF-48)
-# Payload data must be plain text, not serialised JSON like make_api_call require it.
-# Before this functionality can be implemented we must refactor make_api_call to
-# use any **kwargs that are valid for the requests module.
-#
-# def ingest_metrics(cluster, tenant, payload):
-#     r = rh.make_api_call(
-#         cluster=cluster,
-#         tenant=tenant,
-#         endpoint=f"{ENDPOINT}/ingest",
-#         json=payload,
-#         method=rh.HTTP.POST
-#     )
-#
-#     return r
+def ingest_metrics(cluster, tenant, payload):
+    """Ingests metrics based on given payload.
+    Payload must be formatted according to Dynatrace line-protocol for metric ingest.
+    \n
+    @param cluster (dict) - Dynatrace cluster (as taken from variable set)\n
+    @param tenant (str) - name of Dynatrace tenant (as taken from variable set)\n
+    @param payload (str) - payload for metric ingestion. must be formatted according to
+                           Dynatrace line protocol.
+    \n
+    @returns (dict) - response to HTTP request
+    """
+    return rh.make_api_call(
+        cluster=cluster,
+        tenant=tenant,
+        endpoint=f"{ENDPOINT}/ingest",
+        body=payload,
+        method=rh.HTTP.POST
+    )
