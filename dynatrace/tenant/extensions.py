@@ -4,14 +4,14 @@ from dynatrace.framework import request_handler as rh
 ENDPOINT = rh.TenantAPIs.EXTENSIONS
 
 
-def get_all_extensions(cluster, tenant, pageSize=200):
+def get_all_extensions(cluster, tenant, page_size=200):
     """Gets a list of all extensions available on the tenant.
     List is returned whole regardless of page size; page size can be used to control the
     number of API calls.
     \n
     @param cluster (dict) - Cluster dictionary (as taken from variable set)\n
     @param tenant (str) - Tenant name (as taken from variable set)\n
-    @param pageSize (int) - page size between 1 and 500 (default 200)
+    @param page_size (int) - page size between 1 and 500 (default 200)
     \n
     @returns list - list of extensions
     """
@@ -20,7 +20,7 @@ def get_all_extensions(cluster, tenant, pageSize=200):
         tenant=tenant,
         endpoint=ENDPOINT,
         api_version=2,
-        pageSize=pageSize,
+        pageSize=page_size,
         item="extensions"
     ).get('extensions')
 
