@@ -124,6 +124,39 @@ class TestGetExtensions(unittest.TestCase):
 
         self.assertEqual(result, expected_result)
 
+    def test_get_extension_metrics(self):
+        """Tests fetching the metrics collected by an extension"""
+        details_file = f"{RESPONSE_DIR}/details.json"
+        response_file = f"{RESPONSE_DIR}/metrics.json"
+
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=f"{URL_PATH}/{EXTENSION_ID}",
+            request_type=str(HTTP.GET),
+            response_file=details_file,
+            mock_id="first"
+        )
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=str(TenantAPIs.METRICS),
+            parameters={
+                "metricSelector": "ext:custom.jmx.radujmx.*"
+            },
+            mock_id="second",
+            request_type=str(HTTP.GET),
+            response_file=response_file
+        )
+
+        result = extensions.get_extension_metrics(CLUSTER, TENANT, EXTENSION_ID)
+        expected_result = list(
+            m.get('metricId') 
+            for m in testtools.expected_payload(response_file).get('metrics')
+        )
+
+        self.assertEqual(result, expected_result)
+
 
 class TestModifyExtensions(unittest.TestCase):
     """Test cases for modifying extension states and details"""
