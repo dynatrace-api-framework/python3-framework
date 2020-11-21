@@ -1,0 +1,14 @@
+{
+    "id": "custom.jmx.radujmx123456789",
+    "name": "radujmx",
+    "version": "1.123456789",
+    "type": "JMX",
+    "metricGroup": "custom.jmx.radujmx",
+    "metadata": {
+        "configurationVersions": [
+            0
+        ],
+        "clusterVersion": "1.207"
+    },
+    "properties": []
+}

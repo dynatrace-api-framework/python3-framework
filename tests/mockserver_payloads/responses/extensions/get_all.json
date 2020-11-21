@@ -1,0 +1,20 @@
+{
+    "extensions": [
+        {
+            "id": "custom.jmx.radujmx123456789", 
+            "name": "radujmx", 
+            "type": "JMX"
+        },
+        {
+            "id": "custom.python.oneagent_plugin", 
+            "name": "OneAgent Plugin",
+            "type": "ONEAGENT"
+        },
+        {
+            "id": "custom.remote.python.activegate_plugin",
+            "name": "ActiveGate Plugin",
+            "type": "ACTIVEGATE"
+        }
+    ],
+    "totalResults": 3
+}

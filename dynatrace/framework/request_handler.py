@@ -157,12 +157,14 @@ def make_api_call(cluster, endpoint, tenant=None, method=HTTP.GET, **kwargs):
     return response
 
 
-def get_results_whole(cluster, tenant, endpoint, **kwargs):
+def get_results_whole(cluster, tenant, endpoint, api_version, **kwargs):
     """Gets a multi-paged result set and returns it whole.
     \n
     @param cluster (dict) - Dynatrace cluster (as taken from variable set)\n
     @param tenant (str) - name of Dynatrace tenant (as taken from variable set)\n
     @param endpoint (str) - API endpoint to call. Use the TenantAPIs Enum.\n
+    @param api_version (int) - different APIs have different pagination behaviour.
+                               this maps the pagination behaviour to v1 or v2.
     \n
     @kwargs item (str) - the item to be retrieved from results response (e.g. entities)\n
     \n
@@ -170,8 +172,8 @@ def get_results_whole(cluster, tenant, endpoint, **kwargs):
     """
     # Ensure it always makes at least 1 call
     cursor = 1
-    # For V2 and OneAgents APIs must specify the item collected
-    if '/api/v2/' in str(endpoint) or endpoint == TenantAPIs.ONEAGENTS:
+    # For V2 APIs must specify the item collected
+    if api_version == 2:
         is_v2 = True
         if 'item' not in kwargs:
             raise ValueError("For V2 APIs you must provide collected item.")
@@ -211,13 +213,15 @@ def get_results_whole(cluster, tenant, endpoint, **kwargs):
     return results
 
 
-def get_results_by_page(cluster, tenant, endpoint, **kwargs):
+def get_results_by_page(cluster, tenant, endpoint, api_version, **kwargs):
     """Gets a multi-paged result set one page at at time.
     Useful for parsing very large result sets (e.g. entities) in optimal manner.
     \n
     @param cluster (dict) - Dynatrace cluster (as taken from variable set)\n
     @param tenant (str) - name of Dynatrace tenant (as taken from variable set)\n
     @param endpoint (str) - API endpoint to call. Use the TenantAPIs Enum.\n
+    @param api_version (int) - different APIs have different pagination behaviour.
+                               this maps the pagination behaviour to v1 or v2.
     \n
     @kwargs item (str) - the item to be retrieved from results response (e.g. entities)\n
     \n
@@ -226,7 +230,7 @@ def get_results_by_page(cluster, tenant, endpoint, **kwargs):
     # Ensure it always makes at least 1 call
     cursor = 1
     # Check whether pagination behaviour is for V1 or V2 APIs
-    if '/api/v2/' in str(endpoint):
+    if api_version == 2:
         is_v2 = True
         if 'item' not in kwargs:
             raise ValueError("For is_v2 APIs you must provide collected item.")
