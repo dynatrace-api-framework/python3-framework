@@ -127,10 +127,6 @@ def get_extension_instances(cluster, tenant, extension_id):
     return instances
 
 
-def get_extension_metrics(cluster, tenant, extension_id):
-    pass
-
-
 def enable_global_config(cluster, tenant, extension_id):
     """Enables the global configuration for an extension.
     Not applicable to remote extensions.
