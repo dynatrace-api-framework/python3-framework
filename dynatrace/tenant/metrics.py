@@ -19,6 +19,7 @@ def get_metric_descriptor(cluster, tenant, **kwargs):
         cluster=cluster,
         tenant=tenant,
         endpoint=ENDPOINT,
+        api_version=2,
         item='metrics',
         **kwargs
     ).get('metrics')

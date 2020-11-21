@@ -131,6 +131,7 @@ def get_entities_tenantwide(cluster, tenant, entity_type, **kwargs):
     response = rh.get_results_whole(
         cluster=cluster,
         tenant=tenant,
+        api_version=2,
         item='entities',
         endpoint=rh.TenantAPIs.ENTITIES,
         **kwargs
@@ -219,6 +220,7 @@ def get_entities_by_page(cluster, tenant, entity_type, **kwargs):
         cluster=cluster,
         tenant=tenant,
         endpoint=rh.TenantAPIs.ENTITIES,
+        api_version=2,
         item='entities',
         **kwargs
     )
@@ -250,6 +252,7 @@ def get_entity(cluster, tenant, entity_id, **kwargs):
         cluster=cluster,
         tenant=tenant,
         endpoint=rh.TenantAPIs.ENTITIES,
+        api_version=2,
         item='entities',
         **kwargs
     )

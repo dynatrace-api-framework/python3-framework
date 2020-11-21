@@ -17,6 +17,7 @@ def get_host_units_tenantwide(cluster, tenant, **kwargs):
         cluster=cluster,
         tenant=tenant,
         endpoint=f'{rh.TenantAPIs.V1_TOPOLOGY}/infrastructure/hosts',
+        api_version=1,
         **kwargs
     )
 
@@ -86,6 +87,7 @@ def get_oneagents_tenantwide(cluster, tenant, **kwargs):
         cluster=cluster,
         tenant=tenant,
         endpoint=rh.TenantAPIs.ONEAGENTS,
+        api_version=2,
         item='hosts',
         **kwargs
     ).get('hosts')
