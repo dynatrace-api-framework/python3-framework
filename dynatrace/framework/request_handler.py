@@ -157,12 +157,14 @@ def make_api_call(cluster, endpoint, tenant=None, method=HTTP.GET, **kwargs):
     return response
 
 
-def get_results_whole(cluster, tenant, endpoint, **kwargs):
+def get_results_whole(cluster, tenant, endpoint, api_version, **kwargs):
     """Gets a multi-paged result set and returns it whole.
     \n
     @param cluster (dict) - Dynatrace cluster (as taken from variable set)\n
     @param tenant (str) - name of Dynatrace tenant (as taken from variable set)\n
     @param endpoint (str) - API endpoint to call. Use the TenantAPIs Enum.\n
+    @param api_version (int) - different APIs have different pagination behaviour.
+                               this maps the pagination behaviour to v1 or v2.
     \n
     @kwargs item (str) - the item to be retrieved from results response (e.g. entities)\n
     \n
@@ -170,8 +172,8 @@ def get_results_whole(cluster, tenant, endpoint, **kwargs):
     """
     # Ensure it always makes at least 1 call
     cursor = 1
-    # For V2 and OneAgents APIs must specify the item collected
-    if '/api/v2/' in str(endpoint) or endpoint == TenantAPIs.ONEAGENTS:
+    # For V2 APIs must specify the item collected
+    if api_version == 2:
         is_v2 = True
         if 'item' not in kwargs:
             raise ValueError("For V2 APIs you must provide collected item.")
@@ -203,7 +205,11 @@ def get_results_whole(cluster, tenant, endpoint, **kwargs):
                 results = response.json()
             else:
                 results[item].extend(response.json().get(item))
-            cursor = response.json().get('nextPageKey')
+            # Extensions API pagination behaves like V2 but token is nextPageToken
+            if str(endpoint).startswith(str(TenantAPIs.EXTENSIONS)):
+                cursor = response.json().get('nextPageToken')
+            else:
+                cursor = response.json().get('nextPageKey')
         else:
             results.extend(response.json())
             cursor = response.headers.get('next-page-key')
@@ -253,7 +259,11 @@ def get_results_by_page(cluster, tenant, endpoint, **kwargs):
         # OneAgents API pagination behaves like V1 but results returned are like V2
         if is_v2 or endpoint == TenantAPIs.ONEAGENTS:
             yield response.json().get(item)
-            cursor = response.json().get('nextPageKey')
+            # Extensions API pagination behaves like V2 but token is nextPageToken
+            if endpoint.startswith(str(TenantAPIs.EXTENSIONS)):
+                cursor = response.json().get('nextPageToken')
+            else:
+                cursor = response.json().get('nextPageKey')
         else:
             yield response.json()
             cursor = response.headers.get('next-page-key')
