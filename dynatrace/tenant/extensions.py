@@ -1,5 +1,6 @@
 """Operations Interacting with Dynatrace Extensions API"""
 from dynatrace.framework import request_handler as rh
+from dynatrace.tenant import metrics
 
 ENDPOINT = rh.TenantAPIs.EXTENSIONS
 
@@ -43,6 +44,25 @@ def get_extension_details(cluster, tenant, extension_id):
     ).json()
 
     return details
+
+
+def get_extension_metrics(cluster, tenant, extension_id):
+    """Gets a list of metric IDs that are collected by the extension.
+    \n
+    @param cluster (dict) - Cluster dictionary (as taken from variable set)\n
+    @param tenant (str) - Tenant name (as taken from variable set)\n
+    @param extension_id (str) - ID of extension
+    \n
+    @returns list - list of metric IDs
+    """
+    metric_group = get_extension_details(cluster, tenant, extension_id).get('metricGroup')
+    ext_metrics = metrics.get_metric_descriptor(
+        cluster=cluster,
+        tenant=tenant,
+        metricSelector=f"ext:{metric_group}.*"
+    )
+
+    return list(m.get('metricId') for m in ext_metrics)
 
 
 def get_extension_global_config(cluster, tenant, extension_id):
