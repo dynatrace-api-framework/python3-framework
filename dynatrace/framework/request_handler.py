@@ -38,6 +38,7 @@ class TenantAPIs(Enum):
     PROBLEM_DETAILS = "/api/v1/problem/details"
     PROBLEM_FEED = "/api/v1/problem/feed"
     PROBLEM_STATUS = "/api/v1/problem/status"
+    PROBLEMS = "/api/v2/problems"
     DEPLOY_ONEAGENT = "/api/v1/deployment/installer/agent"
     DEPLOY_ONEAGENT_CONNECTION_INFO = "/api/v1/deployment/installer/agent/connectioninfo"
     DEPLOY_ONEAGENT_CONNECTION_ENDPOINTS = \
