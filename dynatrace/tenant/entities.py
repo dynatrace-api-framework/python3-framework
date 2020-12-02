@@ -229,32 +229,27 @@ def get_entities_by_page(cluster, tenant, entity_type, **kwargs):
         yield entities
 
 
-def get_entity(cluster, tenant, entity_id, **kwargs):
+def get_entity(cluster, tenant, entity_id):
     """Get the details of an entity specified by ID.
     You can use more than one ID if they're comma separated (id-1,id-2).\n
 
     @param cluster - Dynatrace Cluster (from variable set)\n
     @param tenant - Dynatrace Tenant (from variable set)\n
     @param entity_id - ID of monitored Entity\n
-    @kwargs entitySelector - used to filter entities\n
     @kwargs from - timeframe start\n
     @kwargs to - timeframe end\n
     @kwargs fields - entity detail fields\n
     @return - One entity for one ID. List of entities otherwise.
     """
-    # If entitySelector already present, don't overwrite
-    if 'entitySelector' in kwargs:
-        kwargs['entitySelector'] += f',entityId({entity_id})'
-    else:
-        kwargs['entitySelector'] = f'entityId({entity_id})'
-
     response = rh.get_results_whole(
         cluster=cluster,
         tenant=tenant,
         endpoint=rh.TenantAPIs.ENTITIES,
         api_version=2,
         item='entities',
-        **kwargs
+        **{
+            'entitySelector': f'entityId({entity_id})'
+        }
     )
 
     if response.get('totalCount') == 1:
@@ -358,6 +353,8 @@ def add_tags(cluster, tenant, tag_list, **kwargs):
         raise TypeError("No tags provided")
     if not isinstance(tag_list, list):
         raise TypeError("tags_list is not a list")
+    if 'entitySelector' not in kwargs:
+        raise ValueError("entitySelector not provided")
     if 'type' not in kwargs['entitySelector'] \
             and 'entityId' not in kwargs['entitySelector']:
         raise ValueError("entitySelector must have at least type or entityId")
@@ -391,6 +388,8 @@ def delete_tag(cluster, tenant, tag_key, tag_value=None, **kwargs):
     # Sanity checking, error handling
     if not tag_key:
         raise TypeError("No tag key provided")
+    if 'entitySelector' not in kwargs:
+        raise ValueError("entitySelector not provided")
     if 'type' not in kwargs['entitySelector'] \
             and 'entityId' not in kwargs['entitySelector']:
         raise ValueError("entitySelector must have at least type or entityId")
