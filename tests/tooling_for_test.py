@@ -72,9 +72,13 @@ def create_mockserver_expectation(cluster, tenant, url_path, request_type, **kwa
             "contentType": "text/plain"
         }
 
-    if "response_file" in kwargs:
-        with open(kwargs['response_file']) as open_file:
-            response_payload = json.load(open_file)
+    if "response_file" in kwargs or "response_data" in kwargs:
+        if "response_file" in kwargs:
+            with open(kwargs['response_file']) as open_file:
+                response_payload = json.load(open_file)
+        else:
+            response_payload = kwargs['response_data']
+
         expectation["httpResponse"]["body"] = {
             "type": "JSON",
             "json": response_payload,
