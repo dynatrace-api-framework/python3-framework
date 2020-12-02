@@ -1,0 +1,21 @@
+{
+    "customDeviceId": "customDeviceId",
+    "displayName": "coffeeMachine",
+    "group": "myCustomDeviceGroup",
+    "ipAddresses": [
+        "10.0.0.1"
+    ],
+    "listenPorts": [
+        80
+    ],
+    "faviconUrl": "https://www.freefavicon.com/freefavicons/food/cup-of-coffee-152-78475.png",
+    "configUrl": "http://coffee-machine.dynatrace.internal.com/coffeemachine/manage",
+    "type": "coffee machine",
+    "properties": {},
+    "tags": [
+        "office-linz"
+    ],
+    "dnsNames": [
+        "coffee-machine.dynatrace.internal.com"
+    ]
+}

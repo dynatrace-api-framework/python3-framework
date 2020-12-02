@@ -2,7 +2,7 @@
 Test Suite for Entities API
 """
 import unittest
-from user_variables import FULL_SET  # pylint: disable=import-error
+from variable_sets.radu_vars import FULL_SET  # pylint: disable=import-error
 from tests import tooling_for_test as testtools
 from dynatrace.tenant.entities import EntityTypes
 from dynatrace.framework.request_handler import TenantAPIs
@@ -393,6 +393,41 @@ class TestHostTagging(unittest.TestCase):
         self.assertEqual(204, result.status_code)
 
 
+class TestCustomDevices(unittest.TestCase):
+    """Test cases for custom devices."""
+
+    def test_create_device(self):
+        """Test creating a new custom device"""
+        request_file = f"{REQUEST_DIR}/device.json"
+        json_data = testtools.expected_payload(request_file)
+        device_id = json_data.get("customDeviceId")
+
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=URL_PATH,
+            request_type="GET",
+            parameters={
+                "entitySelector": f"entityId({device_id})"
+            },
+            response_data={},
+            mock_id="req1"
+        )
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=f"{URL_PATH}/custom",
+            request_type="POST",
+            request_file=request_file,
+            response_code=201,
+            mock_id="req2"
+        )
+
+        result = entities.custom_device(CLUSTER, TENANT, json_data)
+
+        self.assertEquals(result.status_code, 201)
+
+
 class TestErrorHandling(unittest.TestCase):
     """Test cases for error handling in the entities module."""
 
@@ -448,6 +483,40 @@ class TestErrorHandling(unittest.TestCase):
             entities.delete_tag(
                 CLUSTER, TENANT, "test", **{'entitySelector': 'tag("test")'}
             )
+
+    def test_create_device_err_missing(self):
+        """Tests error handling when creating custom devices.
+        Device ID or name must be present in payload.
+        """
+        request_file = f"{REQUEST_DIR}/device.json"
+        json_data = testtools.expected_payload(request_file)
+        json_data.pop("customDeviceId")
+
+        with self.assertRaises(ValueError):
+            entities.custom_device(CLUSTER, TENANT, json_data)
+
+    def test_create_device_err_no_type(self):
+        """Tests error handling when creating a custom device.
+        Type must be present in the payload.
+        """
+        request_file = f"{REQUEST_DIR}/device.json"
+        json_data = testtools.expected_payload(request_file)
+        device_id = json_data.get("customDeviceId")
+        json_data.pop("type")
+
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=URL_PATH,
+            request_type="GET",
+            parameters={
+                "entitySelector": f"entityId({device_id})"
+            },
+            response_data={}
+        )
+
+        with self.assertRaises(ValueError):
+            entities.custom_device(CLUSTER, TENANT, json_data)
 
 
 if __name__ == '__main__':
