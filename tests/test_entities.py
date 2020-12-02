@@ -16,8 +16,41 @@ REQUEST_DIR = "tests/mockserver_payloads/requests/entities"
 RESPONSE_DIR = "tests/mockserver_payloads/responses/entities"
 
 
+class TestFramework(unittest.TestCase):
+    """Tests for framework functions related to entities."""
+
+    def test_enum_repr(self):
+        result = EntityTypes.HOST.__repr__()
+        expected_result = EntityTypes.HOST.name
+
+        self.assertEqual(result, expected_result)
+
+
 class TestGetEntities(unittest.TestCase):
     """Tests cases for fetching entities."""
+
+    def test_get_entities_with_selector(self):
+        """Tests fetching all entities matching a selector"""
+
+        response_file = f"{RESPONSE_DIR}/get_all.json"
+
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=URL_PATH,
+            request_type="GET",
+            parameters={
+                'entitySelector': 'tag("test"),type(HOST)'
+            },
+            response_file=response_file
+        )
+
+        result = entities.get_entities_tenantwide(
+            CLUSTER, TENANT, EntityTypes.HOST, **{'entitySelector': 'tag("test")'}
+        )
+        expected_result = testtools.expected_payload(response_file).get('entities')
+
+        self.assertEqual(result, expected_result)
 
     def test_get_entities(self):
         """Test fetching all entities of given type tenant-wide"""
@@ -79,6 +112,27 @@ class TestGetEntities(unittest.TestCase):
         expected_result = testtools.expected_payload(response_file).get('entities')
         self.assertEqual(result, expected_result)
 
+    def test_get_entities_by_id(self):
+        """Test fetching multiple entities by IDs"""
+        entity_ids = "HOST-ABC123DEF456GHIJ,HOST-5B9CE4E4E14185FA,HOST-421D60DB4A2EA929"
+        response_file = f"{RESPONSE_DIR}/get_all.json"
+
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=URL_PATH,
+            request_type="GET",
+            parameters={
+                'entitySelector': f'entityId({entity_ids})'
+            },
+            response_file=response_file
+        )
+
+        result = entities.get_entity(CLUSTER, TENANT, entity_ids)
+        expected_result = testtools.expected_payload(response_file).get('entities')
+
+        self.assertEqual(result, expected_result)
+
     def test_get_entity(self):
         """Test fetching a single entity."""
 
@@ -120,6 +174,28 @@ class TestGetEntities(unittest.TestCase):
         expected_result = testtools.expected_payload(response_file).get('entities')
         self.assertEqual(next(result), expected_result)
 
+    def test_get_entities_by_page_with_selector(self):
+        """Test fetching tenantwide entities by page using entity selector"""
+
+        response_file = f"{RESPONSE_DIR}/get_all.json"
+
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=URL_PATH,
+            request_type="GET",
+            parameters={
+                'entitySelector': 'tag("test"),type(HOST)'
+            },
+            response_file=response_file
+        )
+
+        result = entities.get_entities_by_page(
+            CLUSTER, TENANT, EntityTypes.HOST, **{'entitySelector': 'tag("test")'}
+        )
+        expected_result = testtools.expected_payload(response_file).get('entities')
+        self.assertEqual(next(result), expected_result)
+
     def test_get_entity_count_tenantwide(self):
         """Test getting the count of entities within a tenant."""
 
@@ -138,6 +214,28 @@ class TestGetEntities(unittest.TestCase):
         )
 
         result = entities.get_entity_count_tenantwide(CLUSTER, TENANT, EntityTypes.HOST)
+        self.assertEqual(result, 3)
+
+    def test_get_entity_count_tenantwide_with_selector(self):
+        """Test getting the count of entities within a tenant."""
+
+        response_file = f"{RESPONSE_DIR}/get_all.json"
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=URL_PATH,
+            request_type="GET",
+            response_file=response_file,
+            parameters={
+                'from': 'now-24h',
+                'pageSize': '1',
+                'entitySelector': 'tag("test"),type(HOST)'
+            }
+        )
+
+        result = entities.get_entity_count_tenantwide(
+            CLUSTER, TENANT, EntityTypes.HOST, **{'entitySelector': 'tag("test")'}
+        )
         self.assertEqual(result, 3)
 
     def test_get_entity_count_clusterwide(self):
@@ -211,7 +309,7 @@ class TestHostTagging(unittest.TestCase):
         )
         self.assertEqual(result.status_code, 201)
 
-    def test_delete_tags(self):
+    def test_delete_tag(self):
         """Test deleting a tag from a specific host."""
 
         host_id = "HOST-ABC123DEF456GHIJ"
@@ -222,6 +320,10 @@ class TestHostTagging(unittest.TestCase):
             tenant=TENANT,
             url_path=TAG_URL_PATH,
             request_type="DELETE",
+            parameters={
+                'key': tag,
+                'entitySelector': f'entityId({host_id})'
+            },
             response_code=204
         )
 
@@ -232,6 +334,120 @@ class TestHostTagging(unittest.TestCase):
             entitySelector=f'entityId({host_id})'
         )
         self.assertEqual(204, result.status_code)
+
+    def test_delete_tag_with_value(self):
+        """Test deleting a tag with specific value from a host."""
+
+        host_id = "HOST-ABC123DEF456GHIJ"
+        tag = "demo_key"
+        tag_val = "demo_value"
+
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=TAG_URL_PATH,
+            request_type="DELETE",
+            parameters={
+                'key': tag,
+                'value': tag_val,
+                'entitySelector': f'entityId({host_id})'
+            },
+            response_code=204
+        )
+
+        result = entities.delete_tag(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            tag_key=tag,
+            tag_value=tag_val,
+            entitySelector=f'entityId({host_id})'
+        )
+        self.assertEqual(204, result.status_code)
+
+    def test_delete_tag_all(self):
+        """Test deleting a tag by key from a specific host."""
+
+        host_id = "HOST-ABC123DEF456GHIJ"
+        tag = "demo"
+
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=TAG_URL_PATH,
+            request_type="DELETE",
+            parameters={
+                "key": tag,
+                "deleteAllWithKey": "True",
+                "entitySelector": f"entityId({host_id})"
+            },
+            response_code=204
+        )
+
+        result = entities.delete_tag(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            tag_key=tag,
+            tag_value="all",
+            entitySelector=f'entityId({host_id})'
+        )
+        self.assertEqual(204, result.status_code)
+
+
+class TestErrorHandling(unittest.TestCase):
+    """Test cases for error handling in the entities module."""
+
+    def test_add_tags_err_no_tag(self):
+        """Tests error handling when adding tags to entities.
+        Tags cannot be empty.
+        """
+        with self.assertRaises(TypeError):
+            entities.add_tags(CLUSTER, TENANT, "")
+
+    def test_add_tags_err_no_list(self):
+        """Tests error handling when adding tags to entities.
+        Tags list must be a list.
+        """
+        with self.assertRaises(TypeError):
+            entities.add_tags(CLUSTER, TENANT, "tag")
+
+    def test_add_tags_err_no_selector(self):
+        """Tests error handling when adding tags to entities.
+        Must provide an entity selector.
+        """
+        with self.assertRaises(ValueError):
+            entities.add_tags(CLUSTER, TENANT, ["test"])
+
+    def test_add_tags_err_no_type(self):
+        """Tests error handling when adding tags to entities.
+        Must provide either entity type or ID in entity selector.
+        """
+        with self.assertRaises(ValueError):
+            entities.add_tags(
+                CLUSTER, TENANT, ["test"], **{'entitySelector': 'tag("test")'}
+            )
+
+    def test_delete_tag_err_no_tag(self):
+        """Tests error handling when deleting tags from entities.
+        Tag key must not be empty.
+        """
+        with self.assertRaises(TypeError):
+            entities.delete_tag(CLUSTER, TENANT, "")
+
+    def test_delete_tag_err_no_selector(self):
+        """Tests error handling when deleting tags from entities.
+        Must provide entity selector.
+        """
+        with self.assertRaises(ValueError):
+            entities.delete_tag(CLUSTER, TENANT, "test")
+
+    def test_delete_tag_err_no_type(self):
+        """Tests error handling when deleting tags from entities.
+        Must provide either entity ID or type in entity selector.
+        """
+        with self.assertRaises(ValueError):
+            entities.delete_tag(
+                CLUSTER, TENANT, "test", **{'entitySelector': 'tag("test")'}
+            )
 
 
 if __name__ == '__main__':
