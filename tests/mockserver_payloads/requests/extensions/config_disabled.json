@@ -1,6 +1,6 @@
 {
     "extensionId": "custom.jmx.radujmx123456789",
-    "enabled": true,
+    "enabled": false,
     "infraOnlyEnabled": false,
     "properties": {},
     "activeGate": "xxxxxxxxxxxxxx"

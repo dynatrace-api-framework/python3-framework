@@ -1,7 +1,6 @@
 """Test Suite for the Extensions API"""
 import unittest
-import json
-from user_variables import FULL_SET  # pylint: disable=import-error
+from variable_sets.radu_vars import FULL_SET  # pylint: disable=import-error
 from tests import tooling_for_test as testtools
 from dynatrace.framework.request_handler import TenantAPIs, HTTP
 from dynatrace.tenant import extensions
@@ -164,8 +163,7 @@ class TestModifyExtensions(unittest.TestCase):
     def test_update_global_config(self):
         """Test updating the global config for an extension"""
         request_file = f"{REQUEST_DIR}/config.json"
-        with open(request_file, "r") as config_file:
-            config = json.loads(config_file.read())
+        config = testtools.expected_payload(request_file)
 
         testtools.create_mockserver_expectation(
             cluster=CLUSTER,
@@ -183,11 +181,70 @@ class TestModifyExtensions(unittest.TestCase):
 
         self.assertEqual(result, expected_result)
 
+    def test_enable_global_config(self):
+        """Test enabling the global configuration of an extension"""
+        request_file = f"{REQUEST_DIR}/config.json"
+        response_file = f"{RESPONSE_DIR}/config.json"
+
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=f"{URL_PATH}/{EXTENSION_ID}/global",
+            request_type=str(HTTP.GET),
+            response_file=response_file,
+            mock_id="req1"
+        )
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=f"{URL_PATH}/{EXTENSION_ID}/global",
+            request_type=str(HTTP.PUT),
+            request_file=request_file,
+            response_code=202,
+            mock_id="req2"
+        )
+
+        result = extensions.enable_global_config(
+            CLUSTER, TENANT, EXTENSION_ID
+        ).status_code
+        expected_result = 202
+
+        self.assertEqual(result, expected_result)
+
+    def test_disable_global_config(self):
+        """Test disabling the global configuration of an extension"""
+        request_file = f"{REQUEST_DIR}/config_disabled.json"
+        response_file = f"{RESPONSE_DIR}/config.json"
+
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=f"{URL_PATH}/{EXTENSION_ID}/global",
+            request_type=str(HTTP.GET),
+            response_file=response_file,
+            mock_id="req1"
+        )
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=f"{URL_PATH}/{EXTENSION_ID}/global",
+            request_type=str(HTTP.PUT),
+            request_file=request_file,
+            response_code=202,
+            mock_id="req2"
+        )
+
+        result = extensions.disable_global_config(
+            CLUSTER, TENANT, EXTENSION_ID
+        ).status_code
+        expected_result = 202
+
+        self.assertEqual(result, expected_result)
+
     def test_update_instance_config(self):
         """Test updating an instance of configuration for an extension"""
         request_file = f"{REQUEST_DIR}/config.json"
-        with open(request_file, "r") as config_file:
-            config = json.loads(config_file.read())
+        config = testtools.expected_payload(request_file)
 
         testtools.create_mockserver_expectation(
             cluster=CLUSTER,
@@ -200,6 +257,66 @@ class TestModifyExtensions(unittest.TestCase):
 
         result = extensions.update_instance_config(
             CLUSTER, TENANT, EXTENSION_ID, INSTANCE_ID, config
+        ).status_code
+        expected_result = 202
+
+        self.assertEqual(result, expected_result)
+
+    def test_enable_instance_config(self):
+        """Tests enabling an instance of configuration for an extension"""
+        response_file = f"{RESPONSE_DIR}/config.json"
+        request_file = f"{REQUEST_DIR}/config.json"
+
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=f"{URL_PATH}/{EXTENSION_ID}/instances/{INSTANCE_ID}",
+            request_type=str(HTTP.GET),
+            response_file=response_file,
+            mock_id="req1"
+        )
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=f"{URL_PATH}/{EXTENSION_ID}/instances/{INSTANCE_ID}",
+            request_type=str(HTTP.PUT),
+            request_file=request_file,
+            response_code=202,
+            mock_id="req2"
+        )
+
+        result = extensions.enable_instance_config(
+            CLUSTER, TENANT, EXTENSION_ID, INSTANCE_ID
+        ).status_code
+        expected_result = 202
+
+        self.assertEqual(result, expected_result)
+
+    def test_disable_instance_config(self):
+        """Tests enabling an instance of configuration for an extension"""
+        response_file = f"{RESPONSE_DIR}/config.json"
+        request_file = f"{REQUEST_DIR}/config_disabled.json"
+
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=f"{URL_PATH}/{EXTENSION_ID}/instances/{INSTANCE_ID}",
+            request_type=str(HTTP.GET),
+            response_file=response_file,
+            mock_id="req1"
+        )
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=f"{URL_PATH}/{EXTENSION_ID}/instances/{INSTANCE_ID}",
+            request_type=str(HTTP.PUT),
+            request_file=request_file,
+            response_code=202,
+            mock_id="req2"
+        )
+
+        result = extensions.disable_instance_config(
+            CLUSTER, TENANT, EXTENSION_ID, INSTANCE_ID
         ).status_code
         expected_result = 202
 
