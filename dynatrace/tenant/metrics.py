@@ -58,8 +58,6 @@ def get_metric_data(cluster, tenant, **kwargs):
     @kwargs metricSelector (str) - mandatory. used to pass in ID of queried metric(s)
     \n
     @returns dict - metric data as dictionary with metric id as key
-    \n
-    @throws Exception - exception as thrown from downstream
     """
     next_page_key = 1
     results = {}
@@ -69,15 +67,12 @@ def get_metric_data(cluster, tenant, **kwargs):
         if next_page_key != 1:
             kwargs = dict(nextPageKey=next_page_key)
 
-        try:
-            response = rh.make_api_call(cluster=cluster,
-                                        tenant=tenant,
-                                        endpoint=f"{ENDPOINT}/query",
-                                        params=kwargs)
-        except InvalidAPIResponseException as err:
-            if 'metric key that could not be resolved in the metric registry' in str(err):
-                break
-            raise
+        response = rh.make_api_call(
+            cluster=cluster,
+            tenant=tenant,
+            endpoint=f"{ENDPOINT}/query",
+            params=kwargs
+        )
 
         for result in response.json().get('result'):
             metric = result.get('metricId')

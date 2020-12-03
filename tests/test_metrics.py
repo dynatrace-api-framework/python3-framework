@@ -190,26 +190,5 @@ class TestPushMetrics(unittest.TestCase):
         self.assertEqual(result.status_code, 202)
 
 
-class TestErrorHandling(unittest.TestCase):
-    """Test cases for error handling during metrics operations"""
-
-    def test_fetch_metric_not_resolved(self):
-        """Tests error handling for missing metric selector.
-        """
-        response_file = f"{RESPONSE_DIR}/error.json"
-
-        testtools.create_mockserver_expectation(
-            cluster=CLUSTER,
-            tenant=TENANT,
-            url_path=f"{URL_PATH}/query",
-            request_type="GET",
-            response_file=response_file,
-            response_code=400
-        )
-
-        with self.assertRaises(InvalidAPIResponseException):
-            metrics.get_metric_data(CLUSTER, TENANT)
-
-
 if __name__ == '__main__':
     unittest.main()

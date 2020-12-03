@@ -1,6 +1,0 @@
-{
-    "error": {
-        "code": 400,
-        "message": "Metric selector may not be empty."
-    }
-}
