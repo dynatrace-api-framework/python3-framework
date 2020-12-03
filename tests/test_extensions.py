@@ -1,6 +1,6 @@
 """Test Suite for the Extensions API"""
 import unittest
-from variable_sets.radu_vars import FULL_SET  # pylint: disable=import-error
+from user_variables import FULL_SET  # pylint: disable=import-error
 from tests import tooling_for_test as testtools
 from dynatrace.framework.request_handler import TenantAPIs, HTTP
 from dynatrace.tenant import extensions
@@ -150,7 +150,7 @@ class TestGetExtensions(unittest.TestCase):
 
         result = extensions.get_extension_metrics(CLUSTER, TENANT, EXTENSION_ID)
         expected_result = list(
-            m.get('metricId') 
+            m.get('metricId')
             for m in testtools.expected_payload(response_file).get('metrics')
         )
 
