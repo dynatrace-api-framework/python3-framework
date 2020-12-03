@@ -1,0 +1,22 @@
+{
+    "totalCount": 2,
+    "nextPageKey": null,
+    "result": [
+        {
+            "metricId": "builtin:host.mem.avail.pct",
+            "data": [
+                {
+                    "dimensions": [
+                        "HOST-123ABC456DEF789GHI0"
+                    ],
+                    "timestamps": [
+                        1605681827391
+                    ],
+                    "values": [
+                        29.36756863040855
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,22 @@
+{
+    "totalCount": 2,
+    "nextPageKey": "ABC123",
+    "result": [
+        {
+            "metricId": "builtin:host.mem.avail.pct",
+            "data": [
+                {
+                    "dimensions": [
+                        "HOST-ABC123DEF456GHI7"
+                    ],
+                    "timestamps": [
+                        1605684060000
+                    ],
+                    "values": [
+                        29.36756863040855
+                    ]
+                }
+            ]
+        }
+    ]
+}

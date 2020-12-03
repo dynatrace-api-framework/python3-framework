@@ -5,6 +5,7 @@ import unittest
 # from user_variables import FULL_SET  # pylint: disable=import-error
 from user_variables import FULL_SET
 from tests import tooling_for_test as testtools
+from dynatrace.framework.exceptions import InvalidAPIResponseException
 from dynatrace.framework.request_handler import TenantAPIs
 from dynatrace.tenant import metrics
 
@@ -123,6 +124,49 @@ class TestGetMetrics(unittest.TestCase):
         expected_result = 3 * 525.6
         self.assertEqual(result, expected_result)
 
+    def test_get_metric_data_multipage(self):
+        """Test fetching datapoints for metrics matching selector in a
+        multipage result set.
+        """
+        response_file1 = f"{RESPONSE_DIR}/datapoints_page1.json"
+        response_file2 = f"{RESPONSE_DIR}/datapoints_page2.json"
+
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=f"{URL_PATH}/query",
+            request_type="GET",
+            parameters={
+                "metricSelector": "builtin:host.mem.avail.pct",
+                "resolution": "Inf"
+            },
+            response_file=response_file1,
+            mock_id="req1"
+        )
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=f"{URL_PATH}/query",
+            request_type="GET",
+            parameters={
+                "nextPageKey": "ABC123"
+            },
+            response_file=response_file2,
+            mock_id="req2"
+        )
+
+        result = metrics.get_metric_data(
+            CLUSTER, TENANT, **{'metricSelector': 'builtin:host.mem.avail.pct',
+                                'resolution': 'Inf'}
+        )
+        data = testtools.expected_payload(response_file1).get('result')[0].get('data')
+        data.extend(
+            testtools.expected_payload(response_file2).get('result')[0].get('data')
+        )
+        expected_result = {'builtin:host.mem.avail.pct': data}
+
+        self.assertEqual(result, expected_result)
+
 
 class TestPushMetrics(unittest.TestCase):
     """Tests for metrics ingestion capability"""
@@ -144,6 +188,27 @@ class TestPushMetrics(unittest.TestCase):
 
         result = metrics.ingest_metrics(CLUSTER, TENANT, payload)
         self.assertEqual(result.status_code, 202)
+
+
+class TestErrorHandling(unittest.TestCase):
+    """Test cases for error handling during metrics operations"""
+
+    def test_fetch_metric_not_resolved(self):
+        """Tests error handling for missing metric selector.
+        """
+        response_file = f"{RESPONSE_DIR}/error.json"
+
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=f"{URL_PATH}/query",
+            request_type="GET",
+            response_file=response_file,
+            response_code=400
+        )
+
+        with self.assertRaises(InvalidAPIResponseException):
+            metrics.get_metric_data(CLUSTER, TENANT)
 
 
 if __name__ == '__main__':
