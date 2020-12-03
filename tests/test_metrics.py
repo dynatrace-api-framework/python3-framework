@@ -5,7 +5,6 @@ import unittest
 # from user_variables import FULL_SET  # pylint: disable=import-error
 from user_variables import FULL_SET
 from tests import tooling_for_test as testtools
-from dynatrace.framework.exceptions import InvalidAPIResponseException
 from dynatrace.framework.request_handler import TenantAPIs
 from dynatrace.tenant import metrics
 
