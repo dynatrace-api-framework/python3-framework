@@ -135,12 +135,12 @@ def add_comment(cluster, tenant, problem_id, **kwargs):
     @param tenant (str) - name of Dynatrace Tenant (as taken from variable set)\n
     @param problem_id (str) - ID of the problem to add the comment to
     \n
-    @kwargs comment (str) - comment content\n
+    @kwargs message (str) - comment content\n
     @kwargs context (str) - comment context. added under "via ..."
     \n
     @returns Response - HTTP response for the request
     """
-    comment = kwargs.get("comment") if "comment" in kwargs else ""
+    message = kwargs.get("message") if "message" in kwargs else ""
     context = kwargs.get("context") if "context" in kwargs else ""
 
     response = rh.make_api_call(
@@ -148,7 +148,7 @@ def add_comment(cluster, tenant, problem_id, **kwargs):
         tenant=tenant,
         endpoint=f"{ENDPOINT}/{problem_id}/comments",
         method=rh.HTTP.POST,
-        json=dict(comment=comment, context=context)
+        json=dict(message=message, context=context)
     )
 
     return response
@@ -162,17 +162,19 @@ def update_comment(cluster, tenant, problem_id, comment_id, **kwargs):
     @param problem_id (str) - ID of the problem containing the comment\n
     @param comment_id (str) - ID of the comment to update
     \n
-    @kwargs comment (str) - comment content\n
+    @kwargs message (str) - comment content\n
     @kwargs context (str) - comment context. added under "via ..."
     \n
     @returns Response - HTTP response for the request
     """
-    comment = get_comment(cluster, tenant, problem_id, comment_id)
+    comment = {}
+    message = kwargs.get("message") if "message" in kwargs else ""
+    context = kwargs.get("context") if "context" in kwargs else ""
 
-    if "comment" in kwargs:
-        comment["comment"] = kwargs.get("comment")
-    if "context" in kwargs:
-        comment["context"] = kwargs.get("context")
+    if message:
+        comment["message"] = message
+    if context:
+        comment["context"] = context
 
     response = rh.make_api_call(
         cluster=cluster,
