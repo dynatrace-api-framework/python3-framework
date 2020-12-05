@@ -62,6 +62,10 @@ def create_mockserver_expectation(cluster, tenant, url_path, request_type, **kwa
                 "content-type": [content_type],
                 "x-ratelimit-remaining": [rate_remaining],
                 "x-ratelimit-limit": [rate_limit]
+            },
+            "body": {
+                "type": "JSON",
+                "json": {}
             }
         },
         "times": {
@@ -80,14 +84,14 @@ def create_mockserver_expectation(cluster, tenant, url_path, request_type, **kwa
     if response_file or response_data:
         response_body = {
             "type": "JSON",
-            "json": expected_payload(response_file) if response_file else response_data,
+            "json": expected_payload(response_file) if response_file else response_data
         }
         expectation["httpResponse"]["body"] = response_body
 
     if request_file:
         request_body = {
             "type": "JSON",
-            "json": expected_payload(request_file),
+            "json": expected_payload(request_file)
         }
         expectation["httpRequest"]["body"] = request_body
 
