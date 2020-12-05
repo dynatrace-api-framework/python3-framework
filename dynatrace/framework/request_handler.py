@@ -176,9 +176,10 @@ def get_results_whole(cluster, tenant, endpoint, api_version, **kwargs):
     # For V2 APIs must specify the item collected
     if api_version == 2:
         is_v2 = True
-        if 'item' not in kwargs:
+        if "item" not in kwargs:
             raise ValueError("For V2 APIs you must provide collected item.")
-        item = kwargs['item']
+        item = kwargs["item"]
+        kwargs.pop("item")
         results = {}
     else:
         is_v2 = False
@@ -188,7 +189,7 @@ def get_results_whole(cluster, tenant, endpoint, api_version, **kwargs):
         if cursor != 1:
             if not is_v2 or endpoint == TenantAPIs.ONEAGENTS:
                 # V1 and OneAgents require all other query params are preserved
-                kwargs['nextPageKey'] = cursor
+                kwargs["nextPageKey"] = cursor
             else:
                 # V2 requires all other query params are removed
                 kwargs = dict(nextPageKey=cursor)
