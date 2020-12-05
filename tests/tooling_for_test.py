@@ -4,8 +4,6 @@ import logging
 import requests
 
 logging.basicConfig(filename="testing_tools.log", level=logging.DEBUG)
-EXPECTATION_URL = "https://mockserver.mockserver:5555/mockserver/expectation"
-
 
 def create_mockserver_expectation(cluster, tenant, url_path, request_type, **kwargs):
     """Creates an expectation for a mockserver request.
@@ -108,10 +106,11 @@ def create_mockserver_expectation(cluster, tenant, url_path, request_type, **kwa
             expectation["httpResponse"]["headers"][header] = [response_headers[header]]
 
     logging.debug(expectation)
+    expectation_url = f"https://{cluster['tenant'][tenant]}.{cluster['url']}/mockserver/expectation"
 
     test_req = requests.request(
         "PUT",
-        EXPECTATION_URL,
+        expectation_url,
         json=expectation,
         verify=False
     )
