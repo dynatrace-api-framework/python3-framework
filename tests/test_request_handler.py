@@ -88,7 +88,7 @@ class TestRequests(unittest.TestCase):
         testools.create_mockserver_expectation(
             cluster=MGD_CLUSTER,
             tenant=TENANT,
-            url_path="/e/mockserver/testpath",
+            url_path=f"/e/{MGD_CLUSTER['tenant'][TENANT]}/testpath",
             request_type=str(rh.HTTP.GET),
             response_code=200,
             mock_id="managed"
