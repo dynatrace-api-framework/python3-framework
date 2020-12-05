@@ -2,9 +2,9 @@
 import json
 import logging
 import requests
-from dynatrace.framework.request_handler import generate_tenant_url
 
 logging.basicConfig(filename="testing_tools.log", level=logging.DEBUG)
+EXPECTATION_URL = "https://mockserver.mockserver:5555/mockserver/expectation"
 
 
 def create_mockserver_expectation(cluster, tenant, url_path, request_type, **kwargs):
@@ -18,89 +18,100 @@ def create_mockserver_expectation(cluster, tenant, url_path, request_type, **kwa
     @kwargs parameters (dict) - query string parameters for the request\n
     @kwargs request_file (str) - path to JSON file representing request payload\n
     @kwargs request_data (str) - path to plain-text file representing request payload
-    @kwargs response_body (str) - path to JSON file representing response to request\n
+    @kwargs response_file (str) - path to JSON file representing response to request\n
+    @kwargs response_body (dict) - dictionary representing the JSON response to request\n
     @kwargs response_code (int) - HTTP response code
     \n
     @throws ValueError - when the response code is not positive
     """
     requests.packages.urllib3.disable_warnings()  # pylint: disable=no-member
+
+    logging.debug("URL PATH: %s", url_path)
+    logging.debug("KWARGS %s", kwargs)
+
+    # Get the appropriate token for the API
+    if "onpremise" in url_path:
+        api_token = cluster["cluster_token"]
+    else:
+        api_token = cluster["api_token"][tenant]
+
+    # Defaults that can be overridden in kwargs
+    response_code = kwargs.get("response_code", 200)
+    request_id = kwargs.get("mock_id", "OneOff")
+    rate_remaining = kwargs.get("rate_remaining", "100000000")
+    rate_limit = kwargs.get("rate_limit", "100000000")
+    content_type = kwargs.get("content_type", "application/json")
+    parameters = kwargs.get("parameters", None)
+    request_file = kwargs.get("request_file", None)
+    request_data = kwargs.get("request_data", None)
+    response_file = kwargs.get("response_file", None)
+    response_data = kwargs.get("response_data", None)
+    response_headers = kwargs.get("response_headers", None)
+    request_body = None
+    response_body = None
+
     expectation = {
         "httpRequest": {
             "headers": {
-                "Authorization": [f"Api-Token {cluster.get('api_token').get(tenant)}"]
+                "Authorization": [f"Api-Token {api_token}"]
             },
             "path": url_path,
             "method": request_type
         },
         "httpResponse": {
-            "statusCode": 200
+            "statusCode": response_code,
+            "headers": {
+                "content-type": [content_type],
+                "x-ratelimit-remaining": [rate_remaining],
+                "x-ratelimit-limit": [rate_limit]
+            }
         },
         "times": {
             "remainingTimes": 1,
             "unlimited": False
         },
-        "id": "OneOff",
+        "id": request_id,
     }
-
-    logging.debug("URL PATH: %s", url_path)
-    logging.debug("KWARGS %s", kwargs)
 
     # Mockserver expectation syntax expects each parameter's matching values
     # to be given as a list (even if just 1 value)
-    if 'parameters' in kwargs:
-        expectation["httpRequest"]["queryStringParameters"] = {
-            param: [
-                kwargs['parameters'][param]
-            ]
-            for param in kwargs['parameters']
-        }
+    if parameters:
+        parameters = {param: [parameters.get(param)] for param in parameters}
+        expectation["httpRequest"]["queryStringParameters"] = parameters
 
-    if "request_file" in kwargs:
-        with open(kwargs['request_file']) as open_file:
-            request_payload = json.load(open_file)
-        expectation["httpRequest"]["body"] = {
+    if response_file or response_data:
+        response_body = {
             "type": "JSON",
-            "json": request_payload,
+            "json": expected_payload(response_file) if response_file else response_data,
         }
+        expectation["httpResponse"]["body"] = response_body
 
-    if "request_data" in kwargs:
+    if request_file:
+        request_body = {
+            "type": "JSON",
+            "json": expected_payload(request_file),
+        }
+        expectation["httpRequest"]["body"] = request_body
+
+    if request_data:
         with open(kwargs['request_data']) as file:
-            request_data = file.read()
-        expectation["httpRequest"]["body"] = {
+            data = file.read()
+        request_body = {
             "type": "STRING",
-            "string": request_data,
+            "string": data,
             "contentType": "text/plain"
         }
+        expectation["httpRequest"]["body"] = request_body
 
-    if "response_file" in kwargs or "response_data" in kwargs:
-        if "response_file" in kwargs:
-            with open(kwargs['response_file']) as open_file:
-                response_payload = json.load(open_file)
-        else:
-            response_payload = kwargs['response_data']
-
-        expectation["httpResponse"]["body"] = {
-            "type": "JSON",
-            "json": response_payload,
-        }
-        expectation["httpResponse"]["headers"] = {
-            "content-type": ["application/json"],
-            "x-ratelimit-remaining": ['100000000'],
-            "x-ratelimit-limit": ['100000000']
-        }
-
-    if "response_code" in kwargs:
-        expectation["httpResponse"]["statusCode"] = kwargs["response_code"]
-
-    if "mock_id" in kwargs:
-        expectation["id"] = kwargs["mock_id"]
+    if response_headers:
+        for header in response_headers:
+            expectation["httpResponse"]["headers"][header] = [response_headers[header]]
 
     logging.debug(expectation)
 
-    expectation_url = f"{generate_tenant_url(cluster, tenant)}/mockserver/expectation"
     test_req = requests.request(
         "PUT",
-        expectation_url,
+        EXPECTATION_URL,
         json=expectation,
         verify=False
     )
