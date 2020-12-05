@@ -425,7 +425,7 @@ class TestCustomDevices(unittest.TestCase):
 
         result = entities.custom_device(CLUSTER, TENANT, json_data)
 
-        self.assertEquals(result.status_code, 201)
+        self.assertEqual(result.status_code, 201)
 
 
 class TestErrorHandling(unittest.TestCase):
