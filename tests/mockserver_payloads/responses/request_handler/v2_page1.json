@@ -1,0 +1,11 @@
+{
+    "nextPageKey": "ABC123",
+    "items": [
+        {
+            "name": "item1"
+        },
+        {
+            "name": "item2"
+        }
+    ]
+}
