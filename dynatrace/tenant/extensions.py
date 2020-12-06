@@ -1,8 +1,9 @@
 """Operations Interacting with Dynatrace Extensions API"""
-from dynatrace.framework import request_handler as rh
+from dynatrace.framework import request_handler as rh, logging
 from dynatrace.tenant import metrics
 
 ENDPOINT = rh.TenantAPIs.EXTENSIONS
+logger = logging.get_logger(__name__)
 
 
 def get_all_extensions(cluster, tenant, page_size=200):
@@ -16,6 +17,7 @@ def get_all_extensions(cluster, tenant, page_size=200):
     \n
     @returns list - list of extensions
     """
+    logger.info(f"Getting all extensions in {tenant} tenant")
     extension_list = rh.get_results_whole(
         cluster=cluster,
         tenant=tenant,
@@ -37,6 +39,7 @@ def get_extension_details(cluster, tenant, extension_id):
     \n
     @returns (dict) - JSON response containing extension details
     """
+    logger.info(f"Getting extension details for {extension_id}")
     details = rh.make_api_call(
         cluster=cluster,
         endpoint=f"{ENDPOINT}/{extension_id}",
@@ -55,6 +58,7 @@ def get_extension_metrics(cluster, tenant, extension_id):
     \n
     @returns list - list of metric IDs
     """
+    logger.info(f"Getting metrics collected by extension {extension_id}")
     metric_group = get_extension_details(cluster, tenant, extension_id).get('metricGroup')
     ext_metrics = metrics.get_metric_descriptor(
         cluster=cluster,
@@ -75,6 +79,7 @@ def get_extension_global_config(cluster, tenant, extension_id):
     \n
     @returns dict - global configuration
     """
+    logger.info(f"Getting global configuration for extension {extension_id}")
     config = rh.make_api_call(
         cluster=cluster,
         tenant=tenant,
@@ -95,6 +100,9 @@ def get_extension_instance_config(cluster, tenant, extension_id, instance_id):
     \n
     @returns dict - instance configuration
     """
+    logger.info(
+        f"Getting configuration for instance {instance_id} on extension {extension_id}"
+    )
     config = rh.make_api_call(
         cluster=cluster,
         tenant=tenant,
@@ -115,6 +123,7 @@ def get_extension_states(cluster, tenant, extension_id):
     \n
     @returns list - states/instances of this extension
     """
+    logger.info(f"Getting states for extension {extension_id}")
     states = rh.get_results_whole(
         cluster=cluster,
         tenant=tenant,
@@ -136,6 +145,7 @@ def get_extension_instances(cluster, tenant, extension_id):
     \n
     @returns list - configuration instances for this extension
     """
+    logger.info(f"Getting instances for extension {extension_id}")
     instances = rh.get_results_whole(
         cluster=cluster,
         tenant=tenant,
@@ -160,7 +170,7 @@ def enable_global_config(cluster, tenant, extension_id):
     config = get_extension_global_config(cluster, tenant, extension_id)
 
     config['enabled'] = True
-
+    logger.info(f"Enabling global config for extension {extension_id}")
     response = update_global_config(cluster, tenant, extension_id, config)
 
     return response
@@ -179,7 +189,7 @@ def disable_global_config(cluster, tenant, extension_id):
     config = get_extension_global_config(cluster, tenant, extension_id)
 
     config['enabled'] = False
-
+    logger.info(f"Disabling global config for extension {extension_id}")
     response = update_global_config(cluster, tenant, extension_id, config)
 
     return response
@@ -196,6 +206,7 @@ def update_global_config(cluster, tenant, extension_id, config):
     \n
     @returns dict - HTTP response to request
     """
+    logger.info(f"Updating global config for extension {extension_id}")
     response = rh.make_api_call(
         cluster=cluster,
         tenant=tenant,
@@ -232,6 +243,7 @@ def enable_instance_config(cluster, tenant, extension_id, instance_id):
     if 'activeGate' in config:
         config['extensionId'] = extension_id
 
+    logger.info(f"Enabling config for instance {instance_id} of {extension_id}")
     response = update_instance_config(
         cluster, tenant, extension_id, instance_id, config
     )
@@ -264,6 +276,7 @@ def disable_instance_config(cluster, tenant, extension_id, instance_id):
     if 'activeGate' in config:
         config['extensionId'] = extension_id
 
+    logger.info(f"Disabling config for instance {instance_id} of {extension_id}")
     response = update_instance_config(
         cluster, tenant, extension_id, instance_id, config
     )
@@ -283,6 +296,7 @@ def update_instance_config(cluster, tenant, extension_id, instance_id, config):
     \n
     @returns dict - HTTP response to request
     """
+    logger.info(f"Updating config for instance {instance_id} of {extension_id}")
     response = rh.make_api_call(
         cluster=cluster,
         tenant=tenant,
