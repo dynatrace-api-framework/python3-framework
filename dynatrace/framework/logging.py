@@ -6,7 +6,7 @@ from dynatrace.framework import settings
 logging.root.setLevel(logging.NOTSET)
 
 
-def get_logger(name=__name__):
+def get_logger(name):
     """Sets up a logger and returns it for use throughout the framework.
     Actual configuration parameters are exposed in framework settings.
     \n
@@ -18,6 +18,7 @@ def get_logger(name=__name__):
     output = settings.get_setting("LOG_OUTPUT")
     folder = settings.get_setting("LOG_DIR")
     level = settings.get_setting("LOG_LEVEL")
+
     logger = logging.getLogger(name)
 
     log_format = logging.Formatter(
