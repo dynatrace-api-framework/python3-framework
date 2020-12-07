@@ -7,12 +7,12 @@ except ImportError:
 
 
 DefaultSettings = {
-    'LOG_LEVEL': "ERROR",
-    'LOG_DIR': None,
-    'LOG_OUTPUT': [
+    "LOG_LEVEL": "ERROR",
+    "LOG_DIR": "logs/",
+    "LOG_OUTPUT": [
         "CONSOLE",
     ],
-    'LOG_ENABLED': True,
+    "LOG_ENABLED": True,
 
     # ROLE TYPE KEYS
     # access_env
