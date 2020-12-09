@@ -28,6 +28,10 @@ def get_logger(name):
 
     if enabled:
         if "FILE" in output:
+            if folder is None:
+                raise ValueError(
+                    "Could not setup logging - missing folder from settings."
+                )
             file_handler = handlers.RotatingFileHandler(
                 filename=f"{folder}/Framework.log",
                 delay=True,
