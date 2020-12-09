@@ -1,6 +1,8 @@
 """Module for OneAgent operations."""
 
-import dynatrace.framework.request_handler as rh
+from dynatrace.framework import request_handler as rh, logging
+
+logger = logging.get_logger(__name__)
 
 
 def get_host_units_tenantwide(cluster, tenant, **kwargs):
@@ -13,6 +15,7 @@ def get_host_units_tenantwide(cluster, tenant, **kwargs):
     """
     host_units = 0
 
+    logger.info(f"Getting hosts from tenant {tenant}")
     host_list = rh.get_results_whole(
         cluster=cluster,
         tenant=tenant,
@@ -21,6 +24,7 @@ def get_host_units_tenantwide(cluster, tenant, **kwargs):
         **kwargs
     )
 
+    logger.info("Adding up host units")
     for host in host_list:
         host_units += round(host['consumedHostUnits'], ndigits=3)
 
@@ -39,6 +43,7 @@ def get_host_units_clusterwide(cluster, aggregated=True, **kwargs):
     total_host_units = 0
     host_units = {}
 
+    logger.info("Getting host units for the whole cluster")
     for tenant in cluster['tenant']:
         tenant_host_units = get_host_units_tenantwide(
             cluster=cluster,
@@ -63,6 +68,7 @@ def get_host_units_setwide(full_set, aggregated=True, **kwargs):
     total_host_units = 0
     host_units = {}
 
+    logger.info("Getting host units for the whole set")
     for cluster in full_set:
         cluster_host_units = get_host_units_clusterwide(
             cluster=full_set[cluster],
@@ -83,6 +89,7 @@ def get_oneagents_tenantwide(cluster, tenant, **kwargs):
 
     @returns - list of OneAgents
     """
+    logger.info(f"Getting OneAgents from tenant {tenant}")
     return rh.get_results_whole(
         cluster=cluster,
         tenant=tenant,
