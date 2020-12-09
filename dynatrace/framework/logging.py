@@ -1,4 +1,5 @@
 """Module for logging throughout the framework."""
+import os
 import logging
 from logging import handlers
 from dynatrace.framework import settings
@@ -6,11 +7,13 @@ from dynatrace.framework import settings
 logging.root.setLevel(logging.NOTSET)
 
 
-def get_logger(name):
+def get_logger(name, filename="Framework.log"):
     """Sets up a logger and returns it for use throughout the framework.
     Actual configuration parameters are exposed in framework settings.
     \n
     @param name (str) - name of the logger. defaults to __name__
+    @param filename (str) - name of the log file (in case of logging to file)
+                            Defaults to Framework.log
     \n
     @returns Logger - logger to be used in framework
     """
@@ -32,8 +35,10 @@ def get_logger(name):
                 raise ValueError(
                     "Could not setup logging - missing folder from settings."
                 )
+            if not os.path.exists(folder):
+                os.mkedirs(folder)
             file_handler = handlers.RotatingFileHandler(
-                filename=f"{folder}/Framework.log",
+                filename=f"{folder}/{filename}",
                 delay=True,
                 maxBytes=1000000,
                 backupCount=5
