@@ -1,7 +1,10 @@
 """Module for Entities API operations"""
 
 from enum import Enum, auto
+from dynatrace.framework import logging
 from dynatrace.framework import request_handler as rh
+
+logger = logging.get_logger(__name__)
 
 
 class EntityTypes(Enum):
@@ -128,6 +131,7 @@ def get_entities_tenantwide(cluster, tenant, entity_type, **kwargs):
     else:
         kwargs['entitySelector'] = f'type({entity_type})'
 
+    logger.info(f"Getting whole result set for entities in {tenant} tenant")
     response = rh.get_results_whole(
         cluster=cluster,
         tenant=tenant,
@@ -155,6 +159,7 @@ def get_entities_clusterwide(cluster, entity_type, aggregated=True, **kwargs):
     split_entities = {}
     all_entities = []
 
+    logger.info("Getting whole result set for entities in cluster")
     for tenant in cluster['tenant']:
         tenant_entities = get_entities_tenantwide(
             cluster=cluster,
@@ -184,6 +189,7 @@ def get_entities_setwide(full_set, entity_type, aggregated=True, **kwargs):
     split_entities = {}
     all_entities = []
 
+    logger.info("Getting whole result set for entities in all clusters")
     for cluster in full_set:
         cluster_entities = get_entities_clusterwide(
             cluster=full_set[cluster],
@@ -216,6 +222,7 @@ def get_entities_by_page(cluster, tenant, entity_type, **kwargs):
     else:
         kwargs['entitySelector'] = f'type({entity_type})'
 
+    logger.info(f"Getting paged result set for entities in {tenant} tenant")
     response = rh.get_results_by_page(
         cluster=cluster,
         tenant=tenant,
@@ -248,6 +255,7 @@ def get_entity(cluster, tenant, entity_id, **kwargs):
     else:
         kwargs['entitySelector'] = f'entityId({entity_id})'
 
+    logger.info(f"Getting entity details for ID(s) {entity_id}")
     response = rh.get_results_whole(
         cluster=cluster,
         tenant=tenant,
@@ -287,6 +295,7 @@ def get_entity_count_tenantwide(cluster, tenant, entity_type, **kwargs):
     else:
         kwargs['entitySelector'] = f'type({entity_type})'
 
+    logger.info(f"Getting entity count from {tenant} tenant")
     response = rh.make_api_call(
         cluster=cluster,
         tenant=tenant,
@@ -309,6 +318,7 @@ def get_entity_count_clusterwide(cluster, entity_type, **kwargs):
     @return - number of entities
     """
     count = 0
+    logger.info("Getting entity count from cluster")
     for tenant in cluster['tenant']:
         count += get_entity_count_tenantwide(
             cluster=cluster,
@@ -331,6 +341,7 @@ def get_entity_count_setwide(full_set, entity_type, **kwargs):
     @return - number of entities
     """
     count = 0
+    logger.info("Getting entity count from all clusters")
     for cluster in full_set:
         count += get_entity_count_clusterwide(
             cluster=full_set[cluster],
@@ -355,13 +366,26 @@ def add_tags(cluster, tenant, tag_list, **kwargs):
     """
     # Sanity checking, error handling
     if not tag_list:
-        raise TypeError("No tags provided")
+        try:
+            raise TypeError("No tags provided")
+        except TypeError:
+            logger.exception("Error: No tags provided")
+            raise
     if not isinstance(tag_list, list):
-        raise TypeError("tags_list is not a list")
+        try:
+            raise TypeError("tags_list is not a list")
+        except TypeError:
+            logger.exception("Error: tags_list must be a list")
+            raise
     if 'type' not in kwargs['entitySelector'] \
             and 'entityId' not in kwargs['entitySelector']:
-        raise ValueError("entitySelector must have at least type or entityId")
+        try:
+            raise ValueError("entitySelector must have at least type or entityId")
+        except ValueError:
+            logger.exception("Error: entitySelector missing required values")
+            raise
 
+    logger.info("Adding tags to entities")
     response = rh.make_api_call(
         cluster=cluster,
         tenant=tenant,
@@ -390,17 +414,29 @@ def delete_tag(cluster, tenant, tag_key, tag_value=None, **kwargs):
     """
     # Sanity checking, error handling
     if not tag_key:
-        raise TypeError("No tag key provided")
+        try:
+            raise TypeError("No tag key provided")
+        except TypeError:
+            logger.exception("Error: Must provide a tag key")
+            raise
     if 'type' not in kwargs['entitySelector'] \
             and 'entityId' not in kwargs['entitySelector']:
-        raise ValueError("entitySelector must have at least type or entityId")
+        try:
+            raise ValueError("entitySelector must have at least type or entityId")
+        except ValueError:
+            logger.exception("Error: entitySelector missing required values")
+            raise
 
     # Set params for tag key & value
     kwargs['key'] = tag_key
     if tag_value == "all":
         kwargs['deleteAllWithKey'] = True
+        logger.info(f"Deleting all {tag_key} tags from entities")
     elif tag_value:
         kwargs['value'] = tag_value
+        logger.info(f"Deleting {tag_key}:{tag_value} tags from entities")
+    else:
+        logger.info(f"Deleting {tag_key} tag from entities.")
 
     response = rh.make_api_call(
         cluster=cluster,
@@ -431,13 +467,18 @@ def custom_device(cluster, tenant, json_data):
     @throws ValueError - if mandatory properties missing from JSON data
     """
     # Sanity checking, error handling
-    if not json_data.get('customDeviceId') or not json_data.get('displayName'):
-        raise ValueError("JSON data is missing Device ID and/or Name.")
-    # json_data.type can be NoneType when device already exists
-    if not get_entity(cluster, tenant, json_data.get('customDeviceId')) \
-            and not json_data.get('type'):
-        raise ValueError("type must be in JSON data when creating a device")
+    try:
+        if not json_data.get('customDeviceId') or not json_data.get('displayName'):
+            raise ValueError("JSON data is missing Device ID and/or Name.")
+        # json_data.type can be NoneType when device already exists
+        if not get_entity(cluster, tenant, json_data.get('customDeviceId')) \
+                and not json_data.get('type'):
+            raise ValueError("type must be in JSON data when creating a device")
+    except ValueError:
+        logger.exception("Error: Missing mandatory details.")
+        raise
 
+    logger.info("Creating/updating custom device.")
     response = rh.make_api_call(
         cluster=cluster,
         tenant=tenant,

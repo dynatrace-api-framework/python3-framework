@@ -1,8 +1,9 @@
 """Module for interacting with the Metrics API"""
-from dynatrace.framework import request_handler as rh
+from dynatrace.framework import request_handler as rh, logging
 from dynatrace.framework.exceptions import InvalidAPIResponseException
 
 ENDPOINT = str(rh.TenantAPIs.METRICS)
+logger = logging.get_logger(__name__)
 
 
 def get_metric_descriptor(cluster, tenant, **kwargs):
@@ -15,6 +16,7 @@ def get_metric_descriptor(cluster, tenant, **kwargs):
     \n
     @returns list - list of metric descriptors mathing the metricSelector
     """
+    logger.info("Getting metric descriptors")
     descriptors = rh.get_results_whole(
         cluster=cluster,
         tenant=tenant,
@@ -35,6 +37,7 @@ def get_metric_count(cluster, tenant, **kwargs):
     \n
     @returns int - Number of metrics matching the metricSelector
     """
+    logger.info("Getting the total metric count for the query.")
     count = rh.make_api_call(
         cluster=cluster,
         tenant=tenant,
@@ -64,6 +67,7 @@ def get_metric_data(cluster, tenant, **kwargs):
     next_page_key = 1
     results = {}
 
+    logger.info("Getting metric datapoints")
     while next_page_key:
         # Upon subsequent calls, clear all other params
         if next_page_key != 1:
@@ -76,7 +80,9 @@ def get_metric_data(cluster, tenant, **kwargs):
                                         params=kwargs)
         except InvalidAPIResponseException as err:
             if 'metric key that could not be resolved in the metric registry' in str(err):
+                logger.warn("Invalid metric ID encountered. Returning results so far.")
                 break
+            logger.exception("Error: Invalid API response")
             raise
 
         for result in response.json().get('result'):
@@ -103,6 +109,7 @@ def get_metric_dimension_count(cluster, tenant, metric_selector):
     \n
     @returns int - the sum total of dimensions across all matched metrics
     """
+    logger.info("Getting dimension count for metric(s)")
     details = get_metric_descriptor(
         cluster=cluster,
         tenant=tenant,
@@ -131,6 +138,7 @@ def get_metric_estimated_ddus(cluster, tenant, metric_selector):
     \n
     @returns (float) - total number of yearly DDUs
     """
+    logger.info("Getting DDUs for metric(s)")
     return get_metric_dimension_count(
         cluster=cluster,
         tenant=tenant,
@@ -149,6 +157,7 @@ def ingest_metrics(cluster, tenant, payload):
     \n
     @returns (dict) - response to HTTP request
     """
+    logger.info("Sending metrics to Dynatrace")
     return rh.make_api_call(
         cluster=cluster,
         tenant=tenant,
