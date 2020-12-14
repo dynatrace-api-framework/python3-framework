@@ -23,10 +23,9 @@ class TestGetTimeseries(unittest.TestCase):
         testtools.create_mockserver_expectation(
             cluster=CLUSTER,
             tenant=TENANT,
-            url_path=URL_PATH,
+            url_path=f"{URL_PATH}/{TIMESERIES_ID}",
             request_type=str(HTTP.GET),
             parameters={
-                "timeseriesIdentifier": TIMESERIES_ID,
                 "relativeTime": "30mins",
                 "includeData": "True",
                 "predict": "True"
