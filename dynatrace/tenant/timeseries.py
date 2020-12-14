@@ -17,7 +17,6 @@ def get_metric_data_with_prediction(cluster, tenant, timeseries_id, **kwargs):
     \n
     @returns dict - predicted datapoints of the timeseries
     """
-    kwargs["timeseriesIdentifier"] = timeseries_id
     kwargs["includeData"] = True
     kwargs["predict"] = True
     if not (("startTimestamp" in kwargs and "endTimestamp" in kwargs)
@@ -27,7 +26,7 @@ def get_metric_data_with_prediction(cluster, tenant, timeseries_id, **kwargs):
     response = rh.make_api_call(
         cluster=cluster,
         tenant=tenant,
-        endpoint=ENDPOINT,
+        endpoint=f"{ENDPOINT}/{timeseries_id}",
         params=kwargs
     ).json()
 
