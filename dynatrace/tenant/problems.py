@@ -13,7 +13,7 @@ def get_all_problems(cluster, tenant, **kwargs):
     \n
     @returns list - list of problems
     """
-    logger.info(f"Getting problems from tenant {tenant}")
+    logger.info("Getting problems from tenant %s", tenant)
     problems_list = rh.get_results_whole(
         cluster=cluster,
         tenant=tenant,
@@ -34,7 +34,7 @@ def get_problem_count(cluster, tenant, **kwargs):
     \n
     @returns int - number of problems
     """
-    logger.info(f"Getting the total problem count in tenant {tenant}")
+    logger.info("Getting the total problem count in tenant %s", tenant)
     problems_list = rh.make_api_call(
         cluster=cluster,
         tenant=tenant,
@@ -58,7 +58,7 @@ def get_problem_details(cluster, tenant, problem_id, **kwargs):
     \n
     @returns (dict) - problem details
     """
-    logger.info(f"Getting problem details for problem {problem_id}")
+    logger.info("Getting problem details for problem %s", problem_id)
     details = rh.make_api_call(
         cluster=cluster,
         tenant=tenant,
@@ -79,8 +79,8 @@ def close_problem(cluster, tenant, problem_id, comment=""):
     \n
     @returns Response - HTTP response for the request
     """
-    logger.info(f"Closing problem {problem_id}")
-    logger.info(f"Closing comment: {comment}")
+    logger.info("Closing problem %s", problem_id)
+    logger.info("Closing comment: %s", comment)
     response = rh.make_api_call(
         cluster=cluster,
         tenant=tenant,
@@ -103,7 +103,7 @@ def get_all_comments(cluster, tenant, problem_id, **kwargs):
     \n
     @returns list - list of comments
     """
-    logger.info(f"Getting comments from problem {problem_id}")
+    logger.info("Getting comments from problem %s", problem_id)
     comments = rh.get_results_whole(
         cluster=cluster,
         tenant=tenant,
@@ -126,7 +126,7 @@ def get_comment(cluster, tenant, problem_id, comment_id):
     \n
     @returns dict - comment details
     """
-    logger.info(f"Getting details for comment {comment_id} from problem {problem_id}")
+    logger.info("Getting details for comment %s from problem %s", comment_id, problem_id)
     comment = rh.make_api_call(
         cluster=cluster,
         tenant=tenant,
@@ -148,7 +148,7 @@ def add_comment(cluster, tenant, problem_id, **kwargs):
     \n
     @returns Response - HTTP response for the request
     """
-    logger.info(f"Adding comment to problem {problem_id}")
+    logger.info("Adding comment to problem %s", problem_id)
     comment = kwargs.get("comment") if "comment" in kwargs else ""
     context = kwargs.get("context") if "context" in kwargs else ""
 
@@ -176,7 +176,7 @@ def update_comment(cluster, tenant, problem_id, comment_id, **kwargs):
     \n
     @returns Response - HTTP response for the request
     """
-    logger.info(f"Updating comment {comment_id} from problem {problem_id}")
+    logger.info("Updating comment %s from problem %s", comment_id, problem_id)
     comment = get_comment(cluster, tenant, problem_id, comment_id)
 
     if "comment" in kwargs:
@@ -205,7 +205,7 @@ def delete_comment(cluster, tenant, problem_id, comment_id):
     \n
     @returns Response - HTTP response for the request
     """
-    logger.info(f"Deleting comment {comment_id} from problem {problem_id}")
+    logger.info("Deleting comment %s from problem %s", comment_id, problem_id)
     response = rh.make_api_call(
         cluster=cluster,
         tenant=tenant,

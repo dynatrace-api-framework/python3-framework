@@ -131,7 +131,7 @@ def get_entities_tenantwide(cluster, tenant, entity_type, **kwargs):
     else:
         kwargs['entitySelector'] = f'type({entity_type})'
 
-    logger.info(f"Getting whole result set for entities in {tenant} tenant")
+    logger.info("Getting whole result set for entities in %s tenant", tenant)
     response = rh.get_results_whole(
         cluster=cluster,
         tenant=tenant,
@@ -222,7 +222,7 @@ def get_entities_by_page(cluster, tenant, entity_type, **kwargs):
     else:
         kwargs['entitySelector'] = f'type({entity_type})'
 
-    logger.info(f"Getting paged result set for entities in {tenant} tenant")
+    logger.info("Getting paged result set for entities in %s tenant", tenant)
     response = rh.get_results_by_page(
         cluster=cluster,
         tenant=tenant,
@@ -255,7 +255,7 @@ def get_entity(cluster, tenant, entity_id, **kwargs):
     else:
         kwargs['entitySelector'] = f'entityId({entity_id})'
 
-    logger.info(f"Getting entity details for ID(s) {entity_id}")
+    logger.info("Getting entity details for ID(s) %s", entity_id)
     response = rh.get_results_whole(
         cluster=cluster,
         tenant=tenant,
@@ -295,7 +295,7 @@ def get_entity_count_tenantwide(cluster, tenant, entity_type, **kwargs):
     else:
         kwargs['entitySelector'] = f'type({entity_type})'
 
-    logger.info(f"Getting entity count from {tenant} tenant")
+    logger.info("Getting entity count from %s tenant", tenant)
     response = rh.make_api_call(
         cluster=cluster,
         tenant=tenant,
@@ -369,20 +369,22 @@ def add_tags(cluster, tenant, tag_list, **kwargs):
         try:
             raise TypeError("No tags provided")
         except TypeError:
-            logger.exception("Error: No tags provided")
+            logger.exception("Error: No tags provided", stack_info=True)
             raise
     if not isinstance(tag_list, list):
         try:
             raise TypeError("tags_list is not a list")
         except TypeError:
-            logger.exception("Error: tags_list must be a list")
+            logger.exception("Error: tags_list must be a list", stack_info=True)
             raise
     if 'type' not in kwargs['entitySelector'] \
             and 'entityId' not in kwargs['entitySelector']:
         try:
             raise ValueError("entitySelector must have at least type or entityId")
         except ValueError:
-            logger.exception("Error: entitySelector missing required values")
+            logger.exception(
+                "Error: entitySelector missing required values", stack_info=True
+            )
             raise
 
     logger.info("Adding tags to entities")
@@ -417,26 +419,28 @@ def delete_tag(cluster, tenant, tag_key, tag_value=None, **kwargs):
         try:
             raise TypeError("No tag key provided")
         except TypeError:
-            logger.exception("Error: Must provide a tag key")
+            logger.exception("Error: Must provide a tag key", stack_info=True)
             raise
     if 'type' not in kwargs['entitySelector'] \
             and 'entityId' not in kwargs['entitySelector']:
         try:
             raise ValueError("entitySelector must have at least type or entityId")
         except ValueError:
-            logger.exception("Error: entitySelector missing required values")
+            logger.exception(
+                "Error: entitySelector missing required values", stack_info=True
+            )
             raise
 
     # Set params for tag key & value
     kwargs['key'] = tag_key
     if tag_value == "all":
         kwargs['deleteAllWithKey'] = True
-        logger.info(f"Deleting all {tag_key} tags from entities")
+        logger.info("Deleting all %s tags from entities", tag_key)
     elif tag_value:
         kwargs['value'] = tag_value
-        logger.info(f"Deleting {tag_key}:{tag_value} tags from entities")
+        logger.info("Deleting %s:%s tags from entities", tag_key, tag_value)
     else:
-        logger.info(f"Deleting {tag_key} tag from entities.")
+        logger.info("Deleting %s tag from entities.", tag_key)
 
     response = rh.make_api_call(
         cluster=cluster,
@@ -475,7 +479,7 @@ def custom_device(cluster, tenant, json_data):
                 and not json_data.get('type'):
             raise ValueError("type must be in JSON data when creating a device")
     except ValueError:
-        logger.exception("Error: Missing mandatory details.")
+        logger.exception("Error: Missing mandatory details.", stack_info=True)
         raise
 
     logger.info("Creating/updating custom device.")

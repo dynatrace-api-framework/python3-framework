@@ -17,7 +17,7 @@ def get_all_extensions(cluster, tenant, page_size=200):
     \n
     @returns list - list of extensions
     """
-    logger.info(f"Getting all extensions in {tenant} tenant")
+    logger.info("Getting all extensions in %s tenant", tenant)
     extension_list = rh.get_results_whole(
         cluster=cluster,
         tenant=tenant,
@@ -39,7 +39,7 @@ def get_extension_details(cluster, tenant, extension_id):
     \n
     @returns (dict) - JSON response containing extension details
     """
-    logger.info(f"Getting extension details for {extension_id}")
+    logger.info("Getting extension details for %s", extension_id)
     details = rh.make_api_call(
         cluster=cluster,
         endpoint=f"{ENDPOINT}/{extension_id}",
@@ -58,7 +58,7 @@ def get_extension_metrics(cluster, tenant, extension_id):
     \n
     @returns list - list of metric IDs
     """
-    logger.info(f"Getting metrics collected by extension {extension_id}")
+    logger.info("Getting metrics collected by extension %s", extension_id)
     metric_group = get_extension_details(cluster, tenant, extension_id).get('metricGroup')
     ext_metrics = metrics.get_metric_descriptor(
         cluster=cluster,
@@ -79,7 +79,7 @@ def get_extension_global_config(cluster, tenant, extension_id):
     \n
     @returns dict - global configuration
     """
-    logger.info(f"Getting global configuration for extension {extension_id}")
+    logger.info("Getting global configuration for extension %s", extension_id)
     config = rh.make_api_call(
         cluster=cluster,
         tenant=tenant,
@@ -101,7 +101,7 @@ def get_extension_instance_config(cluster, tenant, extension_id, instance_id):
     @returns dict - instance configuration
     """
     logger.info(
-        f"Getting configuration for instance {instance_id} on extension {extension_id}"
+        "Getting configuration for instance %s on extension %s", instance_id, extension_id
     )
     config = rh.make_api_call(
         cluster=cluster,
@@ -123,7 +123,7 @@ def get_extension_states(cluster, tenant, extension_id):
     \n
     @returns list - states/instances of this extension
     """
-    logger.info(f"Getting states for extension {extension_id}")
+    logger.info("Getting states for extension %s", extension_id)
     states = rh.get_results_whole(
         cluster=cluster,
         tenant=tenant,
@@ -145,7 +145,7 @@ def get_extension_instances(cluster, tenant, extension_id):
     \n
     @returns list - configuration instances for this extension
     """
-    logger.info(f"Getting instances for extension {extension_id}")
+    logger.info("Getting instances for extension %s", extension_id)
     instances = rh.get_results_whole(
         cluster=cluster,
         tenant=tenant,
@@ -170,7 +170,7 @@ def enable_global_config(cluster, tenant, extension_id):
     config = get_extension_global_config(cluster, tenant, extension_id)
 
     config['enabled'] = True
-    logger.info(f"Enabling global config for extension {extension_id}")
+    logger.info("Enabling global config for extension %s", extension_id)
     response = update_global_config(cluster, tenant, extension_id, config)
 
     return response
@@ -189,7 +189,7 @@ def disable_global_config(cluster, tenant, extension_id):
     config = get_extension_global_config(cluster, tenant, extension_id)
 
     config['enabled'] = False
-    logger.info(f"Disabling global config for extension {extension_id}")
+    logger.info("Disabling global config for extension %s", extension_id)
     response = update_global_config(cluster, tenant, extension_id, config)
 
     return response
@@ -206,7 +206,7 @@ def update_global_config(cluster, tenant, extension_id, config):
     \n
     @returns dict - HTTP response to request
     """
-    logger.info(f"Updating global config for extension {extension_id}")
+    logger.info("Updating global config for extension %s", extension_id)
     response = rh.make_api_call(
         cluster=cluster,
         tenant=tenant,
@@ -243,7 +243,7 @@ def enable_instance_config(cluster, tenant, extension_id, instance_id):
     if 'activeGate' in config:
         config['extensionId'] = extension_id
 
-    logger.info(f"Enabling config for instance {instance_id} of {extension_id}")
+    logger.info("Enabling config for instance %s of %s", instance_id, extension_id)
     response = update_instance_config(
         cluster, tenant, extension_id, instance_id, config
     )
@@ -276,7 +276,7 @@ def disable_instance_config(cluster, tenant, extension_id, instance_id):
     if 'activeGate' in config:
         config['extensionId'] = extension_id
 
-    logger.info(f"Disabling config for instance {instance_id} of {extension_id}")
+    logger.info("Disabling config for instance %s of %s", instance_id, extension_id)
     response = update_instance_config(
         cluster, tenant, extension_id, instance_id, config
     )
@@ -296,7 +296,7 @@ def update_instance_config(cluster, tenant, extension_id, instance_id, config):
     \n
     @returns dict - HTTP response to request
     """
-    logger.info(f"Updating config for instance {instance_id} of {extension_id}")
+    logger.info("Updating config for instance %s of %s", instance_id, extension_id)
     response = rh.make_api_call(
         cluster=cluster,
         tenant=tenant,
