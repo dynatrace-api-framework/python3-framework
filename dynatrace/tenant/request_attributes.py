@@ -1,5 +1,7 @@
 """Module for Request Attributes Operations via Configuration API"""
 
+import os
+import json
 from dynatrace.framework import request_handler as rh, logging
 
 ENDPOINT = str(rh.TenantAPIs.REQUEST_ATTRIBUTES)
@@ -15,13 +17,13 @@ def get_all_request_attributes(cluster, tenant):
     @returns list - list of Request Attributes from tenant
     """
     logger.info("Getting all request attributes in tenant %s", tenant)
-    request_attributes = rh.make_api_call(
+    req_attrs = rh.make_api_call(
         cluster=cluster,
         tenant=tenant,
         endpoint=ENDPOINT
     ).json()
 
-    return request_attributes
+    return req_attrs
 
 
 def get_request_attribute_details(cluster, tenant, ra_id):
@@ -167,9 +169,41 @@ def get_request_attribute_id(cluster, tenant, name):
     @returns str - ID of the request attribute if found. None otherwise.
     """
     logger.info("Finding the ID for request attribute with name %s", name)
-    request_attributes = get_all_request_attributes(cluster, tenant)
+    req_attrs = get_all_request_attributes(cluster, tenant)
 
-    for req_attr in request_attributes:
+    for req_attr in req_attrs:
         if req_attr.get("name") == name:
             return req_attr.get("id")
     return None
+
+
+def export_to_files(cluster, tenant, folder):
+    """Export all the request attributes in the tenant to files.
+    Each request attribute is written to a separate file in the folder provided.
+    The folder must exist already.
+    \n
+    @param cluster (dict) - Dynatrace Cluster dictionary, as taken from variable set\n
+    @param tenant (str) - Dynatrace Tenant name, as taken from variable set\n
+    @param folder (str) - path to folder where to write the export files
+    \n
+    @throws RuntimeException - when the specified folder is not found
+    """
+    if not os.path.exists(folder):
+        try:
+            raise RuntimeError("Error: the given folder path does not exist")
+        except RuntimeError:
+            logger.exception("Error: folder path not found.", stack_info=True)
+            raise
+
+    if "/" in folder and not folder.endswith("/"):
+        folder = f"{folder}/"
+    if "\\" in folder and not folder.endswith("\\"):
+        folder = f"{folder}\\"
+
+    req_attrs = get_all_request_attributes(cluster, tenant)
+
+    logger.info("Exporting request attributes. Writing files inside %s", folder)
+    for req_attr in req_attrs:
+        logger.debug("Exporting request attribute called %s", req_attr.get("name"))
+        with open(file=f"{folder}{req_attr.get('name')}.json", mode="w") as ra_file:
+            json.dump(req_attr, ra_file, indent=4)
