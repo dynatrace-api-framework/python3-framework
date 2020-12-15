@@ -41,7 +41,7 @@ def get_host_units_clusterwide(cluster, aggregated=True, **kwargs):
                with tenants as keys if not aggregated.
     """
     total_host_units = 0
-    host_units = %s
+    host_units = {}
 
     logger.info("Getting host units for the whole cluster")
     for tenant in cluster['tenant']:
@@ -66,7 +66,7 @@ def get_host_units_setwide(full_set, aggregated=True, **kwargs):
                with clusters as keys if not aggregated.
     """
     total_host_units = 0
-    host_units = %s
+    host_units = {}
 
     logger.info("Getting host units for the whole set")
     for cluster in full_set:
