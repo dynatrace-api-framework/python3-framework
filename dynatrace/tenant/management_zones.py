@@ -56,16 +56,20 @@ def generate_mz_template(name, tags):
     \n
     @returns dict - Management Zone
     """
-    if not isinstance(tags, list):
-        raise ValueError(
-            f"Tags must be given as a list of tuples. Found {type(tags)} instead."
-        )
-    if not all(isinstance(tag, tuple) for tag in tags):
-        raise ValueError(
-            "All provided tags must be tuples. Found a mix of types instead."
-        )
+    try:
+        if not isinstance(tags, list):
+            raise ValueError(
+                f"Tags must be given as a list of tuples. Found {type(tags)} instead."
+            )
+        if not all(isinstance(tag, tuple) for tag in tags):
+            raise ValueError(
+                "All provided tags must be tuples. Found a mix of types instead."
+            )
+    except ValueError:
+        logger.exception("Error: invalid format for tags object.", stack_info=True)
+        raise
     logger.info("Building standard Management Zone from template")
-    logger.debug("Name: %s; Tags: %s" % (name, tags))
+    logger.debug("Name: %s; Tags: %s", name, tags)
     me_types = [
         RuleTypes.HOST, RuleTypes.SERVICE, RuleTypes.PROCESS_GROUP,
         RuleTypes.WEB_APPLICATION, RuleTypes.BROWSER_MONITOR, RuleTypes.HTTP_MONITOR,
@@ -109,7 +113,7 @@ def add_management_zone(cluster, tenant, mz_json):
     \n
     @returns str - ID of the newly created Management Zone, if successful
     """
-    logger.info("Adding a new Management Zone in tenant %s" % tenant)
+    logger.info("Adding a new Management Zone in tenant %s", tenant)
     response = rh.make_api_call(
         cluster=cluster,
         tenant=tenant,
@@ -134,7 +138,7 @@ def update_management_zone(cluster, tenant, mz_id, mz_json):
     \n
     @returns Response - HTTP Response to the request
     """
-    logger.info("Updating Management Zone with ID %s in tenant %s" % (mz_id, tenant))
+    logger.info("Updating Management Zone with ID %s in tenant %s", mz_id, tenant)
 
     response = rh.make_api_call(
         cluster=cluster,
@@ -156,7 +160,7 @@ def delete_management_zone_by_id(cluster, tenant, mz_id):
     \n
     @returns Response - HTTP Response to the request
     """
-    logger.info("Deleting Management Zone with ID %s from tenant %s" % (mz_id, tenant))
+    logger.info("Deleting Management Zone with ID %s from tenant %s", mz_id, tenant)
 
     response = rh.make_api_call(
         cluster=cluster,
@@ -182,9 +186,13 @@ def delete_management_zone_by_name(cluster, tenant, mz_name):
     mz_id = get_management_zone_id(cluster, tenant, mz_name)
 
     if not mz_id:
-        raise RuntimeError(
-            "Error: No Management Zone found with name %s in tenant %s" % (mz_id, tenant)
-        )
+        try:
+            raise RuntimeError(
+                f"Error: No Management Zone found with name {mz_id} in tenant {tenant}"
+            )
+        except RuntimeError:
+            logger.exception("Error: Management Zone not found.", stack_info=True)
+            raise
 
     logger.info("Deleting the Management Zone from tenant")
     response = rh.make_api_call(
@@ -205,7 +213,7 @@ def get_all_management_zones(cluster, tenant):
     \n
     @returns list - list of Management Zones
     """
-    logger.info("Getting all Management Zones from tenant %s" % tenant)
+    logger.info("Getting all Management Zones from tenant %s", tenant)
     management_zones = rh.make_api_call(
         cluster=cluster,
         tenant=tenant,
@@ -225,7 +233,7 @@ def get_management_zone_details(cluster, tenant, mz_id):
     @returns dict - Management Zone details
     """
     logger.info(
-        "Getting details for Management Zone with id %s in tenant %s" % (mz_id, tenant)
+        "Getting details for Management Zone with id %s in tenant %s", mz_id, tenant
     )
     mz_details = rh.make_api_call(
         cluster=cluster,
@@ -246,7 +254,7 @@ def get_management_zone_id(cluster, tenant, mz_name):
     @returns str - ID of the Management Zone if found. None otherwise.
     """
     logger.info(
-        "Finding ID for Management Zone with name %s in tenant %s" % (mz_name, tenant)
+        "Finding ID for Management Zone with name %s in tenant %s", mz_name, tenant
     )
     mz_list = get_all_management_zones(cluster, tenant)
 
