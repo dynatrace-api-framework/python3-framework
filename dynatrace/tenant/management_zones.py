@@ -65,7 +65,7 @@ def generate_mz_template(name, tags):
             "All provided tags must be tuples. Found a mix of types instead."
         )
     logger.info("Building standard Management Zone from template")
-    logger.debug(f"Name: {name}; Tags: {tags}")
+    logger.debug("Name: %s; Tags: %s" % (name, tags))
     me_types = [
         RuleTypes.HOST, RuleTypes.SERVICE, RuleTypes.PROCESS_GROUP,
         RuleTypes.WEB_APPLICATION, RuleTypes.BROWSER_MONITOR, RuleTypes.HTTP_MONITOR,
@@ -109,7 +109,7 @@ def add_management_zone(cluster, tenant, mz_json):
     \n
     @returns str - ID of the newly created Management Zone, if successful
     """
-    logger.info(f"Adding a new Management Zone in tenant {tenant}")
+    logger.info("Adding a new Management Zone in tenant %s" % tenant)
     response = rh.make_api_call(
         cluster=cluster,
         tenant=tenant,
@@ -134,7 +134,7 @@ def update_management_zone(cluster, tenant, mz_id, mz_json):
     \n
     @returns Response - HTTP Response to the request
     """
-    logger.info(f"Updating Management Zone with ID {mz_id} in tenant {tenant}")
+    logger.info("Updating Management Zone with ID %s in tenant %s" % (mz_id, tenant))
 
     response = rh.make_api_call(
         cluster=cluster,
@@ -156,7 +156,7 @@ def delete_management_zone_by_id(cluster, tenant, mz_id):
     \n
     @returns Response - HTTP Response to the request
     """
-    logger.info(f"Deleting Management Zone with ID {mz_id} from tenant {tenant}")
+    logger.info("Deleting Management Zone with ID %s from tenant %s" % (mz_id, tenant))
 
     response = rh.make_api_call(
         cluster=cluster,
@@ -183,7 +183,7 @@ def delete_management_zone_by_name(cluster, tenant, mz_name):
 
     if not mz_id:
         raise RuntimeError(
-            f"Error: No Management Zone found with name {mz_name} in tenant {tenant}"
+            "Error: No Management Zone found with name %s in tenant %s" % (mz_id, tenant)
         )
 
     logger.info("Deleting the Management Zone from tenant")
@@ -205,7 +205,7 @@ def get_all_management_zones(cluster, tenant):
     \n
     @returns list - list of Management Zones
     """
-    logger.info(f"Getting all Management Zones from tenant {tenant}")
+    logger.info("Getting all Management Zones from tenant %s" % tenant)
     management_zones = rh.make_api_call(
         cluster=cluster,
         tenant=tenant,
@@ -224,7 +224,9 @@ def get_management_zone_details(cluster, tenant, mz_id):
     \n
     @returns dict - Management Zone details
     """
-    logger.info(f"Getting details for Management Zone with id {mz_id} in tenant {tenant}")
+    logger.info(
+        "Getting details for Management Zone with id %s in tenant %s" % (mz_id, tenant)
+    )
     mz_details = rh.make_api_call(
         cluster=cluster,
         tenant=tenant,
@@ -243,7 +245,9 @@ def get_management_zone_id(cluster, tenant, mz_name):
     \n
     @returns str - ID of the Management Zone if found. None otherwise.
     """
-    logger.info(f"Finding ID for Management Zone with name {mz_name} in tenant {tenant}")
+    logger.info(
+        "Finding ID for Management Zone with name %s in tenant %s" % (mz_name, tenant)
+    )
     mz_list = get_all_management_zones(cluster, tenant)
 
     for m_zone in mz_list:
@@ -260,7 +264,7 @@ def import_mz_from_file(file):
     @returns dict - dictionary created from reading the file
     """
     logger.info("Reading Management Zone from file.")
-    with open(file=file, mode="r") as f:
-        mz = json.load(f)
+    with open(file=file, mode="r") as json_file:
+        mz_details = json.load(json_file)
 
-    return mz
+    return mz_details
