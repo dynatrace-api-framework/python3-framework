@@ -42,7 +42,7 @@ class RuleTypes(Enum):
 
     def __str__(self):
         """Overriding default __str__ to return the name."""
-        return self.name
+        return str(self.name)
 
 
 def generate_mz_template(name, tags):
