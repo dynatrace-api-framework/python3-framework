@@ -103,28 +103,26 @@ class TestFetchingMZs(unittest.TestCase):
 class TestModifyingManagementZones(unittest.TestCase):
     """Test cases for making changes to Management Zones within a tenant"""
 
-    # BUG: Test tools needs fixing for using response.json()
-    # TODO: Uncomment once testtols is fixed.
-    # def test_add_management_zone(self):
-    #     """Tests adding a new management zone to a tenant"""
-    #     request_file = f"{REQUEST_DIR}/mz.json"
-    #     response_file = f"{RESPONSE_DIR}/created.json"
-    #     mz_json = testtools.expected_payload(request_file)
+    def test_add_management_zone(self):
+        """Tests adding a new management zone to a tenant"""
+        request_file = f"{REQUEST_DIR}/mz.json"
+        response_file = f"{RESPONSE_DIR}/created.json"
+        mz_json = testtools.expected_payload(request_file)
 
-    #     testtools.create_mockserver_expectation(
-    #         cluster=CLUSTER,
-    #         tenant=TENANT,
-    #         url_path=URL_PATH,
-    #         request_type=str(HTTP.POST),
-    #         request_file=request_file,
-    #         response_code=204,
-    #         response_file=response_file
-    #     )
+        testtools.create_mockserver_expectation(
+            cluster=CLUSTER,
+            tenant=TENANT,
+            url_path=URL_PATH,
+            request_type=str(HTTP.POST),
+            request_file=request_file,
+            response_code=201,
+            response_file=response_file
+        )
 
-    #     result = management_zones.add_management_zone(CLUSTER, TENANT, mz_json)
-    #     expected_result = MZ_ID
+        result = management_zones.add_management_zone(CLUSTER, TENANT, mz_json)
+        expected_result = MZ_ID
 
-    #     self.assertEqual(result, expected_result)
+        self.assertEqual(result, expected_result)
 
     def test_update_management_zone(self):
         """Tests updating an existing Management Zone in a tenant"""
