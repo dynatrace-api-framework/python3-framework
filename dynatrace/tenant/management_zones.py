@@ -52,10 +52,18 @@ def generate_mz_template(name, tags):
     Tags must be given as a tuple in this order: context, key, value (optional).
     \n
     @param name (str) - The name of the Management Zone to be created\n
-    @param tags (list(Tuple)) - [0] is tag context, [1] is tag key, [2] is the tag value
+    @param tags (list(tuple)) - [0] is tag context, [1] is tag key, [2] is the tag value
     \n
     @returns dict - Management Zone
     """
+    if not isinstance(tags, list):
+        raise ValueError(
+            f"Tags must be given as a list of tuples. Found {type(tags)} instead."
+        )
+    if not all(isinstance(tag, tuple) for tag in tags):
+        raise ValueError(
+            "All provided tags must be tuples. Found a mix of types instead."
+        )
     logger.info("Building standard Management Zone from template")
     logger.debug(f"Name: {name}; Tags: {tags}")
     me_types = [
@@ -178,7 +186,7 @@ def delete_management_zone_by_name(cluster, tenant, mz_name):
             f"Error: No Management Zone found with name {mz_name} in tenant {tenant}"
         )
 
-    logger.info(f"Deleting the Management Zone from tenant")
+    logger.info("Deleting the Management Zone from tenant")
     response = rh.make_api_call(
         cluster=cluster,
         tenant=tenant,
@@ -205,6 +213,25 @@ def get_all_management_zones(cluster, tenant):
     ).json().get("values")
 
     return management_zones
+
+
+def get_management_zone_details(cluster, tenant, mz_id):
+    """Gets the full details of a Management Zone referenced by ID.
+    \n
+    @param cluster (dict) - Dynatrace Cluster dictionary, as taken from variable set\n
+    @param tenant (str) - Dynatrace Tenant name, as taken from variable set\n
+    @param mz_id (str) - ID of the Management Zone to fetch
+    \n
+    @returns dict - Management Zone details
+    """
+    logger.info(f"Getting details for Management Zone with id {mz_id} in tenant {tenant}")
+    mz_details = rh.make_api_call(
+        cluster=cluster,
+        tenant=tenant,
+        endpoint=f"{ENDPOINT}/{mz_id}"
+    ).json()
+
+    return mz_details
 
 
 def get_management_zone_id(cluster, tenant, mz_name):
@@ -234,6 +261,6 @@ def import_mz_from_file(file):
     """
     logger.info("Reading Management Zone from file.")
     with open(file=file, mode="r") as f:
-        mz = json.load(f.read())
+        mz = json.load(f)
 
     return mz
