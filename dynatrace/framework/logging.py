@@ -36,7 +36,7 @@ def get_logger(name, filename="Framework.log"):
                     "Could not setup logging - missing folder from settings."
                 )
             if not os.path.exists(folder):
-                os.mkedirs(folder)
+                os.makedirs(folder)
             file_handler = handlers.RotatingFileHandler(
                 filename=f"{folder}/{filename}",
                 delay=True,
