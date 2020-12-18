@@ -21,7 +21,7 @@ def get_all_request_attributes(cluster, tenant):
         cluster=cluster,
         tenant=tenant,
         endpoint=ENDPOINT
-    ).json()
+    ).json().get("values")
 
     return req_attrs
 
@@ -143,7 +143,7 @@ def delete_request_attribute_by_name(cluster, tenant, ra_name):
 def create_or_update_request_attribute(cluster, tenant, ra_json):
     """Either creates a new request attribute from the provided JSON or updates it if it
     already exists in the tenant. Either way, the request attribute will be in the
-    tenant.
+    tenant. It will check if there is an ID present in the JSON for the update.
     \n
     @param cluster (dict) - Dynatrace Cluster dictionary, as taken from variable set\n
     @param tenant (str) - Dynatrace Tenant name, as taken from variable set\n
@@ -151,7 +151,7 @@ def create_or_update_request_attribute(cluster, tenant, ra_json):
     \n
     @returns Response - HTTP Response to the request
     """
-    ra_id = get_request_attribute_id(cluster, tenant, ra_json.get("name"))
+    ra_id = ra_json.get("id")
 
     if ra_id:
         return update_request_attribute(cluster, tenant, ra_id, ra_json)
@@ -159,20 +159,20 @@ def create_or_update_request_attribute(cluster, tenant, ra_json):
     return create_request_attribute(cluster, tenant, ra_json)
 
 
-def get_request_attribute_id(cluster, tenant, name):
+def get_request_attribute_id(cluster, tenant, ra_name):
     """Gets the ID for a request attribute referenced by name.
     \n
     @param cluster (dict) - Dynatrace Cluster dictionary, as taken from variable set\n
     @param tenant (str) - Dynatrace Tenant name, as taken from variable set\n
-    @param name (str) - name of the Request Attribute
+    @param ra_name (str) - name of the Request Attribute
     \n
     @returns str - ID of the request attribute if found. None otherwise.
     """
-    logger.info("Finding the ID for request attribute with name %s", name)
+    logger.info("Finding the ID for request attribute with name %s", ra_name)
     req_attrs = get_all_request_attributes(cluster, tenant)
 
     for req_attr in req_attrs:
-        if req_attr.get("name") == name:
+        if req_attr.get("name") == ra_name:
             return req_attr.get("id")
     return None
 
@@ -186,7 +186,7 @@ def export_to_files(cluster, tenant, folder):
     @param tenant (str) - Dynatrace Tenant name, as taken from variable set\n
     @param folder (str) - path to folder where to write the export files
     \n
-    @throws RuntimeException - when the specified folder is not found
+    @throws RuntimeError - when the specified folder is not found
     """
     if not os.path.exists(folder):
         try:
@@ -205,5 +205,6 @@ def export_to_files(cluster, tenant, folder):
     logger.info("Exporting request attributes. Writing files inside %s", folder)
     for req_attr in req_attrs:
         logger.debug("Exporting request attribute called %s", req_attr.get("name"))
+        ra_data = get_request_attribute_details(cluster, tenant, req_attr.get("id"))
         with open(file=f"{folder}{req_attr.get('name')}.json", mode="w") as ra_file:
-            json.dump(req_attr, ra_file, indent=4)
+            json.dump(ra_data, ra_file, indent=4)
