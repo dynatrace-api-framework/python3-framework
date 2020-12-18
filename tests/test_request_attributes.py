@@ -16,7 +16,7 @@ REQUEST_DIR = "tests/mockserver_payloads/requests/request_attributes"
 RESPONSE_DIR = "tests/mockserver_payloads/responses/request_attributes"
 
 
-class TestRequest_Attributes(unittest.TestCase):
+class TestRequestAttributes(unittest.TestCase):
     """Test cases for main functionality of the request_attributes module"""
 
     def test_create_or_update_request_attribute_U(self):
