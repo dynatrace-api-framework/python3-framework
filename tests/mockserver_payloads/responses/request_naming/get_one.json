@@ -1,0 +1,42 @@
+
+{
+    "metadata": {
+        "configurationVersions": [
+            0
+        ],
+        "clusterVersion": "1.208.63.20201218-162412"
+    },
+    "id": "abc1234def-1233-3321-ab123-abc123defghi",
+    "enabled": true,
+    "namingPattern": "{mock} request name",
+    "managementZones": [],
+    "conditions": [
+        {
+            "attribute": "SERVICE_REQUEST_ATTRIBUTE",
+            "comparisonInfo": {
+                "type": "STRING_REQUEST_ATTRIBUTE",
+                "comparison": "EXISTS",
+                "value": null,
+                "negate": false,
+                "requestAttribute": "Mock Request Attribute",
+                "caseSensitive": false,
+                "matchOnChildCalls": false,
+                "source": null
+            }
+        }
+    ],
+    "placeholders": [
+        {
+            "name": "mock",
+            "attribute": "SERVICE_REQUEST_ATTRIBUTE",
+            "kind": "REGEX_EXTRACTION",
+            "delimiterOrRegex": "(^.*?$)",
+            "endDelimiter": null,
+            "requestAttribute": "Mock Request Attribute",
+            "normalization": "ORIGINAL",
+            "useFromChildCalls": null,
+            "aggregation": null,
+            "source": null
+        }
+    ]
+}
