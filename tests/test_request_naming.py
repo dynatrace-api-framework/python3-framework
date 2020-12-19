@@ -15,7 +15,7 @@ REQUEST_DIR = "tests/mockserver_payloads/requests/request_naming"
 RESPONSE_DIR = "tests/mockserver_payloads/responses/request_naming"
 
 
-class TestRequest_Naming(unittest.TestCase):
+class TestRequestNaming(unittest.TestCase):
     """Test cases for main functionality of the request_naming module"""
 
     def test_create_naming_rule(self):
