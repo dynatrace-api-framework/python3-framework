@@ -38,6 +38,7 @@ class TenantAPIs(Enum):
     Enum representing Dynatrace Tenant REST API endpoints.\n
     Use these values when adding the 'endpoint' argument.
     """
+    TIMESERIES = "/api/v1/timeseries"
     PROBLEM_DETAILS = "/api/v1/problem/details"
     PROBLEM_FEED = "/api/v1/problem/feed"
     PROBLEM_STATUS = "/api/v1/problem/status"
