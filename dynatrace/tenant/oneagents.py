@@ -15,7 +15,7 @@ def get_host_units_tenantwide(cluster, tenant, **kwargs):
     """
     host_units = 0
 
-    logger.info(f"Getting hosts from tenant {tenant}")
+    logger.info("Getting hosts from tenant %s", tenant)
     host_list = rh.get_results_whole(
         cluster=cluster,
         tenant=tenant,
@@ -89,7 +89,7 @@ def get_oneagents_tenantwide(cluster, tenant, **kwargs):
 
     @returns - list of OneAgents
     """
-    logger.info(f"Getting OneAgents from tenant {tenant}")
+    logger.info("Getting OneAgents from tenant %s", tenant)
     return rh.get_results_whole(
         cluster=cluster,
         tenant=tenant,

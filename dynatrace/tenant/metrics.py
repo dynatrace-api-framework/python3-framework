@@ -82,7 +82,7 @@ def get_metric_data(cluster, tenant, **kwargs):
             if 'metric key that could not be resolved in the metric registry' in str(err):
                 logger.warn("Invalid metric ID encountered. Returning results so far.")
                 break
-            logger.exception("Error: Invalid API response")
+            logger.exception("Error: Invalid API response", stack_info=True)
             raise
 
         for result in response.json().get('result'):

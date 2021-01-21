@@ -141,7 +141,7 @@ def make_api_call(cluster, endpoint, tenant=None, method=HTTP.GET, **kwargs):
     # Set the right URL for the operation
     url = f"{generate_tenant_url(cluster, tenant)}{endpoint}" \
         if tenant else f"{HTTPS_STR}{cluster['url']}{endpoint}"
-    logger.debug(f"URL used for API call: {url}")
+    logger.debug("URL used for API call: %s", url)
 
     # Get correct token for the operation
     if 'onpremise' in str(endpoint) or 'cluster' in str(endpoint):
@@ -193,11 +193,11 @@ def get_results_whole(cluster, tenant, endpoint, api_version, **kwargs):
             try:
                 raise ValueError("For V2 APIs you must provide collected item.")
             except ValueError:
-                logger.exception("Error: item missing from V2 API call.")
+                logger.exception("Error: item missing from V2 API call.", stack_info=True)
                 raise
         item = kwargs['item']
         results = {}
-        logger.debug(f"Using V2 pagination for API to collect {item}")
+        logger.debug("Using V2 pagination for API to collect %s", item)
     else:
         is_v2 = False
         results = []
@@ -205,7 +205,7 @@ def get_results_whole(cluster, tenant, endpoint, api_version, **kwargs):
 
     while cursor:
         if cursor != 1:
-            logger.debug(f"Getting next page of results. Cursor is {cursor}")
+            logger.debug("Getting next page of results. Cursor is %", cursor)
             if not is_v2 or endpoint == TenantAPIs.ONEAGENTS:
                 # V1 and OneAgents require all other query params are preserved
                 kwargs['nextPageKey'] = cursor
@@ -257,17 +257,17 @@ def get_results_by_page(cluster, tenant, endpoint, api_version, **kwargs):
             try:
                 raise ValueError("For is_v2 APIs you must provide collected item.")
             except ValueError:
-                logger.exception("Error: item missing from V2 API call.")
+                logger.exception("Error: item missing from V2 API call.", stack_info=True)
                 raise
         item = kwargs['item']
-        logger.debug(f"Using V2 pagination for API to collect {item}")
+        logger.debug("Using V2 pagination for API to collect %s", item)
     else:
         logger.debug("Using V1 pagination for API")
         is_v2 = False
 
     while cursor:
         if cursor != 1:
-            logger.debug(f"Getting next page of results. Cursor is {cursor}")
+            logger.debug("Getting next page of results. Cursor is %s", cursor)
             # V1 requires all other query params are preserved
             if not is_v2 or endpoint == TenantAPIs.ONEAGENTS:
                 kwargs['nextPageKey'] = cursor
@@ -299,18 +299,19 @@ def check_response(response):
 
     '''
     logger.debug("Validating the response for the API call.")
-    logger.debug(f"Response: {response}")
+    logger.debug("Response: %s", response)
     headers = response.headers
 
     if response.status_code == 429:
-        logger.warn("Endpoint request limit of "
-                    f"{headers['x-ratelimit-limit']} was reached!")
+        logger.warn(
+            "Endpoint request limit of %s was reached!", headers['x-ratelimit-limit']
+        )
         # Wait until the limit resets and try again
         time_to_wait = int(headers['x-ratelimit-reset'])/1000000 - time.time()
 
         # Check that there's actually time to wait
         if time_to_wait > 0:
-            logger.warn(f"Waiting {time_to_wait} sec until the limit resets.")
+            logger.warn("Waiting %s sec until the limit resets.", time_to_wait)
             time.sleep(float(time_to_wait))
         return False
 
@@ -321,7 +322,7 @@ def check_response(response):
                 f"{response.url}\n{response.status_code}\n{response.text}"
             )
         except InvalidAPIResponseException:
-            logger.exception("Error: Invalid API response.")
+            logger.exception("Error: Invalid API response.", stack_info=True)
             raise
 
     return True
@@ -334,7 +335,9 @@ def check_managed(cluster):
         try:
             raise ManagedClusterOnlyException()
         except ManagedClusterOnlyException:
-            logger.exception("Error: Managed operation attempted on SaaS cluster.")
+            logger.exception(
+                "Error: Managed operation attempted on SaaS cluster.", stack_info=True
+            )
             raise
 
 
