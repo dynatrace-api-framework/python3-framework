@@ -6,7 +6,7 @@ jobs:
         environment:
           PIPENV_VENV_IN_PROJECT: true
       - image: mockserver/mockserver
-        name: mockserver.mockserver
+        name: mockserver
     steps:
       - checkout # check out source code to working directory
       - run:
