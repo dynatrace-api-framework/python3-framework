@@ -24,12 +24,20 @@ def create_mockserver_expectation(cluster, tenant, url_path, request_type, **kwa
     @throws ValueError - when the response code is not positive
     """
     requests.packages.urllib3.disable_warnings()  # pylint: disable=no-member
+
+    if cluster.get("is_managed"):
+        expected_path = f"/e/{cluster.get('tenant').get(tenant)}{url_path}"
+        expectation_url = f"http://{cluster['url']}/mockserver/expectation"
+    else:
+        expected_path = url_path
+        expectation_url = f"{generate_tenant_url(cluster, tenant)}/mockserver/expectation"
+
     expectation = {
         "httpRequest": {
             "headers": {
                 "Authorization": [f"Api-Token {cluster.get('api_token').get(tenant)}"]
             },
-            "path": url_path,
+            "path": expected_path,
             "method": request_type
         },
         "httpResponse": {
@@ -93,7 +101,6 @@ def create_mockserver_expectation(cluster, tenant, url_path, request_type, **kwa
 
     logging.debug(expectation)
 
-    expectation_url = f"{generate_tenant_url(cluster, tenant)}/mockserver/expectation"
     test_req = requests.request(
         "PUT",
         expectation_url,
