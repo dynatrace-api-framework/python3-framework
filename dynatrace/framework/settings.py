@@ -39,7 +39,7 @@ DefaultSettings = {
     'DEFAULT_TIMEZONE': "UTC",
 }
 
-__IMPORTED_SETTINGS__ = None
+__IMPORTED_SETTINGS__ = {}
 
 
 def get_setting(attribute):
