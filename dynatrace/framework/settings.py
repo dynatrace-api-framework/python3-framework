@@ -1,5 +1,6 @@
 """Module for retreiving settings safely"""
 import yaml
+import json
 try:
     import user_variables  # pylint: disable=import-error
     FILE_IMPORTED = True
@@ -112,8 +113,13 @@ def load_settings_from_file(settings_file):
     if str.endswith(settings_file, ".yaml") or str.endswith(settings_file, ".yml"):
         with open(settings_file) as file:
             imported_settings = yaml.load(file, Loader=yaml.FullLoader)
-            if __IMPORTED_SETTINGS__ is None:
-                __IMPORTED_SETTINGS__ = imported_settings
-            else:
-                for setting, value in imported_settings.items():
-                    __IMPORTED_SETTINGS__[setting] = value
+
+    if str.endswith(settings_file, ".json"):
+        with open(settings_file) as file:
+            imported_settings = json.load(file)
+
+    if __IMPORTED_SETTINGS__ is None:
+        __IMPORTED_SETTINGS__ = imported_settings
+    else:
+        for setting, value in imported_settings.items():
+            __IMPORTED_SETTINGS__[setting] = value
