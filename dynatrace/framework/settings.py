@@ -117,7 +117,7 @@ def create_cluster(cluster_name, url, **kwargs):
     elif tenant_ids is None and tenant_tokens is None:
         pass
     else:
-        raise ValueError("tenant and tenant token must both be dict")
+        raise ValueError("Tenant and tenant token must both be dict")
 
     if 'FULL_SET' not in __IMPORTED_SETTINGS__:
         __IMPORTED_SETTINGS__['FULL_SET'] = {}
@@ -126,9 +126,17 @@ def create_cluster(cluster_name, url, **kwargs):
 
 def add_tenant_to_cluster(cluster, tenant_id, tenant_token, tenant_name):
     """Add tenant to predefined cluster"""
+    if isinstance (cluster, dict):
+        raise NotImplementedError(
+                "Cluster dicts are not supported yet. Please use str for the cluster's key"
+        )
     if isinstance(tenant_id, str) and isinstance(tenant_token, str):
-        cluster ['tenant'] [tenant_name] = tenant_id
-        cluster ['api_token'] [tenant_name] = tenant_token
+        if cluster in __IMPORTED_SETTINGS__['FULL_SET']:
+            __IMPORTED_SETTINGS__['FULL_SET'][cluster]['tenant'][tenant_name] = tenant_id
+            __IMPORTED_SETTINGS__['FULL_SET'][cluster]['api_token'][tenant_name] = tenant_token
+        else:
+            raise KeyError("Cluster not found")
+        return __IMPORTED_SETTINGS__['FULL_SET'][cluster]
 
 def load_settings_from_file(settings_file):
     """Assign setting value)s as defined by the cluster"""
@@ -142,8 +150,5 @@ def load_settings_from_file(settings_file):
         with open(settings_file) as file:
             imported_settings = json.load(file)
 
-    if __IMPORTED_SETTINGS__ == {}:
-        __IMPORTED_SETTINGS__ = imported_settings
-    else:
-        for setting, value in imported_settings.items():
-            __IMPORTED_SETTINGS__[setting] = value
+    for setting, value in imported_settings.items():
+        __IMPORTED_SETTINGS__[setting] = value
