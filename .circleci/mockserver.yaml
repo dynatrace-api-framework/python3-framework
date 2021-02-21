@@ -1,6 +1,6 @@
 FULL_SET:
   mockserver1:
-    url: veteran.philly:1080
+    url: mockserver:1080
     tenant:
       tenant1: mockenv
     api_token:
