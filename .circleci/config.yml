@@ -16,7 +16,8 @@ jobs:
       - run:
           command: |
             cp .circleci/mockserver.py user_variables.py
-            cp .circleci/user_variables.yaml user_variables.yaml
+            cp .circleci/mockserver.yaml user_variables.yaml
+            cp .circleci/mockserver.json user_variables.json
             pip install pipenv
             pipenv install --dev
       - run:
