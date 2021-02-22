@@ -1,0 +1,14 @@
+{
+    "nextPageKey": null,
+    "metrics": [
+        { 
+            "metricId": "ext:custom.jmx.radujmx.metric_test-count"
+        },
+        {
+            "metricId": "ext:custom.jmx.radujmx.metric_test-avg"
+        },
+        {
+            "metricId": "ext:custom.jmx.radujmx.metric_test-sum"
+        }
+    ]
+}

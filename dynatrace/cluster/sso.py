@@ -1,7 +1,7 @@
 """SSO Operations for Dynatrace"""
-import dynatrace.requests.request_handler as rh
+import dynatrace.framework.request_handler as rh
 
-ENDPOINT = "sso/ssoProvider"
+ENDPOINT = "/api/v1.0/onpremise/sso/ssoProvider"
 
 
 def disable_sso(cluster):
@@ -45,6 +45,14 @@ def enable_sso(cluster, disable_local=False, groups_enabled=False, is_openid=Fal
 
 
 def get_sso_status(cluster):
+    """Current Settings of SSO
+
+    Args:
+        cluster (cluster dict): Currently selected cluster
+
+    Returns:
+        dict: All SSO settings in their current setting
+    """
     response = rh.make_api_call(cluster=cluster,
                                 endpoint=ENDPOINT)
     return response.json()

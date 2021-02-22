@@ -1,0 +1,70 @@
+{
+    "nextPageKey": null,
+    "totalCount": 2,
+    "problems": [
+        {
+            "problemId": "-123456789_987654321V2",
+            "displayId": "P-123456",
+            "title": "Problem1",
+            "impactLevel": "INFRASTRUCTURE",
+            "severityLevel": "AVAILABILITY",
+            "status": "OPEN",
+            "affectedEntities": [
+                {
+                    "entityId": {
+                        "id": "HOST-123456789",
+                        "type": "HOST"
+                    },
+                    "name": "DemoHost"
+                }
+            ],
+            "impactedEntities": [
+                {
+                    "entityId": {
+                        "id": "HOST-123456789",
+                        "type": "HOST"
+                    },
+                    "name": "DemoHost"
+                }
+            ],
+            "rootCauseEntity": null,
+            "managementZones": [],
+            "entityTags": [],
+            "problemFilters": [],
+            "startTime": 1605168880219,
+            "endTime": -1
+        },
+        {
+            "problemId": "987654321_123456789V2",
+            "displayId": "P-98765",
+            "title": "Problem2",
+            "impactLevel": "APPLICATION",
+            "severityLevel": "AVAILABILITY",
+            "status": "OPEN",
+            "affectedEntities": [
+                {
+                    "entityId": {
+                        "id": "HTTP_CHECK-123456789",
+                        "type": "HTTP_CHECK"
+                    },
+                    "name": "Demo Test"
+                }
+            ],
+            "impactedEntities": [
+                {
+                    "entityId": {
+                        "id": "HTTP_CHECK-123456789",
+                        "type": "HTTP_CHECK"
+                    },
+                    "name": "Demo Test"
+                }
+            ],
+            "rootCauseEntity": null,
+            "managementZones": [],
+            "entityTags": [],
+            "problemFilters": [],
+            "startTime": 1605169224250,
+            "endTime": -1
+        }
+    ]
+}

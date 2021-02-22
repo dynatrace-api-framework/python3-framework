@@ -1,8 +1,7 @@
 #!/bin/python3
 """Cluster Group Operations"""
-import user_variables
-from dynatrace.requests import request_handler as rh
-from dynatrace.tenant import management_zones as mzh
+import user_variables  # pylint: disable=import-error
+from dynatrace.framework import request_handler as rh
 
 MZ_USER_PERMISSONS = {
     "access_env": "VIEWER",
@@ -13,6 +12,18 @@ MZ_USER_PERMISSONS = {
 
 
 def generate_group_name(template, user_type, tenant, app_name):
+    """Generate User Group according to template
+
+    Args:
+        template (str): template with replacable values for variables
+        user_type (str): user permission type
+        tenant (str): tenant for user_group to match to
+        app_name (str): Application name
+
+    Returns:
+        [type]: [description]
+    """
+    # TODO Refactor for more replacements
     template = template.replace("{USER_TYPE}", user_type)
     template = template.replace("{TENANT}", tenant)
     template = template.replace("{APP_NAME}", app_name)
@@ -59,6 +70,12 @@ def create_app_groups_setwide(app_name):
 
 
 def delete_app_groups(cluster, app_name):
+    """Delete Uesr Groups for Application
+
+    Args:
+        cluster (cluster dict): Currently selected cluster
+        app_name (str): Application to remove all groups
+    """
     role_types = user_variables.USER_GROUPS['role_types']
     role_tenants = user_variables.USER_GROUPS['role_tenants']
 
@@ -79,34 +96,3 @@ def delete_app_groups_setwide(app_name):
     for cluster in user_variables.FULL_SET.values():
         if cluster['is_managed']:
             delete_app_groups(cluster, app_name)
-
-
-def create_app_clusterwide(cluster, app_name, zones=None):
-    """Create App User Groups and Management Zones"""
-    # Create Standard App MZs
-    mz_list = {}
-    for tenant_key in cluster['tenant'].keys():
-        mzh.add_management_zone(
-            cluster,
-            tenant_key,
-            str.upper(app_name)
-        )
-        if tenant_key in zones:
-            mz_list[tenant_key] = []
-            for zone in zones[tenant_key]:
-                mz_id = mzh.add_management_zone(
-                    cluster,
-                    tenant_key,
-                    str.upper(app_name),
-                    zone
-                )
-                if mz_id is not None:
-                    mz_list[tenant_key].append(mz_id)
-
-    # Create User Groups
-    user_groups = create_app_groups(cluster, app_name)
-    print(user_groups)
-
-    # for tenant in user_variables.USER_GROUPS['role_tenants']:
-    #   if "access_env" in user_groups [tenant]:
-    #     add_mz_to_user

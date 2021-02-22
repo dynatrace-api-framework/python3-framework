@@ -1,3 +1,4 @@
+---
 ###########################
 ###########################
 ## Linter GitHub Actions ##
@@ -40,12 +41,34 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
+      - run: mkdir -p super-linter.report
       ################################
       # Run Linter against code base #
       ################################
       - name: Lint Code Base
-        uses: docker://github/super-linter:v3
+        uses: github/super-linter@v3.11.0
         env:
-          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_ALL_CODEBASE: true
           DEFAULT_BRANCH: master
+          LINTER_RULES_PATH: .
+          PYTHON_PYLINT_CONFIG_FILE: .pylintrc
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LOG_FILE: super-linter.log
+          OUTPUT_FOLDER: super-linter.report
+          OUTPUT_FORMAT: tap
+          OUTPUT_DETAILS: detailed
+          VALIDATE_YAML: true
+          VALIDATE_JSON: true
+          VALIDATE_EDITORCONFIG: true
+          VALIDATE_MARKDOWN: true
+          VALIDATE_PYTHON_PYLINT: true
+      - run: ls
+      ########################
+      # Retreive tap reports #
+      ########################
+      - name: Archive super-linter tap reports
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: linter-report
+          path: super-linter.report

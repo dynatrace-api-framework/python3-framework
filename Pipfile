@@ -7,9 +7,11 @@ verify_ssl = true
 pylint = "*"
 autopep8 = "*"
 coverage = "*"
+flake8 = "*"
 
 [packages]
 requests = "*"
+pyyaml = "*"
 
 [requires]
 python_version = "3.8"

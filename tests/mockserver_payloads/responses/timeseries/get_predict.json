@@ -1,0 +1,63 @@
+{
+    "timeseriesId": "custom.test.timeseries",
+    "displayName": "Custom Mock Metric",
+    "dimensions": [
+        "SERVICE"
+    ],
+    "aggregationTypes": [
+        "COUNT"
+    ],
+    "unit": "Count (count)",
+    "filter": "BUILTIN",
+    "detailedSource": "Services",
+    "types": [],
+    "dataResult": {
+        "dataPoints": {
+            "SERVICE-ABC123DEF456GHI789J": [
+                [
+                    1607939400000,
+                    523.666655307729,
+                    410.15412668486834,
+                    635.8478203297005
+                ],
+                [
+                    1607939700000,
+                    603.0451778473598,
+                    472.15260627789496,
+                    732.1528174479977
+                ],
+                [
+                    1607940000000,
+                    459.95450718505396,
+                    335.8356721235074,
+                    587.664001040329
+                ],
+                [
+                    1607940300000,
+                    441.4722415900446,
+                    322.67147758176833,
+                    567.8571115102844
+                ],
+                [
+                    1607940600000,
+                    422.50195767708374,
+                    284.5712246898428,
+                    567.8243284420648
+                ],
+                [
+                    1607940900000,
+                    546.0887158520202,
+                    400.57725605634965,
+                    697.3510794865584
+                ]
+            ]
+        },
+        "timeseriesId": "custom.test.timeseries",
+        "unit": "Count (count)",
+        "resolutionInMillisUTC": 300000,
+        "aggregationType": "COUNT",
+        "entities": {
+            "SERVICE-ABC123DEF456GHI789J": "/MockService"
+        }
+    }
+}
