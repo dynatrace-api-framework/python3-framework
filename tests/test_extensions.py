@@ -151,7 +151,7 @@ class TestGetExtensions(unittest.TestCase):
 
         result = extensions.get_extension_metrics(CLUSTER, TENANT, EXTENSION_ID)
         expected_result = list(
-            m.get('metricId') 
+            m.get('metricId')
             for m in testtools.expected_payload(response_file).get('metrics')
         )
 

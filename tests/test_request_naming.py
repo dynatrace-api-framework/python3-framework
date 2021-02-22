@@ -148,7 +148,8 @@ class TestRequestNaming(unittest.TestCase):
 
 
 class TestErrorHandling(unittest.TestCase):
-    def test_export_to_files_RuntimeError(self):
+    """Test Request Naming Error Handling"""
+    def test_export_to_files_runtime_error(self):
         """Tests error handling for function export_to_files.
         RuntimeError should be raised when the folder path does not exist.
         """

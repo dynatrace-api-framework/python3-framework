@@ -19,7 +19,7 @@ RESPONSE_DIR = "tests/mockserver_payloads/responses/request_attributes"
 class TestRequestAttributes(unittest.TestCase):
     """Test cases for main functionality of the request_attributes module"""
 
-    def test_create_or_update_request_attribute_U(self):
+    def test_create_or_update_request_attribute_u(self):
         """Tests the create_or_update_request_attribute function.
         Test the update portion of this function.
         """
@@ -53,7 +53,7 @@ class TestRequestAttributes(unittest.TestCase):
 
         self.assertEqual(result, expected_result)
 
-    def test_create_or_update_request_attribute_C(self):
+    def test_create_or_update_request_attribute_c(self):
         """Tests the create_or_update_request_attribute function.
         Test the create portion of this function.
         """
@@ -266,12 +266,13 @@ class TestRequestAttributes(unittest.TestCase):
 
 
 class TestErrorHandling(unittest.TestCase):
-    def test_delete_request_attribute_by_name_RuntimeError(self):
+    """Tests Request Attribute Error Handling"""
+    def test_delete_request_attribute_by_name_runtime_error(self):
         """Tests error handling for function delete_request_attribute_by_name.
         RuntimeError should be raised when request attribute ID is not found.
         """
         response_file = f"{RESPONSE_DIR}/get_all.json"
-        RA_NAME = "invalid_name"
+        ra_name = "invalid_name"
 
         testtools.create_mockserver_expectation(
             cluster=CLUSTER,
@@ -283,16 +284,16 @@ class TestErrorHandling(unittest.TestCase):
         )
 
         with self.assertRaises(RuntimeError):
-            request_attributes.delete_request_attribute_by_name(CLUSTER, TENANT, RA_NAME)
+            request_attributes.delete_request_attribute_by_name(CLUSTER, TENANT, ra_name)
 
-    def test_export_to_files_RuntimeError(self):
+    def test_export_to_files_runtime_error(self):
         """Tests error handling for function export_to_files.
         RuntimeError should be raised when export folder does not exist.
         """
-        FOLDER = "invalid_folder/path"
+        folder = "invalid_folder/path"
 
         with self.assertRaises(RuntimeError):
-            request_attributes.export_to_files(CLUSTER, TENANT, FOLDER)
+            request_attributes.export_to_files(CLUSTER, TENANT, folder)
 
 
 if __name__ == "__main__":
