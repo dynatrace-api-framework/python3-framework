@@ -310,7 +310,7 @@ def generate_window_json(name, description, suppression, schedule, **kwargs):
     Returns:
         dict: dictionary for json payload
     """
-   
+
     scope = None if 'scope' not in kwargs else kwargs['scope']
     is_planned = False if 'is_planned' not in kwargs else kwargs['is_planned']
 
