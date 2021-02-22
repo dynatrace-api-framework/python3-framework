@@ -14,6 +14,7 @@ FULL_SET = {
     }
 }
 
+LOG_OUTPUT = "FILE"
 LOG_LEVEL = "INFO"
 
 # ROLE TYPE KEYS
