@@ -3,7 +3,7 @@ import datetime
 import re
 from enum import Enum, auto
 import dynatrace.framework.request_handler as rh
-import user_variables
+from dynatrace.framework.settings import get_setting
 from dynatrace.framework.exceptions import InvalidDateFormatException
 
 
@@ -338,7 +338,7 @@ def generate_schedule(
     }
 
     if zone_id is None:
-        schedule['zoneId'] = user_variables.DEFAULT_TIMEZONE
+        schedule['zoneId'] = get_setting('DEFAULT_TIMEZONE')
 
     if recurrence_type != "ONCE":
         # Check Start Time

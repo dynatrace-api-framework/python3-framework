@@ -1,12 +1,12 @@
 """Test cases for Timeseries (V1) API operations"""
 
 import unittest
-from tests import tooling_for_test as testtools
-from user_variables import FULL_SET
-from dynatrace.tenant import timeseries
 from dynatrace.framework.request_handler import TenantAPIs, HTTP
+from dynatrace.framework.settings import get_cluster_dict
+from dynatrace.tenant import timeseries
+from tests import tooling_for_test as testtools
 
-CLUSTER = FULL_SET["mockserver1"]
+CLUSTER = get_cluster_dict("mockserver1")
 TENANT = "tenant1"
 URL_PATH = str(TenantAPIs.TIMESERIES)
 TIMESERIES_ID = "custom.test.timeseries"

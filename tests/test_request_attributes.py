@@ -3,11 +3,11 @@
 import unittest
 import os
 import tests.tooling_for_test as testtools
-from user_variables import FULL_SET
 from dynatrace.framework.request_handler import TenantAPIs, HTTP
+from dynatrace.framework.settings import get_cluster_dict
 from dynatrace.tenant import request_attributes
 
-CLUSTER = FULL_SET["mockserver1"]
+CLUSTER = get_cluster_dict("mockserver1")
 TENANT = "tenant1"
 URL_PATH = str(TenantAPIs.REQUEST_ATTRIBUTES)
 RA_ID = "123abc456-a123-1234-4321-def123ghi45"
