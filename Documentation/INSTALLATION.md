@@ -12,7 +12,7 @@ If you see a TODO for something related, please reach out to Aaron Philipose on 
 
 ### Install indepentantly
 - [Download the latest version of Python 3](https://www.python.org/downloads/)
-- Run the installer 
+- Run the installer
   - Use default options.
   - Select to add PYTHON_HOME to PATH
 - Open PowerShell or Command Line
