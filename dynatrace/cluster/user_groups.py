@@ -2,7 +2,6 @@
 """Cluster Group Operations"""
 import user_variables  # pylint: disable=import-error
 from dynatrace.framework import request_handler as rh
-from dynatrace.tenant import management_zones as mzh
 
 MZ_USER_PERMISSONS = {
     "access_env": "VIEWER",
