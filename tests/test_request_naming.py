@@ -3,11 +3,11 @@
 import unittest
 import os
 import tests.tooling_for_test as testtools
-from user_variables import FULL_SET
 from dynatrace.framework.request_handler import TenantAPIs, HTTP
+from dynatrace.framework.settings import get_cluster_dict
 from dynatrace.tenant import request_naming
 
-CLUSTER = FULL_SET["mockserver1"]
+CLUSTER = get_cluster_dict("mockserver1")
 TENANT = "tenant1"
 URL_PATH = str(TenantAPIs.REQUEST_NAMING)
 RULE_ID = "abc1234def-1233-3321-ab123-abc123defghi"
@@ -148,7 +148,8 @@ class TestRequestNaming(unittest.TestCase):
 
 
 class TestErrorHandling(unittest.TestCase):
-    def test_export_to_files_RuntimeError(self):
+    """Test Request Naming Error Handling"""
+    def test_export_to_files_runtime_error(self):
         """Tests error handling for function export_to_files.
         RuntimeError should be raised when the folder path does not exist.
         """

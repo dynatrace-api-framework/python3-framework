@@ -2,10 +2,10 @@
 
 import os
 import json
-from dynatrace.framework import request_handler as rh, logging
+from dynatrace.framework import request_handler as rh, log_handler
 
 ENDPOINT = str(rh.TenantAPIs.REQUEST_ATTRIBUTES)
-logger = logging.get_logger(__name__)
+logger = log_handler.get_logger(__name__)
 
 
 def get_all_request_attributes(cluster, tenant):
@@ -120,7 +120,7 @@ def delete_request_attribute_by_name(cluster, tenant, ra_name):
     \n
     @param cluster (dict) - Dynatrace Cluster dictionary, as taken from variable set\n
     @param tenant (str) - Dynatrace Tenant name, as taken from variable set\n
-    @param ra_name (str) - name of the request attribute to delete
+    @param ra_name (str) - name of the request attribute to delete\n
     \n
     @returns Response - HTTP Response
     \n

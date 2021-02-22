@@ -2,10 +2,10 @@
 
 import json
 from enum import Enum, auto
-from dynatrace.framework import request_handler as rh, logging
+from dynatrace.framework import request_handler as rh, log_handler
 
 ENDPOINT = str(rh.TenantAPIs.MANAGEMENT_ZONES)
-logger = logging.get_logger(__name__)
+logger = log_handler.get_logger(__name__)
 
 
 class RuleTypes(Enum):

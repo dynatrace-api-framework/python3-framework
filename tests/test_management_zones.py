@@ -2,11 +2,11 @@
 
 import unittest
 import tests.tooling_for_test as testtools
-from user_variables import FULL_SET
 from dynatrace.tenant import management_zones
+from dynatrace.framework.settings import get_cluster_dict
 from dynatrace.framework.request_handler import TenantAPIs, HTTP
 
-CLUSTER = FULL_SET["mockserver1"]
+CLUSTER = get_cluster_dict("mockserver1")
 TENANT = "tenant1"
 URL_PATH = str(TenantAPIs.MANAGEMENT_ZONES)
 RESPONSE_DIR = "tests/mockserver_payloads/responses/management_zones"

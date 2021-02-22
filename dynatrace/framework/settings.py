@@ -136,6 +136,8 @@ def add_tenant_to_cluster(cluster, tenant_id, tenant_token, tenant_name):
             raise KeyError("Cluster not found")
         return __IMPORTED_SETTINGS__['FULL_SET'][cluster]
 
+    raise ValueError("Tenant and tenant token must both be dict")
+
 def load_settings_from_file(settings_file):
     """Assign setting value)s as defined by the cluster"""
     global __IMPORTED_SETTINGS__ # pylint: disable=global-statement

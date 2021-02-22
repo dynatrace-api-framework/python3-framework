@@ -1,10 +1,10 @@
 """Module for Entities API operations"""
 
 from enum import Enum, auto
-from dynatrace.framework import logging
+from dynatrace.framework import log_handler
 from dynatrace.framework import request_handler as rh
 
-logger = logging.get_logger(__name__)
+logger = log_handler.get_logger(__name__)
 
 
 class EntityTypes(Enum):

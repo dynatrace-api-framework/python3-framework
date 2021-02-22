@@ -1,9 +1,9 @@
 """Module for interacting with the Metrics API"""
-from dynatrace.framework import request_handler as rh, logging
+from dynatrace.framework import request_handler as rh, log_handler
 from dynatrace.framework.exceptions import InvalidAPIResponseException
 
 ENDPOINT = str(rh.TenantAPIs.METRICS)
-logger = logging.get_logger(__name__)
+logger = log_handler.get_logger(__name__)
 
 
 def get_metric_descriptor(cluster, tenant, **kwargs):
@@ -80,7 +80,7 @@ def get_metric_data(cluster, tenant, **kwargs):
                                         params=kwargs)
         except InvalidAPIResponseException as err:
             if 'metric key that could not be resolved in the metric registry' in str(err):
-                logger.warn("Invalid metric ID encountered. Returning results so far.")
+                logger.warning("Invalid metric ID encountered. Returning results so far.")
                 break
             logger.exception("Error: Invalid API response", stack_info=True)
             raise

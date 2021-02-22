@@ -1,3 +1,4 @@
+---
 FULL_SET:
   mockserver1:
     url: mockserver:1080
