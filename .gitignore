@@ -15,8 +15,9 @@ pythonenv**
 ***.tap**
 .converge
 
-user_variables.py
+user_variables.*
 sandbox_script.py
+htmlcov/*
 
 !variable_sets/template.py
 !scripts/template.py

@@ -3,17 +3,18 @@ FULL_SET = {
     "mockserver1": {
         "url": "mockserver:1080",
         "tenant": {
-            "tenant1": "mockserver",
+            "tenant1": "mockenv",
         },
         "api_token": {
             "tenant1": "sample_api_token",
         },
         "verify_ssl": False,
-        "is_managed": False,
+        "is_managed": True,
         "cluster_token": "Required for Cluster Operations in Managed"
     }
 }
 
+LOG_OUTPUT = "FILE"
 LOG_LEVEL = "INFO"
 
 # ROLE TYPE KEYS

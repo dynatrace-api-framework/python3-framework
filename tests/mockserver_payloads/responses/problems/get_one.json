@@ -1,0 +1,32 @@
+{
+    "problemId": "-123456789_987654321V2",
+    "displayId": "P-123456",
+    "title": "Problem1",
+    "impactLevel": "INFRASTRUCTURE",
+    "severityLevel": "AVAILABILITY",
+    "status": "OPEN",
+    "affectedEntities": [
+        {
+            "entityId": {
+                "id": "HOST-123456789",
+                "type": "HOST"
+            },
+            "name": "DemoHost"
+        }
+    ],
+    "impactedEntities": [
+        {
+            "entityId": {
+                "id": "HOST-123456789",
+                "type": "HOST"
+            },
+            "name": "DemoHost"
+        }
+    ],
+    "rootCauseEntity": null,
+    "managementZones": [],
+    "entityTags": [],
+    "problemFilters": [],
+    "startTime": 1605168880219,
+    "endTime": -1
+}

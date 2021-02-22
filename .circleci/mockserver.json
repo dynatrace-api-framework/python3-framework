@@ -1,0 +1,14 @@
+{
+  "FULL_SET": {
+    "mockserver1": {
+      "url": "mockserver.philly:1080",
+      "tenant": {
+        "tenant1": "mockenv"
+      },
+      "verify_ssl": false,
+      "is_managed": true,
+      "cluster_token": "cluster_token_here"
+    }
+  },
+  "LOG_LEVEL": "WARNING"
+}

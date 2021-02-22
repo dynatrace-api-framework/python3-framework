@@ -1,12 +1,12 @@
 """Test Cases For Maintenance Windows."""
 import unittest
-import user_variables  # pylint: disable=import-error
 from tests import tooling_for_test
 from dynatrace.tenant import maintenance
-from dynatrace.requests.request_handler import TenantAPIs
-from dynatrace.exceptions import InvalidDateFormatException
+from dynatrace.framework.request_handler import TenantAPIs
+from dynatrace.framework.settings import get_cluster_dict
+from dynatrace.framework.exceptions import InvalidDateFormatException
 
-CLUSTER = user_variables.FULL_SET["mockserver1"]
+CLUSTER = get_cluster_dict("mockserver1")
 TENANT = "tenant1"
 URL_PATH = str(TenantAPIs.MAINTENANCE_WINDOWS)
 TEST_RANGE_START = "2020-01-01 00:00"

@@ -1,46 +1,133 @@
-#!/bin/python3
-"""Global Service Request Naming Class"""
+"""Service Request Naming Rule Operations via the Configuration API"""
 
 import os
 import json
-from dynatrace.requests import request_handler as rh
+from dynatrace.framework import request_handler as rh
 
-ENDPOINT = rh.TenantAPIs.REQUEST_NAMING
-
-
-def pull_to_files(cluster, tenant, ignore_disabled=True):
-    """Pull Service Naming Rules to Files"""
-    all_rules_call = rh.make_api_call(cluster=cluster,
-                                      tenant=tenant,
-                                      endpoint=ENDPOINT)
-    all_rules_list = all_rules_call.json()
-    all_rules_list = all_rules_list['values']
-    # print (json.dumps(all_rules_list, indent=2))
-
-    rules_file_list = []
-    rule_num = 0
-    for naming_rule in all_rules_list:
-        rule_call = rh.make_api_call(cluster=cluster,
-                                     tenant=tenant,
-                                     endpoint=f"{ENDPOINT}/{naming_rule['id']}")
-        if rule_call.status_code == 200:
-            rule_json = rule_call.json()
-            if rule_json['enabled'] and ignore_disabled:
-                rule_json.pop('metadata')
-                rule_json.pop('id')
-                rule_file_name = f"jsons/request_naming/{rule_num}.json"
-                with open(rule_file_name, 'w') as current_file:
-                    json.dump(rule_json, current_file, indent=2)
-                rules_file_list.append(rule_file_name)
-        else:
-            print(rule_call.status_code)
-        rule_num = rule_num + 1
-    return rules_file_list
+ENDPOINT = str(rh.TenantAPIs.REQUEST_NAMING)
 
 
-def generate_file_list():
-    """Generate File List from files in JSON directory"""
-    file_list = os.listdir("./jsons/request_naming/")
-    for file_name in file_list:
-        print(str.isdigit(file_name))
-    # print(file_list.sort(key=lambda f: filter(str.isdigit, f)))
+def delete_naming_rule(cluster, tenant, rule_id):
+    """Deletes an already existing request naming rule, referenced by its ID.
+    \n
+    @param cluster (dict) - Dynatrace Cluster dictionary, as taken from variable set\n
+    @param tenant (str) - Dynatrace Tenant name, as taken from variable set\n
+    @param rule_id (str) - ID of the request naming rule to delete
+    \n
+    @returns Response - HTTP Response to the request
+    """
+    response = rh.make_api_call(
+        cluster=cluster,
+        tenant=tenant,
+        endpoint=f"{ENDPOINT}/{rule_id}",
+        method=rh.HTTP.DELETE
+    )
+
+    return response
+
+
+def update_naming_rule(cluster, tenant, rule_id, rule_json):
+    """Updates an already existing request naming rule, referenced by its ID.
+    \n
+    @param cluster (dict) - Dynatrace Cluster dictionary, as taken from variable set\n
+    @param tenant (str) - Dynatrace Tenant name, as taken from variable set\n
+    @param rule_id (str) - ID of the request naming rule to update\n
+    @param rule_json (dict) - new rule definition, to be sent as JSON payload
+    \n
+    @returns Response - HTTP Response to the request
+    """
+    response = rh.make_api_call(
+        cluster=cluster,
+        tenant=tenant,
+        endpoint=f"{ENDPOINT}/{rule_id}",
+        method=rh.HTTP.PUT,
+        json=rule_json
+    )
+
+    return response
+
+
+def create_naming_rule(cluster, tenant, rule_json):
+    """Creates a new request naming rule.
+    \n
+    @param cluster (dict) - Dynatrace Cluster dictionary, as taken from variable set\n
+    @param tenant (str) - Dynatrace Tenant name, as taken from variable set\n
+    @param rule_json (dict) - new rule definition, to be sent as JSON payload
+    \n
+    @returns Response - HTTP Response to the request
+    """
+    response = rh.make_api_call(
+        cluster=cluster,
+        tenant=tenant,
+        endpoint=ENDPOINT,
+        method=rh.HTTP.POST,
+        json=rule_json
+    )
+
+    return response
+
+
+def get_rule_details(cluster, tenant, rule_id):
+    """Gets the definition of an already existing request naming rule, referenced
+    by its ID.
+    \n
+    @param cluster (dict) - Dynatrace Cluster dictionary, as taken from variable set\n
+    @param tenant (str) - Dynatrace Tenant name, as taken from variable set\n
+    @param rule_id (str) - ID of the request naming rule to fetch
+    \n
+    @returns dict - the rule definition (details)
+    """
+    details = rh.make_api_call(
+        cluster=cluster,
+        tenant=tenant,
+        endpoint=f"{ENDPOINT}/{rule_id}",
+        method=rh.HTTP.GET
+    ).json()
+
+    return details
+
+
+def get_all_rules(cluster, tenant):
+    """Gets a list of all request naming rules in the tenant.
+    \n
+    @param cluster (dict) - Dynatrace Cluster dictionary, as taken from variable set\n
+    @param tenant (str) - Dynatrace Tenant name, as taken from variable set
+    \n
+    @returns list - list of request naming rules
+    """
+    rules = rh.make_api_call(
+        cluster=cluster,
+        tenant=tenant,
+        endpoint=ENDPOINT,
+        method=rh.HTTP.GET
+    ).json().get("values")
+
+    return rules
+
+
+def export_to_files(cluster, tenant, folder):
+    """Exports request naming rules from the tenant to .json files.
+    Each rule is written to its own file, in JSON format. The file is named after the
+    rule.
+    \n
+    @param cluster (dict) - Dynatrace Cluster dictionary, as taken from variable set\n
+    @param tenant (str) - Dynatrace Tenant name, as taken from variable set\n
+    @param folder (str) - path to folder where to create the files.
+    \n
+    @throws RuntimeError - when the folder path does not exist.
+    """
+    if not os.path.exists(folder):
+        raise RuntimeError("Error: export folder path does not exist")
+
+    if "/" in folder and not folder.endswith("/"):
+        folder += "/"
+    if "\\" in folder and not folder.endswith("\\"):
+        folder += "\\"
+
+    rules = get_all_rules(cluster, tenant)
+
+    for rule in rules:
+        rule_details = get_rule_details(cluster, tenant, rule.get("id"))
+        rule_name = rule.get("name")
+        with open(file=f"{folder}{rule_name}.json", mode="w") as rule_file:
+            json.dump(rule_details, rule_file, indent=4)

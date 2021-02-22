@@ -1,5 +1,5 @@
 """SSO Operations for Dynatrace"""
-import dynatrace.requests.request_handler as rh
+import dynatrace.framework.request_handler as rh
 
 ENDPOINT = "/api/v1.0/onpremise/sso/ssoProvider"
 

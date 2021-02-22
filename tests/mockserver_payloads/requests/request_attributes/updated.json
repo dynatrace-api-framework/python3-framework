@@ -1,0 +1,22 @@
+{
+    "id": "123abc456-a123-1234-4321-def123ghi45",
+    "name": "Mock_ReqAttr_1_update",
+    "enabled": true,
+    "dataType": "STRING",
+    "dataSources": [
+        {
+            "enabled": true,
+            "source": "REQUEST_HEADER",
+            "valueProcessing": {
+                "splitAt": "",
+                "trim": false
+            },
+            "parameterName": "x-mock-header",
+            "capturingAndStorageLocation": "CAPTURE_AND_STORE_ON_SERVER"
+        }
+    ],
+    "normalization": "ORIGINAL",
+    "aggregation": "FIRST",
+    "confidential": false,
+    "skipPersonalDataMasking": false
+}

@@ -1,3 +1,4 @@
+---
 version: 2
 jobs:
   build:
@@ -6,7 +7,7 @@ jobs:
         environment:
           PIPENV_VENV_IN_PROJECT: true
       - image: mockserver/mockserver
-        name: mockserver.mockserver
+        name: mockserver
     steps:
       - checkout # check out source code to working directory
       - run:
@@ -16,6 +17,8 @@ jobs:
       - run:
           command: |
             cp .circleci/mockserver.py user_variables.py
+            cp .circleci/mockserver.yaml user_variables.yaml
+            cp .circleci/mockserver.json user_variables.json
             pip install pipenv
             pipenv install --dev
       - run:

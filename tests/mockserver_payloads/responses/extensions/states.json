@@ -1,0 +1,35 @@
+{ 
+    "states": [
+        {
+            "extensionId": "custom.jmx.radujmx123456789",
+            "version": null,
+            "endpointId": null,
+            "state": "OK",
+            "stateDescription": "",
+            "timestamp": 1605975229340,
+            "hostId": "HOST-1111111111111",
+            "processId": "PROCESS_GROUP_INSTANCE-1111111111111"
+        },
+        {
+            "extensionId": "custom.jmx.radujmx123456789",
+            "version": null,
+            "endpointId": null,
+            "state": "OK",
+            "stateDescription": "",
+            "timestamp": 1605975229340,
+            "hostId": "HOST-222222222222222",
+            "processId": "PROCESS_GROUP_INSTANCE-222222222222222"
+        },
+        {
+            "extensionId": "custom.jmx.radujmx123456789",
+            "version": null,
+            "endpointId": null,
+            "state": "OK",
+            "stateDescription": "",
+            "timestamp": 1605975229340,
+            "hostId": "HOST-333333333333",
+            "processId": "PROCESS_GROUP_INSTANCE-3333333333333"
+        }
+    ],
+    "totalResults": 3
+}

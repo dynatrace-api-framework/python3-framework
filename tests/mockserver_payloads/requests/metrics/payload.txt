@@ -1,0 +1,3 @@
+cpu.temperature,cpu=Intel,core=1 gauge,min=20,max=30,sum=50,count=2
+cpu.temperature,cpu=Intel,core=2 gauge,min=10,max=30,sum=40,count=2
+cpu.temperature,cpu=Intel,core=3 gauge,min=30,max=40,sum=70,count=2
