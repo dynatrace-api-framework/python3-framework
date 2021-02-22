@@ -56,6 +56,7 @@ jobs:
           LOG_FILE: super-linter.log
           OUTPUT_FOLDER: super-linter.report
           OUTPUT_FORMAT: tap
+          OUTPUT_DETAILS: detailed
           VALIDATE_YAML: true
           VALIDATE_JSON: true
           VALIDATE_EDITORCONFIG: true
