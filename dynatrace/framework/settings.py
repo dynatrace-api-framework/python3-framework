@@ -114,9 +114,7 @@ def create_cluster(cluster_name, url, **kwargs):
         for tenant in tenant_ids:
             cluster['tenant'][tenant] = tenant_ids [tenant]
             cluster['api_token'][tenant] = tenant_tokens [tenant]
-    elif tenant_ids is None and tenant_tokens is None:
-        pass
-    else:
+    elif not(tenant_ids is None and tenant_tokens is None):
         raise ValueError("Tenant and tenant token must both be dict")
 
     if 'FULL_SET' not in __IMPORTED_SETTINGS__:

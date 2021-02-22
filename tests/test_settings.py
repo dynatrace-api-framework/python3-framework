@@ -3,9 +3,14 @@ import unittest
 import yaml
 from dynatrace.framework import settings
 
-SETTINGS_FILE = "user_variables.yaml"
-with open(SETTINGS_FILE) as file:
+SETTINGS_JSON = "user_variables.json"
+SETTINGS_YAML = "user_variables.yaml"
+with open(SETTINGS_YAML) as file:
     IMPORTED_SETTINGS = yaml.load(file, Loader=yaml.FullLoader)
+
+URL = "test.site"
+TENANT_TOKEN = "new_tenant_token"
+
 class TestSettings(unittest.TestCase):
     """Standard Testing Class"""
     def test_get_setting_from_user_variable(self):
@@ -30,16 +35,16 @@ class TestSettingsFile(unittest.TestCase):
     """Test settings file is being used when provided"""
     def test_import_yaml(self):
         """Testing YAML Import"""
-        settings.load_settings_from_file("user_variables.yaml")
+        settings.load_settings_from_file(SETTINGS_YAML)
         self.assertEqual(settings.get_setting("LOG_LEVEL"), "DEBUG")
     def test_import_json(self):
         """Testing JSON Import"""
-        settings.load_settings_from_file("user_variables.json")
+        settings.load_settings_from_file(SETTINGS_JSON)
         self.assertEqual(settings.get_setting("LOG_LEVEL"), "WARNING")
     def test_import_multi(self):
         """Ensure Latest user_variables file takes precedent"""
-        settings.load_settings_from_file("user_variables.yaml")
-        settings.load_settings_from_file("user_variables.json")
+        settings.load_settings_from_file(SETTINGS_YAML)
+        settings.load_settings_from_file(SETTINGS_JSON)
         self.assertEqual(settings.get_setting("LOG_LEVEL"), "WARNING")
         self.assertEqual(settings.get_setting("DEFAULT_TIMEZONE"),"America/Chicago")
 
@@ -57,9 +62,9 @@ class TestClusterSettings(unittest.TestCase):
         self.assertEqual(IMPORTED_SETTINGS['FULL_SET']['mockserver1'], response_cluster)
     def test_cluster_creation_minimal(self):
         """Test cluster creation programatically"""
-        new_cluster = settings.create_cluster("cluster", "test.site")
+        new_cluster = settings.create_cluster("cluster", URL)
         expected_cluster = {
-            "url": "test.site",
+            "url": URL,
             'tenant': {},
             'api_token': {},
             'verify_ssl': True,
@@ -70,13 +75,13 @@ class TestClusterSettings(unittest.TestCase):
         """Test cluster creation programatically"""
         new_cluster = settings.create_cluster(
                 "cluster",
-                "test.site",
+                URL,
                 tenant_ids={"tenant1":"tenant1-id"},
                 tenant_tokens={"tenant1":"tenant1-token"},
                 cluster_token="cluster_api_token"
         )
         expected_cluster = {
-                "url": "test.site",
+                "url": URL,
                 "tenant": {
                         "tenant1": "tenant1-id"
                 },
@@ -90,23 +95,23 @@ class TestClusterSettings(unittest.TestCase):
         self.assertEqual(new_cluster, expected_cluster)
     def test_add_tenant_to_cluster(self):
         """Test adding tenant to cluster programatically"""
-        new_cluster = settings.create_cluster(
+        settings.create_cluster(
                 "cluster",
-                "test.site"
+                URL
         )
         new_cluster = settings.add_tenant_to_cluster(
                 "cluster",
                 "new-id-here",
-                "new tenant_token",
+                TENANT_TOKEN,
                 "tenant2"
         )
         expected_cluster = {
-                "url": "test.site",
+                "url": URL,
                 "tenant": {
                         "tenant2": "new-id-here"
                 },
                 "api_token": {
-                        "tenant2": "new tenant_token"
+                        "tenant2": TENANT_TOKEN
                 },
                 "verify_ssl": True,
                 "is_managed": True
@@ -120,7 +125,7 @@ class TestClusterExceptions(unittest.TestCase):
         with self.assertRaises(ValueError) as context:
             settings.create_cluster(
                     "cluster",
-                    "test.site",
+                    URL,
                     tenant_ids={"tenant1":"tenant1-id"},
                     cluster_token="cluster_api_token"
             )
@@ -130,12 +135,12 @@ class TestClusterExceptions(unittest.TestCase):
         with self.assertRaises(NotImplementedError) as context:
             new_cluster = settings.create_cluster(
                     "cluster",
-                    "test.site"
+                    URL
             )
             new_cluster = settings.add_tenant_to_cluster(
                     new_cluster,
                     "new-id-here",
-                    "new tenant_token",
+                    TENANT_TOKEN,
                     "tenant2"
             )
         self.assertTrue(
@@ -146,12 +151,12 @@ class TestClusterExceptions(unittest.TestCase):
         with self.assertRaises(KeyError) as context:
             settings.create_cluster(
                     "cluster",
-                    "test.site"
+                    URL
             )
             settings.add_tenant_to_cluster(
                     "cluster2",
                     "new-id-here",
-                    "new tenant_token",
+                    TENANT_TOKEN,
                     "tenant2"
             )
         self.assertTrue("Cluster not found" in str(context.exception))
