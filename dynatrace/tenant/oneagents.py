@@ -1,8 +1,8 @@
 """Module for OneAgent operations."""
 
-from dynatrace.framework import request_handler as rh, logging
+from dynatrace.framework import request_handler as rh, log_handler
 
-logger = logging.get_logger(__name__)
+logger = log_handler.get_logger(__name__)
 
 
 def get_host_units_tenantwide(cluster, tenant, **kwargs):

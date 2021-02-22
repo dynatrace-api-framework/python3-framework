@@ -4,12 +4,12 @@ import time
 import functools
 from copy import deepcopy
 import requests
-from dynatrace.framework import logging
+from dynatrace.framework import log_handler
 from dynatrace.framework.settings import get_cluster_dict
 from dynatrace.framework.exceptions import InvalidAPIResponseException, ManagedClusterOnlyException
 
 requests.packages.urllib3.disable_warnings()  # pylint: disable=no-member
-logger = logging.get_logger(__name__)
+logger = log_handler.get_logger(__name__)
 
 HTTPS_STR = "https://"
 

@@ -1,9 +1,9 @@
 """Operations Interacting with Dynatrace Extensions API"""
-from dynatrace.framework import request_handler as rh, logging
+from dynatrace.framework import request_handler as rh, log_handler
 from dynatrace.tenant import metrics
 
 ENDPOINT = rh.TenantAPIs.EXTENSIONS
-logger = logging.get_logger(__name__)
+logger = log_handler.get_logger(__name__)
 
 
 def get_all_extensions(cluster, tenant, page_size=200):

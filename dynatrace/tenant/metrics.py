@@ -1,9 +1,9 @@
 """Module for interacting with the Metrics API"""
-from dynatrace.framework import request_handler as rh, logging
+from dynatrace.framework import request_handler as rh, log_handler
 from dynatrace.framework.exceptions import InvalidAPIResponseException
 
 ENDPOINT = str(rh.TenantAPIs.METRICS)
-logger = logging.get_logger(__name__)
+logger = log_handler.get_logger(__name__)
 
 
 def get_metric_descriptor(cluster, tenant, **kwargs):
