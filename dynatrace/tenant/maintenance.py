@@ -295,8 +295,25 @@ def generate_scope(
     return scope
 
 
-def generate_window_json(name, description, suppression, schedule, scope=None, is_planned=False,):
-    """Generate JSON information needed for creating Maintenance Window"""
+def generate_window_json(name, description, suppression, schedule, **kwargs):
+    """Generate JSON information needed for creating Maintenance Window
+    Args:
+        name (str): Name of the Maintenance Window
+        description (str): Description of Maintenance Window
+        suppression (str): Type of alerting suppression. Use maintenance.Suppression enums
+        schedule (dict): When and how often to run window. Use generate_schedule to create
+
+    Kwargs:
+        scope (dict): Scope to apply maintenance window to. Use generate scope to create
+        is_planned(boolean): If the maintenance window is scheduled or not.
+
+    Returns:
+        dict: dictionary for json payload
+    """
+   
+    scope = None if 'scope' not in kwargs else kwargs['scope']
+    is_planned = False if 'is_planned' not in kwargs else kwargs['is_planned']
+
     window_json = {
         "name": name,
         "description": description,
@@ -313,14 +330,29 @@ def generate_schedule(
     recurrence_type,
     start_time,
     duration,
-    range_start,
-    range_end,
-    day=None,
-    zone_id=None,
+    **kwargs
 ):
-    """Create schedule structure for maintenance window"""
+    """Create schedule structure for maintenance window
+    Args:
+        recurrence_type (str): How of Maintenance Window Recurs. Use RecurrenceType enum class
+        start_time (str): Start time of the window. Uses HH:mm
+        duration (int): Length of maintenance window in minutes
+
+    Kwargs:
+        range_start (str): Recurring Range Start. Uses %Y-%m-%d %H:%M
+        range_end (str): Recurring Range End. Uses %Y-%m-%d %H:%M
+        day(int,str): day of month or day of week for recurrance use DayOfWeek or DayOfMonth
+        zone_id(str): Management Zone ID to filter Maintenance Window on
+    Returns:
+        dict: dict for sub-JSON
+    """
     # This structure requires a lot of input validation
     recurrence_type = str(recurrence_type).upper()
+
+    range_start = None if 'range_start' not in kwargs else kwargs['range_start']
+    range_end = None if 'range_end' not in kwargs else kwargs['range_end']
+    day = None if 'day' not in kwargs else kwargs['day']
+    zone_id = None if 'zone_id' not in kwargs else kwargs['zone_id']
 
     # Check Recurrence
     if recurrence_type not in RecurrenceType._member_names_:  # pylint: disable=no-member,protected-access
@@ -328,6 +360,7 @@ def generate_schedule(
             "Invalid Recurrence Type! Allowed values are: ONCE, DAILY, WEEKLY, MONTHLY")
 
     # Check ranges
+    # if str(recurrence_type) != "ONCE":
     validate_datetime(range_start, "%Y-%m-%d %H:%M")
     validate_datetime(range_end, "%Y-%m-%d %H:%M")
 

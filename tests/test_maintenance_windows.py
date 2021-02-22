@@ -40,8 +40,8 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
             maintenance.RecurrenceType.DAILY,
             "23:00",
             60,
-            TEST_RANGE_START,
-            TEST_RANGE_END
+            range_start=TEST_RANGE_START,
+            range_end=TEST_RANGE_END
         )
         maintenance_json = maintenance.generate_window_json(
             TEST_PAYLOAD_TITLE,
@@ -70,8 +70,8 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
             maintenance.RecurrenceType.DAILY,
             "23:00",
             60,
-            TEST_RANGE_START,
-            TEST_RANGE_END
+            range_start=TEST_RANGE_START,
+            range_end=TEST_RANGE_END
         )
         maintenance_scope = maintenance.generate_scope(
             tags=[{'context': "CONTEXTLESS", 'key': "testing"}])
@@ -104,8 +104,8 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
             maintenance.RecurrenceType.DAILY,
             "23:00",
             60,
-            TEST_RANGE_START,
-            TEST_RANGE_END
+            range_start=TEST_RANGE_START,
+            range_end=TEST_RANGE_END
         )
         maintenance_scope = maintenance.generate_scope(
             tags=[
@@ -143,8 +143,8 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
             maintenance.RecurrenceType.DAILY,
             "23:00",
             60,
-            TEST_RANGE_START,
-            TEST_RANGE_END
+            range_start=TEST_RANGE_START,
+            range_end=TEST_RANGE_END
         )
         maintenance_scope = maintenance.generate_scope(
             tags=[
@@ -182,8 +182,8 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
             maintenance.RecurrenceType.ONCE,
             "23:00",
             60,
-            TEST_RANGE_START,
-            TEST_RANGE_END
+            range_start=TEST_RANGE_START,
+            range_end=TEST_RANGE_END
         )
         maintenance_json = maintenance.generate_window_json(
             TEST_PAYLOAD_TITLE,
@@ -213,8 +213,8 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
             maintenance.RecurrenceType.WEEKLY,
             "23:00",
             60,
-            TEST_RANGE_START,
-            TEST_RANGE_END,
+            range_start=TEST_RANGE_START,
+            range_end=TEST_RANGE_END,
             day=maintenance.DayOfWeek.SUNDAY
         )
         maintenance_json = maintenance.generate_window_json(
@@ -245,8 +245,8 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
             maintenance.RecurrenceType.MONTHLY,
             "23:00",
             60,
-            TEST_RANGE_START,
-            TEST_RANGE_END,
+            range_start=TEST_RANGE_START,
+            range_end=TEST_RANGE_END,
             day=1
         )
         maintenance_json = maintenance.generate_window_json(
@@ -279,8 +279,8 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
             maintenance.RecurrenceType.DAILY,
             "23:00",
             60,
-            TEST_RANGE_START,
-            TEST_RANGE_END
+            range_start=TEST_RANGE_START,
+            range_end=TEST_RANGE_END
         )
         maintenance_json = maintenance.generate_window_json(
             TEST_PAYLOAD_TITLE,
@@ -316,8 +316,8 @@ class TestMaintenanceWindowCreate(unittest.TestCase):
             maintenance.RecurrenceType.DAILY,
             "23:00",
             60,
-            TEST_RANGE_START,
-            TEST_RANGE_END
+            range_start=TEST_RANGE_START,
+            range_end=TEST_RANGE_END
         )
         maintenance_json = maintenance.generate_window_json(
             TEST_PAYLOAD_TITLE,
@@ -341,8 +341,8 @@ class TestMaintenanceExceptions(unittest.TestCase):
                 "HOURLY",
                 "23:00",
                 60,
-                TEST_RANGE_START,
-                TEST_RANGE_END,
+                range_start=TEST_RANGE_START,
+                range_end=TEST_RANGE_END
             )
 
         self.assertTrue("Invalid Recurrence Type!" in str(context.exception))
@@ -354,8 +354,8 @@ class TestMaintenanceExceptions(unittest.TestCase):
                 maintenance.RecurrenceType.WEEKLY,
                 "23:00",
                 60,
-                TEST_RANGE_START,
-                TEST_RANGE_END,
+                range_start=TEST_RANGE_START,
+                range_end=TEST_RANGE_END,
                 day=1
             )
         self.assertTrue("Invalid Weekly Day!" in str(context.exception))
@@ -367,8 +367,8 @@ class TestMaintenanceExceptions(unittest.TestCase):
                 maintenance.RecurrenceType.MONTHLY,
                 "23:00",
                 60,
-                TEST_RANGE_START,
-                TEST_RANGE_END,
+                range_start=TEST_RANGE_START,
+                range_end=TEST_RANGE_END,
                 day=32
             )
         self.assertTrue("Invalid Monthly Day!" in str(context.exception))
@@ -380,8 +380,8 @@ class TestMaintenanceExceptions(unittest.TestCase):
                 maintenance.RecurrenceType.MONTHLY,
                 "23:00",
                 60,
-                TEST_RANGE_START,
-                TEST_RANGE_END,
+                range_start=TEST_RANGE_START,
+                range_end=TEST_RANGE_END,
                 day="Eleven"
             )
         self.assertTrue(
@@ -394,8 +394,8 @@ class TestMaintenanceExceptions(unittest.TestCase):
                 maintenance.RecurrenceType.WEEKLY,
                 "23:00",
                 60,
-                TEST_RANGE_START,
-                TEST_RANGE_END,
+                range_start=TEST_RANGE_START,
+                range_end=TEST_RANGE_END
             )
         self.assertTrue("Invalid Weekly Day!" in str(context.exception))
 
@@ -406,8 +406,8 @@ class TestMaintenanceExceptions(unittest.TestCase):
                 maintenance.RecurrenceType.MONTHLY,
                 "23:00",
                 60,
-                TEST_RANGE_START,
-                TEST_RANGE_END,
+                range_start=TEST_RANGE_START,
+                range_end=TEST_RANGE_END
             )
         self.assertTrue(
             "Invalid type for Day of Month!" in str(context.exception))
@@ -419,8 +419,8 @@ class TestMaintenanceExceptions(unittest.TestCase):
                 maintenance.RecurrenceType.DAILY,
                 "23:00",
                 60,
-                TEST_RANGE_START,
-                "2020-01-02"
+                range_start=TEST_RANGE_START,
+                range_end="2020-01-02"
             )
         self.assertTrue(
             "Incorrect Date " in context.exception.message, context.exception.message)
@@ -552,6 +552,7 @@ class TestTagParsing(unittest.TestCase):
 class TestMaintenanceWindowInfo(unittest.TestCase):
     """Testing the ability to pull Maintenance Window info"""
     def test_get_all_maintenance_windows(self):
+        """Testing Receiving all maintenance windows in env"""
         mockserver_response_file = f"{RESPONSE_DIR}mock_get_all_1.json"
         tooling_for_test.create_mockserver_expectation(
             CLUSTER,
@@ -560,7 +561,8 @@ class TestMaintenanceWindowInfo(unittest.TestCase):
             "GET",
             response_file=mockserver_response_file
         )
-        self.assertTrue()
+        result = maintenance.get_windows(CLUSTER, TENANT)
+        self.assertEqual(result, tooling_for_test.expected_payload(mockserver_response_file))
 
 if __name__ == '__main__':
     unittest.main()
@@ -576,7 +578,6 @@ if __name__ == '__main__':
 # FILTER_TYPE WITHOUT TAG
 
 # OTHER TEST CASES:
-# GET ALL WINDOWS
 # GET DETAILS OF WINDOW
 # DELETE WINDOW
 # UPDATE WINDOW

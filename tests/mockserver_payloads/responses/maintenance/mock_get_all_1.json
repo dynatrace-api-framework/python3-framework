@@ -1,0 +1,24 @@
+{
+  "values": [
+    {
+      "id": "test-id-1",
+      "name": "Test Once",
+      "description": "Test 1"
+    },
+    {
+      "id": "test-id-2",
+      "name": "Test Daily",
+      "description": "Test 2"
+    },
+    {
+      "id": "test-id-3",
+      "name": "Test Day of Week",
+      "description": "Test 3"
+    },
+    {
+      "id": "test-id-4",
+      "name": "Test Day of Month",
+      "description": "Test 4"
+    }
+  ]
+}
