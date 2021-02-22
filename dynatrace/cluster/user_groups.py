@@ -97,34 +97,3 @@ def delete_app_groups_setwide(app_name):
     for cluster in user_variables.FULL_SET.values():
         if cluster['is_managed']:
             delete_app_groups(cluster, app_name)
-
-
-def create_app_clusterwide(cluster, app_name, zones=None):
-    """Create App User Groups and Management Zones"""
-    # Create Standard App MZs
-    mz_list = {}
-    for tenant_key in cluster['tenant'].keys():
-        mzh.add_management_zone(
-            cluster,
-            tenant_key,
-            str.upper(app_name)
-        )
-        if tenant_key in zones:
-            mz_list[tenant_key] = []
-            for zone in zones[tenant_key]:
-                mz_id = mzh.add_management_zone(
-                    cluster,
-                    tenant_key,
-                    str.upper(app_name),
-                    zone
-                )
-                if mz_id is not None:
-                    mz_list[tenant_key].append(mz_id)
-
-    # Create User Groups
-    user_groups = create_app_groups(cluster, app_name)
-    print(user_groups)
-
-    # for tenant in user_variables.USER_GROUPS['role_tenants']:
-    #   if "access_env" in user_groups [tenant]:
-    #     add_mz_to_user
