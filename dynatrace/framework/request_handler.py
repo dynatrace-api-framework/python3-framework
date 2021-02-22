@@ -2,11 +2,11 @@
 from enum import Enum, auto
 import time
 import functools
-import requests
 from copy import deepcopy
+import requests
 from dynatrace.framework import logging
+from dynatrace.framework.settings import get_cluster_dict
 from dynatrace.framework.exceptions import InvalidAPIResponseException, ManagedClusterOnlyException
-
 
 requests.packages.urllib3.disable_warnings()  # pylint: disable=no-member
 logger = logging.get_logger(__name__)
@@ -139,22 +139,24 @@ def make_api_call(cluster, endpoint, tenant=None, method=HTTP.GET, **kwargs):
     \n
     @returns - response from request\n
     """
+    cluster_dict = get_cluster_dict(cluster)
+    # cluster_dict = cluster
     # Set the right URL for the operation
-    url = f"{generate_tenant_url(cluster, tenant)}{endpoint}" \
-        if tenant else f"{HTTPS_STR}{cluster['url']}{endpoint}"
+    url = f"{generate_tenant_url(cluster_dict, tenant)}{endpoint}" \
+        if tenant else f"{HTTPS_STR}{cluster_dict['url']}{endpoint}"
     logger.debug("URL used for API call: %s", url)
 
     # Get correct token for the operation
     if 'onpremise' in str(endpoint) or 'cluster' in str(endpoint):
-        check_managed(cluster)
-        headers = dict(Authorization=f"Api-Token {cluster['cluster_token']}")
+        check_managed(cluster_dict)
+        headers = dict(Authorization=f"Api-Token {cluster_dict['cluster_token']}")
     else:
-        headers = dict(Authorization=f"Api-Token {cluster['api_token'][tenant]}")
+        headers = dict(Authorization=f"Api-Token {cluster_dict['api_token'][tenant]}")
 
     logger.debug("API call details:")
     call_details = deepcopy(locals())
-    call_details["cluster"]["api_token"][tenant] = "*" * 12
-    call_details["cluster"]["cluster_token"] = "*" * 12
+    del call_details["cluster_dict"]["api_token"] # Remove API Tokens for all tenants
+    call_details["cluster_dict"]["cluster_token"] = "*" * 12
     call_details["headers"]["Authorization"] = "*" * 12
     logger.debug(call_details)
     # Loop to retry in case of rate limits
@@ -163,14 +165,13 @@ def make_api_call(cluster, endpoint, tenant=None, method=HTTP.GET, **kwargs):
             method=str(method),
             url=url,
             headers=headers,
-            verify=cluster.get('verify_ssl'),
+            verify=cluster_dict.get('verify_ssl'),
             **kwargs
         )
         if check_response(response):
             break
 
     return response
-
 
 def get_results_whole(cluster, tenant, endpoint, api_version, **kwargs):
     """Gets a multi-paged result set and returns it whole.
@@ -206,7 +207,7 @@ def get_results_whole(cluster, tenant, endpoint, api_version, **kwargs):
 
     while cursor:
         if cursor != 1:
-            logger.debug("Getting next page of results. Cursor is %", cursor)
+            logger.debug("Getting next page of results. Cursor is %s", cursor)
             if not is_v2 or endpoint == TenantAPIs.ONEAGENTS:
                 # V1 and OneAgents require all other query params are preserved
                 kwargs['nextPageKey'] = cursor
@@ -304,7 +305,7 @@ def check_response(response):
     headers = response.headers
 
     if response.status_code == 429:
-        logger.warn(
+        logger.warning(
             "Endpoint request limit of %s was reached!", headers['x-ratelimit-limit']
         )
         # Wait until the limit resets and try again
@@ -312,7 +313,7 @@ def check_response(response):
 
         # Check that there's actually time to wait
         if time_to_wait > 0:
-            logger.warn("Waiting %s sec until the limit resets.", time_to_wait)
+            logger.warning("Waiting %s sec until the limit resets.", time_to_wait)
             time.sleep(float(time_to_wait))
         return False
 
@@ -332,7 +333,8 @@ def check_response(response):
 def check_managed(cluster):
     """Checks if the Cluster Operation is valid (Managed) for the current cluster"""
     logger.debug("Checking that the cluster is Managed.")
-    if not cluster['is_managed']:
+    cluster_dict = get_cluster_dict(cluster)
+    if not cluster_dict['is_managed']:
         try:
             raise ManagedClusterOnlyException()
         except ManagedClusterOnlyException:
@@ -345,11 +347,12 @@ def check_managed(cluster):
 def generate_tenant_url(cluster, tenant):
     """Generate URL based on SaaS or Managed"""
     url = HTTPS_STR
-    if cluster["is_managed"]:
+    cluster_dict = get_cluster_dict(cluster)
+    if cluster_dict["is_managed"]:
         logger.debug("Generating URL for a Managed cluster.")
-        url += cluster['url'] + "/e/" + cluster['tenant'][tenant]
+        url += cluster_dict['url'] + "/e/" + cluster_dict['tenant'][tenant]
     else:
         logger.debug("Generating URL for a SaaS cluster.")
-        url += cluster['tenant'][tenant] + "." + cluster['url']
+        url += cluster_dict['tenant'][tenant] + "." + cluster_dict['url']
 
     return url
