@@ -191,12 +191,6 @@ def get_results_whole(cluster, tenant, endpoint, api_version, **kwargs):
     # For V2 APIs must specify the item collected
     if api_version == 2:
         is_v2 = True
-<<<<<<< HEAD
-        if "item" not in kwargs:
-            raise ValueError("For V2 APIs you must provide collected item.")
-        item = kwargs["item"]
-        kwargs.pop("item")
-=======
         if 'item' not in kwargs:
             try:
                 raise ValueError("For V2 APIs you must provide collected item.")
@@ -204,7 +198,6 @@ def get_results_whole(cluster, tenant, endpoint, api_version, **kwargs):
                 logger.exception("Error: item missing from V2 API call.", stack_info=True)
                 raise
         item = kwargs['item']
->>>>>>> 9cb95b17c7a54298592347c9624354b1576120b8
         results = {}
         logger.debug("Using V2 pagination for API to collect %s", item)
     else:
