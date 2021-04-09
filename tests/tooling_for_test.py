@@ -5,6 +5,7 @@ import requests
 
 logging.basicConfig(filename="testing_tools.log", level=logging.DEBUG)
 
+
 def create_mockserver_expectation(cluster, tenant, url_path, request_type, **kwargs):
     """Creates an expectation for a mockserver request.
     \n
@@ -47,13 +48,19 @@ def create_mockserver_expectation(cluster, tenant, url_path, request_type, **kwa
     response_headers = kwargs.get("response_headers", None)
     request_body = None
     response_body = None
+    if cluster.get("is_managed"):
+        expected_path = f"/e/{cluster.get('tenant').get(tenant)}{url_path}"
+        expectation_url = f"http://{cluster['url']}/mockserver/expectation"
+    else:
+        expected_path = url_path
+        expectation_url = f"{generate_tenant_url(cluster, tenant)}/mockserver/expectation"
 
     expectation = {
         "httpRequest": {
             "headers": {
                 "Authorization": [f"Api-Token {api_token}"]
             },
-            "path": url_path,
+            "path": expected_path,
             "method": request_type
         },
         "httpResponse": {

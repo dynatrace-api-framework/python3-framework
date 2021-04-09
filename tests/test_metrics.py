@@ -2,13 +2,12 @@
 Test Suite for Metrics API
 """
 import unittest
-# from user_variables import FULL_SET  # pylint: disable=import-error
-from user_variables import FULL_SET
 from tests import tooling_for_test as testtools
 from dynatrace.framework.request_handler import TenantAPIs
+from dynatrace.framework.settings import get_cluster_dict
 from dynatrace.tenant import metrics
 
-CLUSTER = FULL_SET["mockserver1"]
+CLUSTER = get_cluster_dict("mockserver1")
 TENANT = "tenant1"
 URL_PATH = str(TenantAPIs.METRICS)
 METRIC_SELECTOR = 'builtin:host.mem.avail.*'
