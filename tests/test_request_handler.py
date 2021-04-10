@@ -83,6 +83,7 @@ class TestRequests(unittest.TestCase):
     def test_request_managed(self):
         """Tests making a normal API request for Managed"""
         MGD_CLUSTER = CLUSTER.copy()
+        MGD_CLUSTER["url"] = f"{MGD_CLUSTER['tenant'][TENANT]}.{MGD_CLUSTER['url']}"
         MGD_CLUSTER["is_managed"] = True
 
         testools.create_mockserver_expectation(
