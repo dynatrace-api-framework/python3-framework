@@ -180,7 +180,6 @@ def update_comment(cluster, tenant, problem_id, comment_id, **kwargs):
     message = kwargs.get("message") if "message" in kwargs else ""
     context = kwargs.get("context") if "context" in kwargs else ""
     logger.info("Updating comment %s from problem %s", comment_id, problem_id)
-    comment = get_comment(cluster, tenant, problem_id, comment_id)
 
     if message:
         comment["message"] = message
