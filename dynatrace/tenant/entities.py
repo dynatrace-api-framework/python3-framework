@@ -378,6 +378,14 @@ def add_tags(cluster, tenant, tag_list, **kwargs):
         except TypeError:
             logger.exception("Error: tags_list must be a list", stack_info=True)
             raise
+    if 'entitySelector' not in kwargs:
+        try:
+            raise KeyError("Missing mandatory keyword argument: entitySelector")
+        except KeyError:
+            logger.exception(
+                "Error: Missing the mandatory keyword argument 'entitySelector'"
+            )
+            raise
     if 'type' not in kwargs['entitySelector'] \
             and 'entityId' not in kwargs['entitySelector']:
         try:

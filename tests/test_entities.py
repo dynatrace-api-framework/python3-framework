@@ -449,7 +449,7 @@ class TestErrorHandling(unittest.TestCase):
         """Tests error handling when adding tags to entities.
         Must provide an entity selector.
         """
-        with self.assertRaises(ValueError):
+        with self.assertRaises(KeyError):
             entities.add_tags(CLUSTER, TENANT, ["test"])
 
     def test_add_tags_err_no_type(self):
@@ -472,7 +472,7 @@ class TestErrorHandling(unittest.TestCase):
         """Tests error handling when deleting tags from entities.
         Must provide entity selector.
         """
-        with self.assertRaises(ValueError):
+        with self.assertRaises(KeyError):
             entities.delete_tag(CLUSTER, TENANT, "test")
 
     def test_delete_tag_err_no_type(self):
