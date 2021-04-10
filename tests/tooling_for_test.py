@@ -2,6 +2,7 @@
 import json
 import logging
 import requests
+from dynatrace.framework.request_handler import generate_tenant_url
 
 logging.basicConfig(filename="testing_tools.log", level=logging.DEBUG)
 
@@ -48,6 +49,7 @@ def create_mockserver_expectation(cluster, tenant, url_path, request_type, **kwa
     response_headers = kwargs.get("response_headers", None)
     request_body = None
     response_body = None
+
     if cluster.get("is_managed"):
         expected_path = f"/e/{cluster.get('tenant').get(tenant)}{url_path}"
         expectation_url = f"http://{cluster['url']}/mockserver/expectation"
@@ -117,7 +119,6 @@ def create_mockserver_expectation(cluster, tenant, url_path, request_type, **kwa
             expectation["httpResponse"]["headers"][header] = [response_headers[header]]
 
     logging.debug(expectation)
-    expectation_url = f"https://{cluster['tenant'][tenant]}.{cluster['url']}/mockserver/expectation"
 
     test_req = requests.request(
         "PUT",
