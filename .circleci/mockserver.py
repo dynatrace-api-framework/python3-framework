@@ -3,7 +3,7 @@ FULL_SET = {
     "mockserver1": {
         "url": "mockserver:1080",
         "tenant": {
-            "tenant1": "mockserver",
+            "tenant1": "mockenv",
         },
         "api_token": {
             "tenant1": "sample_api_token",
