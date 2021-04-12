@@ -48,7 +48,7 @@ class TestRequests(unittest.TestCase):
             url_path="/testpath",
             request_type=str(rh.HTTP.GET),
             response_code=200,
-            rate_remaining="25",
+            rate_remaining="10",
             rate_limit="100"
         )
 
